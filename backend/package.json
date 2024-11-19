@@ -5,7 +5,7 @@
   "scripts": {
     "start": "ts-node-dev --poll src/server.ts",
     "build": "tsc",
-    "dev": "nodemon src/server.ts"
+    "deploy": "node src/server.ts"
   },
   "keywords": [],
   "author": "",
