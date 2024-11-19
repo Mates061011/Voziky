@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node --poll src/server.ts",
+    "start": "ts-node-dev --poll src/server.ts",
     "build": "tsc",
-    "deploy": "node src/server.js"
+    "deploy": "node dist/server.js"
   },
   "keywords": [],
   "author": "",
