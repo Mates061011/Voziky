@@ -7,7 +7,7 @@ const router = express.Router();
 // Create an appointment handler
 const createAppointment = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { startDate, endDate, user } = req.body;
-
+  res.status(200).json({ message: 'Test route is working!' });
   try {
     // Check if the new appointment overlaps with any existing appointments
     const overlappingAppointments = await Appointment.find({
