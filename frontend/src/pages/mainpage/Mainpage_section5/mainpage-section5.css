@@ -1,0 +1,50 @@
+.sekce5 {
+    margin-top: 150px;
+    margin-bottom: 200px;
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 65vh;
+    gap: 40px;
+}
+
+.galleryPic {
+    width: 30%;
+    height: 65vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    transition: 400ms;
+
+}
+.galleryPic:hover{
+    transform: scale(1.02);
+    transition: 300ms;
+}
+
+.galleryPic1{
+    background-image: url(./Snímek\ obrazovky\ 2024-03-25\ v\ 19.34-1.jpg);
+    background-position: left;
+}
+.galleryPic2{
+    background-image: url(./Snímek\ obrazovky\ 2024-03-25\ v\ 19.34.jpg);
+}
+.galleryPic3{
+    background-image: url(./Snímek\ obrazovky\ 2024-03-25\ v\ 19.34\ 1.jpg);
+    background-position: right;
+}
+
+@media screen and (max-width: 500px) {
+    .sekce5 {
+        flex-direction: column;
+        height: 100vh;
+    }
+    .galleryPic {
+        width: 100%;
+        height: 40vh;
+    }
+    .galleryPic:hover {
+        width: 100%;
+    }
+}

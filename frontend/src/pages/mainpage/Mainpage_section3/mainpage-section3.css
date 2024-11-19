@@ -1,0 +1,97 @@
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+.section3 {
+    margin-top: 100px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    .nadpis-section3 {
+        width: 60vw;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        
+        p {
+            font-family: "Inter";
+            font-weight: 600;
+            font-size: 20px;
+            color: #818181;
+            width: fit-content;
+            text-align: center;
+            animation: fadeIn linear forwards;
+            animation-timeline: view();
+            animation-range-start: contain - 100%;
+            animation-range-end: 300px;
+            opacity: 0;
+        }
+        h3 {
+            font-family: "Inter";
+            font-weight: bold;
+            font-size: 40px;
+            width: fit-content;
+            animation: fadeIn linear forwards;
+            animation-timeline: view();
+            animation-range-start: contain - 100%;
+            animation-range-end: 300px;
+            opacity: 0;
+        }
+    }
+    .popis-a-kocarek {
+        display: flex;
+        width: 60vw;
+        height: auto;
+        overflow: hidden;
+        flex-wrap: wrap;
+        img {
+            width: 60%;
+            flex: 1;
+            min-width: 400px;
+            height: 50%;
+            position: relative;
+            animation: fadeIn linear forwards;
+            animation-timeline: view();
+            animation-range-start: contain - 100%;
+            animation-range-end: 300px;
+            opacity: 0;
+            /*mask-image: linear-gradient(to right, rgba(0, 0, 0, 0)17%, rgba(0, 0, 0, 1)30%);*/
+        }
+        p {
+            flex: 1;
+            text-overflow: ellipsis;
+            width:30%;
+            text-align: left;
+            font-size: 20px;
+            color: #818181;
+            font-weight: 400;
+            height: fit-content;
+            padding-top: 5vw;
+            animation: fadeIn linear forwards;
+            animation-timeline: view();
+            animation-range-start: contain - 100%;
+            animation-range-end: 300px;
+            opacity: 0;
+        }
+        .dontkeep {
+            display: none;
+        }
+    }
+}
+@media screen and (min-width: 1600px) {
+    .popis-a-kocarek>img {
+        transform: translateY(0);
+    }
+}
+@media screen and (max-width: 800px) {
+    .nadpis-section3 {
+        align-items: left;
+        h3{
+            text-align: left;
+        }
+    }
+}

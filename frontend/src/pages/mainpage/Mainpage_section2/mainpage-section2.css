@@ -1,0 +1,160 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+@keyframes fade {
+    70% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+@keyframes rotationFadeIn {
+    to {
+        opacity: 1;
+        transform: rotate(0) scale(1);
+    }
+}
+.section2 {
+    margin-top: 120px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: fit-content;
+    gap: 80px;
+    .nadpisy {
+        width: 60vw;
+        p {
+            font-family: "Inter";
+            font-weight: 700;
+            color: #818181;
+            font-size: 20px;
+            animation: fadeIn linear forwards;
+            animation-timeline: view();
+            animation-range-start: contain - 100%;
+            animation-range-end: 300px;
+            opacity: 0;
+            transform: scale(0.8);
+        }
+        h2 {
+            font-family: "Inter";
+            font-size: 40px;
+            animation: fadeIn linear forwards;
+            animation-timeline: view();
+            animation-range-start: contain - 100%;
+            animation-range-end: 300px;
+            opacity: 0;
+            transform: scale(0.8);
+        }
+    }
+    .kroky {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        .cesta1, .cesta2 {
+            width: 150px;
+            height: 140px;
+        }
+        .cesta1 {
+            transform:scale(1.2) translateY(-25px);
+            animation: fade linear forwards;
+            animation-timeline: view();
+            animation-range-start: contain - 50%;
+            animation-range-end: 300px;
+            opacity: 0;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+        .cesta2 {
+            transform:scale(1.2) translateY(-10px);
+            animation: fade linear forwards;
+            animation-timeline: view();
+            animation-range-start: contain - 50%;
+            animation-range-end: 300px;
+            opacity: 0;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+        .krok {
+            animation: rotationFadeIn linear forwards;
+            animation-timeline: view();
+            animation-range-start: contain - 50%;
+            animation-range-end: 300px;
+            opacity: 0;
+            transform: rotate(5deg) scale(0.5);
+            flex-basis: 300px;
+            height: 280px;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            h4 {
+                margin: 0;
+                margin-top: 30px;
+                font-size: 28px;
+            }
+            p {
+                margin: 0;
+                margin-top: 20px;
+                width: 130%;
+                height: 20%;
+                font-size: 15px;
+                color: #8A8A96;
+            }
+            .icon-bg, .icon-bg2 {
+                
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-radius: 25px;
+                img {
+                    width: 50px;
+                    user-select: none;
+                    -webkit-user-drag: none;
+                }
+            }
+
+        }
+    }
+}
+.icon-bg2 {
+    background-image: url(./Rectangle1.svg);
+    width: 100px;
+    height: 100px;
+    transition: 300ms;
+}
+.icon-bg {
+    background-image: url(./Rectangle1.svg);
+    width: 100px;
+    height: 100px;
+    transition: 300ms;
+}
+.icon-bg:hover, .icon-bg2:hover {
+    width: 110px;
+    transition: 300ms;
+}
+@media screen and (max-width: 1550px) {
+    .kroky {
+        width: 70vw;
+    }
+    .cesta1, .cesta2 {
+        transform: scale(1);
+        overflow: hidden;
+        width: 5vw;
+    }
+}
+@media screen and (min-width: 1550px) {
+    .kroky {
+        width: 48vw;
+    }
+}

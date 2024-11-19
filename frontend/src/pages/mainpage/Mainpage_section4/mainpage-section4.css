@@ -1,0 +1,159 @@
+.calendar {
+    display: flex;
+    flex-direction: column; 
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+  }
+  
+  .week {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+  }
+  
+  .day,.day-name {
+    text-align: center;
+    padding: 10px;
+    font-family: "Inter";
+    font-weight: 500;
+    color: #8A8A96;
+    height: 20px;
+    width: 20px;
+    line-height: 1.19;
+    cursor: pointer;
+    user-select: none;
+  }
+  .selected {
+    background-color: #0775E2;
+    color: white;
+  }
+  .locked {
+    background-color: #A20B0B; 
+    color: white;
+    user-select: none;
+    pointer-events: none;
+    border-radius: 2rem;
+  }
+  .endItem {
+    border-top-right-radius: 2rem;
+    border-bottom-right-radius: 2rem;
+  }
+  .selected {
+    border-radius: 2rem;
+  }
+  .prevMonth {
+    color: rgb(180, 180, 180);
+  }
+  .week .day:last-child {
+    border-top-right-radius: 2rem;
+    border-bottom-right-radius: 2rem;
+  }
+  .calendarsWrapper {
+    width: 800px;
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+  }
+  .calendar1 {
+
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    align-items: left;
+    h2 {
+        font-family: "Inter";
+        color: #818181;
+        margin-top: 160px;
+        margin-bottom: 30px;
+    }
+  }
+  .calendar2 {
+    align-items: left;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    h2 {
+        font-family: "Inter";
+        color: #818181;
+        margin-top: 160px;
+        margin-bottom: 30px;
+    }
+  }
+
+.popisky {
+  display: flex;
+  flex-direction: row;
+  width: 800px;
+  gap: 50px;
+  .popisek1, .popisek2 {
+    padding-top: 15px;
+    display: flex;
+    gap: 12px;
+    flex-direction: row;
+    width: fit-content;
+    justify-content: center;
+    div{ 
+      width: 28px;
+      height: 28px;
+      border-radius: 2rem;
+    }
+    h3 {
+      display: flex;
+      align-items: center;
+      font-family: "Inter";
+      font-weight: 500;
+      font-size: 18px;
+      color: #818181;
+    }
+  }
+}
+.pujceni-info {
+  width: 800px;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  padding: 20px;
+  gap: 40px;
+  p {
+    font-family: "Inter";
+      font-weight: 500;
+      font-size: 18px;
+      color: #818181;
+  }
+}
+.pujceni-button {
+  width: 850px;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+}
+.popisek1>div {
+  background-color: #A20B0B;
+}
+.popisek2>div {
+  background-color: #0775E2;
+}
+
+.pujceni-counter {
+  width: 800px;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  p {
+    font-family: "Inter";
+      font-weight: 500;
+      font-size: 18px;
+      color: #818181;
+  }
+  h5 {
+    font-family: "Inter";
+    font-weight: 500;
+    font-size: 18px;
+    width: fit-content;
+    color: #818181;
+  }
+}
