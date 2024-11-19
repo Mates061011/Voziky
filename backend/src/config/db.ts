@@ -1,13 +1,24 @@
 import mongoose from 'mongoose';
 
-const connectDB = async (): Promise<void> => {
+const connectDB = async (retries = 5) => {
   try {
-    await mongoose.connect(process.env.MONGO_URI || '');
-    console.log('MongoDB Connected...');
+    const dbURI = process.env.MONGODB_URI || '';
+    if (!dbURI) {
+      console.error('MongoDB URI is not set');
+      process.exit(1);
+    }
+    await mongoose.connect(dbURI);
+    console.log('MongoDB connected');
   } catch (error) {
-    console.error('MongoDB Connection Failed:', error);
-    process.exit(1);
+    if (retries > 0) {
+      console.log(`Retrying MongoDB connection... (${retries} attempts left)`);
+      setTimeout(() => connectDB(retries - 1), 5000);  // Retry every 5 seconds
+    } else {
+      console.error('Failed to connect to MongoDB:', error);
+      process.exit(1);
+    }
   }
 };
+
 
 export default connectDB;
