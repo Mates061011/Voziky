@@ -41,7 +41,7 @@ const Cart: React.FC = () => {
     setError(null); // Reset error message before starting the request
 
     try {
-      const response = await fetch('http://localhost:5000/api/appointment', {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/appointment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
