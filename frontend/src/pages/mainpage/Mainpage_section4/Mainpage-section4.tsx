@@ -34,7 +34,7 @@ interface Day {
     //get reservated days
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/appointment');
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/appointment`);
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }
@@ -797,7 +797,7 @@ interface Day {
       const lastDate = selectedDates.length > 0 ? selectedDates[selectedDates.length - 1] : null;
       
       try {
-        const response = await fetch('http://localhost:1337/api/rezervaces', {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/rezervaces`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
