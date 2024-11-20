@@ -9,7 +9,7 @@ import Bg from './Mainpage_section1/solid-color-image.jpeg';
 
 export default function Mainpage(){
     return(
-        <div>
+        <div className="main-cont">
             <div className="grey-bg"><img src={Bg} alt="" /></div>
             <Section1/>
             <Section2/>

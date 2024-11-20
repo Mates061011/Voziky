@@ -1,12 +1,13 @@
 .sekce5 {
     margin-top: 150px;
     margin-bottom: 200px;
-    width: 100vw;
+    width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     height: 65vh;
     gap: 40px;
+    overflow-x: hidden;
 }
 
 .galleryPic {
@@ -35,7 +36,7 @@
     background-position: right;
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 479px) {
     .sekce5 {
         flex-direction: column;
         height: 100vh;

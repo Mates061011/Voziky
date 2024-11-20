@@ -17,7 +17,7 @@ export default function Section1() {
         // Start of the current month
         const min = new Date(currentYear, currentMonth, 1).toISOString().split('T')[0];
 
-        // End of the next month
+        // End of the next month 
         const max = new Date(currentYear, currentMonth + 2, 0).toISOString().split('T')[0];
 
         setMinDate(min);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 interface UserData {
@@ -21,10 +21,38 @@ const Cart: React.FC = () => {
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [submitted, setSubmitted] = useState(false);  // Track if the form has been submitted successfully
+  const [submitted, setSubmitted] = useState(false);
 
-  const formattedStartDate = startDate ? new Date(startDate).toISOString() : '';
-  const formattedEndDate = endDate ? new Date(endDate).toISOString() : '';
+  // Format the selected start and end dates
+  const initialStartDate = startDate ? new Date(startDate) : new Date();
+  const initialEndDate = endDate ? new Date(endDate) : new Date();
+
+  const [startTime, setStartTime] = useState<string>(
+    initialStartDate.toISOString().substring(11, 16) // Extract time in HH:mm format
+  );
+  const [endTime, setEndTime] = useState<string>(
+    initialEndDate.toISOString().substring(11, 16) // Extract time in HH:mm format
+  );
+
+  const [currentStartDate, setCurrentStartDate] = useState<Date>(initialStartDate);
+  const [currentEndDate, setCurrentEndDate] = useState<Date>(initialEndDate);
+
+  useEffect(() => {
+    // Update start date when time is changed
+    const updatedStartDate = new Date(currentStartDate);
+    const [startHour, startMinute] = startTime.split(':').map(Number);
+    updatedStartDate.setHours(startHour, startMinute);
+    setCurrentStartDate(updatedStartDate);
+
+    // Update end date when time is changed
+    const updatedEndDate = new Date(currentEndDate);
+    const [endHour, endMinute] = endTime.split(':').map(Number);
+    updatedEndDate.setHours(endHour, endMinute);
+    setCurrentEndDate(updatedEndDate);
+  }, [startTime, endTime]);
+
+  const formattedStartDate = currentStartDate.toISOString();
+  const formattedEndDate = currentEndDate.toISOString();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -38,7 +66,7 @@ const Cart: React.FC = () => {
     e.preventDefault();
 
     setLoading(true);
-    setError(null); // Reset error message before starting the request
+    setError(null);
 
     try {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/appointment`, {
@@ -60,7 +88,6 @@ const Cart: React.FC = () => {
       const data = await response.json();
       console.log('Appointment successfully created:', data);
 
-      // Set form as submitted
       setSubmitted(true);
     } catch (error) {
       console.error('Error creating appointment:', error);
@@ -77,6 +104,30 @@ const Cart: React.FC = () => {
       {/* Display selected dates */}
       <p>Start Date: {startDate ? new Date(startDate).toLocaleString() : 'Not selected'}</p>
       <p>End Date: {endDate ? new Date(endDate).toLocaleString() : 'Not selected'}</p>
+
+      {/* Display time selectors */}
+      <div>
+        <label>
+          Start Time:
+          <input
+            type="time"
+            value={startTime}
+            onChange={(e) => setStartTime(e.target.value)}
+            required
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          End Time:
+          <input
+            type="time"
+            value={endTime}
+            onChange={(e) => setEndTime(e.target.value)}
+            required
+          />
+        </label>
+      </div>
 
       {/* Show confirmation or form based on submission status */}
       {submitted ? (

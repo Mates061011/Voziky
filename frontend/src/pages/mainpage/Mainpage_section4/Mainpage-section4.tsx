@@ -202,6 +202,7 @@ interface Day {
     };
     
     const handleDayClickNextMonth = (rowIndex: number, dayIndex: number) => {
+      console.log(`is Active: ${isActive}`);
       let clickedDay: Day;
       if(isActive == true) {
           clickedDay = calendarDataNextMonth[rowIndex][dayIndex];
@@ -247,6 +248,11 @@ interface Day {
           if (!clickedDay.prevMonth) {
             return;
           }
+          // Check if there are locked days between previously selected and newly selected days
+          if (checkLockedDaysBetween(rowIndex, dayIndex, calendarDataCurrentMonth, calendarDataNextMonth)) {
+            console.log("locked, exiting")
+              return;
+          }
           // Check if there are any selected days in the current month
           let selectedDayInCurrentMonth: Day | null = null;
           for (let i = 0; i < calendarDataCurrentMonth.length; i++) {
@@ -260,7 +266,6 @@ interface Day {
           }
           if(selectedDayInCurrentMonth != null){
             // Find the row and column index of the selected day in calendarDataCurrentMonth
-            console.log("Vybrani vsech dnu z minuleho mesice funguje")
             const selectedRowIndex = calendarDataCurrentMonth.findIndex(row => row.includes(selectedDayInCurrentMonth as Day));
             const selectedDayIndex = calendarDataCurrentMonth[selectedRowIndex].indexOf(selectedDayInCurrentMonth as Day);
 
@@ -286,11 +291,6 @@ interface Day {
                 calendarDataNextMonth[i][j].selected = true;
               }
             }
-          }
-
-          // Check if there are locked days between previously selected and newly selected days
-          if (checkLockedDaysBetween(rowIndex, dayIndex, calendarDataNextMonth)) {
-              return;
           }
 
           //save the previous calendar data
@@ -468,86 +468,78 @@ interface Day {
       setIsActive(!isActive)
     }
     const handleDayClickCurrentMonth = (rowIndex: number, dayIndex: number) => {
-        console.log(isActive)
-        if(isActive == true) {
-            const clickedDay = calendarDataCurrentMonth[rowIndex][dayIndex];
-            if (clickedDay.locked) {
-                return;
-            }
-            if (clickedDay.prevMonth) {
+      console.log(`is Active: ${isActive}`);
+      if (isActive) {
+          const clickedDay = calendarDataCurrentMonth[rowIndex][dayIndex];
+          if (clickedDay.locked || clickedDay.prevMonth) {
               return;
-            }
-            //vynuluje data
-            const updatedCalendarData = resetSelectedDays(calendarDataCurrentMonth);
-            const updatedCalendarDataX = resetSelectedDays(calendarDataNextMonth);
-            setCalendarDataCurrentMonth(updatedCalendarData);
-            setCalendarDataNextMonth(updatedCalendarDataX);
-            
-            //save the previous calendar data
-            setCalendarDataCurrentMonth((prevCalendarData) => {
-                const updatedCalendarData = prevCalendarData.map((row, rIndex) => {
-                    return row.map((day, dIndex) => {
-                        // Reset selected state for all days
-                        let updatedDay = { ...day, selected: false };
-            
-                        // Check if the current day matches the input day
-                        if (rIndex === rowIndex && dIndex === dayIndex) {
-                            updatedDay = { ...updatedDay, selected: true };
-                        }
-            
-                        return updatedDay;
-                    });
-                });
-        
-                return updatedCalendarData;
-            });
-            console.log(calendarDataCurrentMonth)
-            console.log(calendarDataNextMonth)
-        }
-        else {
-            // Check if there are locked days between previously selected and newly selected days
-            if (checkLockedDaysBetween(rowIndex, dayIndex, calendarDataCurrentMonth)) {
+          }
+          
+          // Reset selected days
+          const updatedCalendarData = resetSelectedDays(calendarDataCurrentMonth);
+          const updatedCalendarDataX = resetSelectedDays(calendarDataNextMonth);
+          setCalendarDataCurrentMonth(updatedCalendarData);
+          setCalendarDataNextMonth(updatedCalendarDataX);
+          
+          // Save the previous calendar data
+          setCalendarDataCurrentMonth((prevCalendarData) => {
+              const updatedCalendarData = prevCalendarData.map((row, rIndex) => {
+                  return row.map((day, dIndex) => {
+                      // Reset selected state for all days
+                      let updatedDay = { ...day, selected: false };
+                      // Check if the current day matches the input day
+                      if (rIndex === rowIndex && dIndex === dayIndex) {
+                          updatedDay = { ...updatedDay, selected: true };
+                      }
+                      return updatedDay;
+                  });
+              });
+              return updatedCalendarData;
+          });
+          console.log(calendarDataCurrentMonth);
+          console.log(calendarDataNextMonth);
+      } else {
+          const clickedDay = calendarDataCurrentMonth[rowIndex][dayIndex];
+          if (clickedDay.locked || clickedDay.prevMonth) {
               return;
-            }
-            // check if the clicked day is locked
-            const clickedDay = calendarDataCurrentMonth[rowIndex][dayIndex];
-            if (clickedDay.locked) {
-                return;
-            }
-            if (clickedDay.prevMonth) {
+          }
+  
+          // Check for locked days between previously selected and newly selected days
+          if (checkLockedDaysBetween(rowIndex, dayIndex, calendarDataCurrentMonth, calendarDataNextMonth)) {
+              console.log("locked, exiting");
               return;
-            }
-            // Check if there are any selected days in the next month
-            let selectedDayInCurrentMonth: Day | null = null;
-            for (let i = 0; i < calendarDataNextMonth.length; i++) {
-                for (let j = 0; j < calendarDataNextMonth[i].length; j++) {
-                    if (calendarDataNextMonth[i][j].selected) {
-                        selectedDayInCurrentMonth = calendarDataNextMonth[i][j];
-                        break;
-                    }
-                }
-                if (selectedDayInCurrentMonth) break;
-            }
-
-            if(selectedDayInCurrentMonth != null){
-              // Find the row and column index of the selected day in calendarDataNextMonth
-              console.log("Vybrani vsech dnu z next mesice funguje")
-              const selectedRowIndex = calendarDataNextMonth.findIndex(row => row.includes(selectedDayInCurrentMonth as Day));
-              const selectedDayIndex = calendarDataNextMonth[selectedRowIndex].indexOf(selectedDayInCurrentMonth as Day);
-
+          }
+  
+          // Check for previously selected days in the next month
+          let selectedDayInNextMonth: Day | null = null;
+          for (let i = 0; i < calendarDataNextMonth.length; i++) {
+              for (let j = 0; j < calendarDataNextMonth[i].length; j++) {
+                  if (calendarDataNextMonth[i][j].selected) {
+                      selectedDayInNextMonth = calendarDataNextMonth[i][j];
+                      break;
+                  }
+              }
+              if (selectedDayInNextMonth) break;
+          }
+  
+          if (selectedDayInNextMonth != null) {
+              const selectedRowIndex = calendarDataNextMonth.findIndex(row => row.includes(selectedDayInNextMonth as Day));
+              const selectedDayIndex = calendarDataNextMonth[selectedRowIndex].indexOf(selectedDayInNextMonth as Day);
+  
               // Mark all days before the selected day as selected
               for (let i = 0; i <= selectedRowIndex; i++) {
-                const endColumn = (i === selectedRowIndex) ? selectedDayIndex : calendarDataNextMonth[i].length - 1;
-                for (let j = 0; j <= endColumn; j++) {
-                  if (!calendarDataNextMonth[i][j].prevMonth) {
-                    continue; // Skip this day and continue to the next one
+                  const endColumn = (i === selectedRowIndex) ? selectedDayIndex : calendarDataNextMonth[i].length - 1;
+                  for (let j = 0; j <= endColumn; j++) {
+                      if (!calendarDataNextMonth[i][j].prevMonth) {
+                          continue; // Skip this day
+                      }
+                      calendarDataNextMonth[i][j].selected = true;
                   }
-                  calendarDataNextMonth[i][j].selected = true;
-                }
               }
-              const selectedRowIndexH = calendarDataCurrentMonth.findIndex(row => row.includes(clickedDay as Day));
+  
+              const selectedRowIndexH = calendarDataCurrentMonth.findIndex(row => row.includes(clickedDay as Day ));
               const selectedDayIndexH = calendarDataCurrentMonth[selectedRowIndexH].indexOf(clickedDay as Day);
-
+  
               for (let i = selectedRowIndexH; i < calendarDataCurrentMonth.length; i++) {
                   const startColumnH = (i === selectedRowIndexH) ? (selectedDayIndexH + 1) : 0;
                   for (let j = startColumnH; j < calendarDataCurrentMonth[i].length; j++) {
@@ -557,187 +549,158 @@ interface Day {
                       calendarDataCurrentMonth[i][j].selected = true; // Select days from the current month
                   }
               }
-            }
-            else{
+          }
+  
+          // Save the previous calendar data
+          setCalendarDataCurrentMonth((prevCalendarData) => {
+              let startRow = -1;
+              let startDay = -1;
+              let endRow = rowIndex;
+              let endDay = dayIndex;
+              let selectedExistsNextMonth = false;
+  
+              // Find the position of the previously selected day
+              for (let i = 0; i < prevCalendarData.length; i++) {
+                  for (let j = 0; j < prevCalendarData[i].length; j++) {
+                      if (prevCalendarData[i][j].selected) {
+                          startRow = i;
+                          startDay = j;
+                          selectedExistsNextMonth = true;
+                          break;
+                      }
+                  }
+                  if (selectedExistsNextMonth) break;
+              }
+  
+              // Find the last selected item from prevCalendarData
+              let lastSelectedRow = -1;
+              let lastSelectedDay = -1;
+              for (let i = prevCalendarData.length - 1; i >= 0; i--) {
+                  for (let j = prevCalendarData[i].length - 1; j >= 0; j--) {
+                      if (prevCalendarData[i][j].selected) {
+                          lastSelectedRow = i;
+                          lastSelectedDay = j;
+                          break;
+                      }
+                  }
+                  if (lastSelectedRow !== -1 && lastSelectedDay !== -1) {
+                      break;
+                  }
+              }
+  
+              // Update endRow and endDay based on the last selected item from prevCalendarData
+              if (lastSelectedRow !== -1 && lastSelectedDay !== -1) {
+                  endRow = lastSelectedRow;
+                  endDay = lastSelectedDay;
+              }
+  
+              // Check if the clicked day comes after any previously selected day
+              const clickedAfterPrevious = selectedExistsNextMonth && ((rowIndex > startRow) || (rowIndex === startRow && dayIndex >= startDay));
+  
+              // Update start and end positions based on clicked day and previously selected day
+              if (selectedExistsNextMonth) {
+                  if (!clickedAfterPrevious) {
+                      endRow = startRow;
+                      endDay = startDay;
+                      startRow = rowIndex;
+                      startDay = dayIndex;
+                  } else {
+                      endRow = rowIndex;
+                      endDay = dayIndex;
+                  }
+              }
+  
+              // Update the selected days based on the start and end positions
+              let updatedCalendarData = prevCalendarData.map((row, rIndex) => {
+                  return row.map((day, dIndex) => {
+                      let updatedDay = { ...day, firstSelected: false, lastSelected: false };
+  
+                      if (rIndex === rowIndex && dIndex === dayIndex) {
+                          if (!selectedExistsNextMonth) {
+                              updatedDay = { ...updatedDay, selected: true, firstSelected: true };
+                          } else {
+                              if ((rIndex === startRow && dIndex === startDay) || (rIndex === endRow && dIndex === endDay)) {
+                                  updatedDay = { ...updatedDay, selected: !day.selected, lastSelected: clickedAfterPrevious };
+                              } else if ((rIndex > startRow && rIndex < endRow) ||
+                                  (rIndex === startRow && dIndex > startDay) ||
+                                  (rIndex === endRow && dIndex < endDay)) {
+                                  const distanceToStart = Math.abs(startRow - rIndex) * 7 + Math.abs(startDay - dIndex);
+                                  const distanceToEnd = Math.abs(endRow - rIndex) * 7 + Math.abs(endDay - dIndex);
+                                  updatedDay = { ...updatedDay, selected: distanceToStart <= distanceToEnd };
+                              } else {
+                                  updatedDay = { ...updatedDay, selected: true };
+                              }
+                          }
+                      } else if (selectedExistsNextMonth && ((rIndex === startRow && dIndex >= startDay && rIndex === endRow && dIndex <= endDay) ||
+                          (rIndex === startRow && dIndex >= startDay && rIndex < endRow) ||
+                          (rIndex === endRow && dIndex <= endDay && rIndex > startRow) ||
+                          (rIndex > startRow && rIndex < endRow))) {
+                          updatedDay = { ...updatedDay, selected: true };
+                      }
+  
+                      return updatedDay;
+                  });
+              });
+  
+              if (selectedExistsNextMonth && ((rowIndex !== startRow || dayIndex !== startDay) || (rowIndex !== endRow || dayIndex !== endDay))) {
+                  const distanceToStart = Math.abs(startRow - rowIndex) * 7 + Math.abs(startDay - dayIndex);
+                  const distanceToEnd = Math.abs(endRow - rowIndex) * 7 + Math.abs(dayIndex - endDay);
+  
+                  if (distanceToStart < distanceToEnd) {
+                      updatedCalendarData[startRow][startDay].selected = false;
+  
+                      for (let r = startRow; r <= rowIndex; r++) {
+                          const startColumn = r === startRow ? startDay : 0;
+                          const endColumn = r === rowIndex ? dayIndex : 6;
+  
+                          for (let c = startColumn; c <= endColumn; c++) {
+                              updatedCalendarData[r][c].selected = true;
+                          }
+                      }
+                  } else {
+                      updatedCalendarData[endRow][endDay].selected = false;
+  
+                      for (let r = rowIndex; r <= endRow; r++) {
+                          const startColumn = r === rowIndex ? dayIndex : 0;
+                          const endColumn = r === endRow ? endDay : 6;
+  
+                          for (let c = startColumn; c <= endColumn; c++) {
+                              updatedCalendarData[r][c].selected = true;
+                          }
+                      }
+                  }
+              }
 
-            }
-
-            
-            
-            //save the previous calendar data
-            setCalendarDataCurrentMonth((prevCalendarData) => {
-                let startRow = -1;
-                let startDay = -1;
-                let endRow = rowIndex;
-                let endDay = dayIndex;
-                let selectedExistsNextMonth = false; // Renamed selectedExists to selectedExistsNextMonth
-                if (selectedExistsNextMonth && endRow !== -1 && endDay !== -1) {
-                    endRow = rowIndex;
-                    endDay = dayIndex;
-                }
-                // Find the position of the previously selected day
-                for (let i = 0; i < prevCalendarData.length; i++) {
-                    for (let j = 0; j < prevCalendarData[i].length; j++) {
-                        if (prevCalendarData[i][j].selected) {
-                            startRow = i;
-                            startDay = j;
-                            selectedExistsNextMonth = true; // Renamed selectedExists to selectedExistsNextMonth
-                            break;
-                        }
-                    }
-                    if (selectedExistsNextMonth) break;
-                }
-                // Find the last selected item from prevCalendarData
-                let lastSelectedRow = -1;
-                let lastSelectedDay = -1;
-                for (let i = prevCalendarData.length - 1; i >= 0; i--) {
-                    for (let j = prevCalendarData[i].length - 1; j >= 0; j--) {
-                        if (prevCalendarData[i][j].selected) {
-                            lastSelectedRow = i;
-                            lastSelectedDay = j;
-                            break;
-                        }
-                    }
-                    if (lastSelectedRow !== -1 && lastSelectedDay !== -1) {
-                        break;
-                    }
-                }
-        
-                // Update endRow and endDay based on the last selected item from prevCalendarData
-                if (lastSelectedRow !== -1 && lastSelectedDay !== -1) {
-                    endRow = lastSelectedRow;
-                    endDay = lastSelectedDay;
-                }
-        
-                // Check if the clicked day comes after any previously selected day
-                const clickedAfterPrevious = selectedExistsNextMonth && ((rowIndex > startRow) || (rowIndex === startRow && dayIndex >= startDay));
-        
-                // Update start and end positions based on clicked day and previously selected day
-                if (selectedExistsNextMonth) {
-                    if (!clickedAfterPrevious) {
-                        // If clicked before any previously selected day, update start positions
-                        endRow = startRow;
-                        endDay = startDay;
-                        startRow = rowIndex;
-                        startDay = dayIndex;
-                    } else {
-                        // Update end positions
-                        endRow = rowIndex;
-                        endDay = dayIndex;
-                    }
-                }
-        
-                // Update the selected days based on the start and end positions
-                let updatedCalendarData = prevCalendarData.map((row, rIndex) => {
-                    return row.map((day, dIndex) => {
-                        // Reset firstSelected and lastSelected for all days
-                        let updatedDay = { ...day, firstSelected: false, lastSelected: false };
-        
-                        if (rIndex === rowIndex && dIndex === dayIndex) {
-                            // Clicked day
-                            if (!selectedExistsNextMonth) {
-                                // If no previous selection, mark as first selected
-                                updatedDay = { ...updatedDay, selected: true, firstSelected: true };
-                            } else {
-                                if ((rIndex === startRow && dIndex === startDay) || (rIndex === endRow && dIndex === endDay)) {
-                                    // If clicked day is first or last selected day, toggle its selection
-                                    updatedDay = { ...updatedDay, selected: !day.selected, lastSelected: clickedAfterPrevious };
-                                } else if ((rIndex > startRow && rIndex < endRow) ||
-                                    (rIndex === startRow && dIndex > startDay) ||
-                                    (rIndex === endRow && dIndex < endDay)) {
-                                    // Check if clicked day is between first and last selected days
-                                    // Determine which end (first or last selected day) is closer
-                                    const distanceToStart = Math.abs(startRow - rIndex) * 7 + Math.abs(startDay - dIndex);
-                                    const distanceToEnd = Math.abs(endRow - rIndex) * 7 + Math.abs(endDay - dIndex);
-                                    // Toggle selection based on proximity to the first or last selected day
-                                    updatedDay = { ...updatedDay, selected: distanceToStart <= distanceToEnd };
-                                } else {
-                                    updatedDay = { ...updatedDay, selected: true };
-                                }
-                            }
-                        } else if (selectedExistsNextMonth && ((rIndex === startRow && dIndex >= startDay && rIndex === endRow && dIndex <= endDay) ||
-                            (rIndex === startRow && dIndex >= startDay && rIndex < endRow) ||
-                            (rIndex === endRow && dIndex <= endDay && rIndex > startRow) ||
-                            (rIndex > startRow && rIndex < endRow))) {
-                            // Select all days between the previously selected day and the clicked day
-                            updatedDay = { ...updatedDay, selected: true };
-                        }
-        
-                        return updatedDay;
-                    });
-                });
-        
-                // Ensure that the clicked day becomes one of the marginal items if it lies between them
-                if (selectedExistsNextMonth && ((rowIndex !== startRow || dayIndex !== startDay) || (rowIndex !== endRow || dayIndex !== endDay))) {
-                    // Calculate distance of clicked item to the first selected item
-                    const distanceToStart = Math.abs(startRow - rowIndex) * 7 + Math.abs(startDay - dayIndex);
-                    const distanceToEnd = Math.abs(endRow - rowIndex) * 7 + Math.abs(dayIndex - endDay);
-        
-                    if (distanceToStart < distanceToEnd) {
-                        // Ensure that the clicked day becomes the start marginal item
-                        updatedCalendarData[startRow][startDay].selected = false;
-        
-                        for (let r = startRow; r <= rowIndex; r++) {
-                            const startColumn = r === startRow ? startDay : 0;
-                            const endColumn = r === rowIndex ? dayIndex : 6;
-        
-                            for (let c = startColumn; c <= endColumn; c++) {
-                                updatedCalendarData[r][c].selected = true;
-                            }
-                        }
-                    } else {
-                        // Ensure that the clicked day becomes the end marginal item
-                        updatedCalendarData[endRow][endDay].selected = false;
-        
-                        for (let r = rowIndex; r <= endRow; r++) {
-                            const startColumn = r === rowIndex ? dayIndex : 0;
-                            const endColumn = r === endRow ? endDay : 6;
-        
-                            for (let c = startColumn; c <= endColumn; c++) {
-                                updatedCalendarData[r][c].selected = true;
-                            }
-                        }
-                    }
-                }
-        
-                // Calculate distance of clicked item to the marginal selected items
-                const firstItemDistance = calculateDistance(startRow, startDay, rowIndex, dayIndex);
-                const lastItemDistance = calculateDistance(endRow, endDay, rowIndex, dayIndex);
-                // Log the distance to the console
-                // Mark only the last ever selected element as lastSelected
-                lastSelectedRow = -1;
-                lastSelectedDay = -1;
-                updatedCalendarData.forEach((row, rIndex) => {
-                    row.forEach((day, dIndex) => {
-                        if (day.selected) {
-                            lastSelectedRow = rIndex;
-                            lastSelectedDay = dIndex;
-                        }
-                    });
-                });
-        
-                if (lastSelectedRow !== -1 && lastSelectedDay !== -1) {
-                    updatedCalendarData[lastSelectedRow][lastSelectedDay].lastSelected = true;
-                }
-                // Find the last selected item and unselect all items after it
-                let lastSelectedFound = false;
-                for (let r = 0; r < updatedCalendarData.length; r++) {
-                    for (let c = 0; c < updatedCalendarData[r].length; c++) {
-                        const day = updatedCalendarData[r][c];
-                        if (day.selected && day.lastSelected) {
-                            lastSelectedFound = true;
-                        } else if (lastSelectedFound && day.selected) {
-                            // Unselect all items after the last selected item
-                            updatedCalendarData[r][c].selected = false;
-                        }
-                    }
-                }
-        
-                return updatedCalendarData;
-            });
-        }
-        setIsActive(!isActive)
-    }
+              updatedCalendarData.forEach((row, rIndex) => {
+                  row.forEach((day, dIndex) => {
+                      if (day.selected) {
+                          lastSelectedRow = rIndex;
+                          lastSelectedDay = dIndex;
+                      }
+                  });
+              });
+  
+              if (lastSelectedRow !== -1 && lastSelectedDay !== -1) {
+                  updatedCalendarData[lastSelectedRow][lastSelectedDay].lastSelected = true;
+              }
+  
+              let lastSelectedFound = false;
+              for (let r = 0; r < updatedCalendarData.length; r++) {
+                  for (let c = 0; c < updatedCalendarData[r].length; c++) {
+                      const day = updatedCalendarData[r][c];
+                      if (day.selected && day.lastSelected) {
+                          lastSelectedFound = true;
+                      } else if (lastSelectedFound && day.selected) {
+                          updatedCalendarData[r][c].selected = false;
+                      }
+                  }
+              }
+  
+              return updatedCalendarData;
+          });
+      }
+      setIsActive(!isActive);
+  }
     
     const resetSelectedDays = (calendarData: Day[][]) => {
       return calendarData.map(row => {
@@ -752,101 +715,108 @@ interface Day {
       });
     };
     
-    // zkontroluje zda mezi vybranými dny není locked day 
-    const checkLockedDaysBetween = (rowIndex: number, dayIndex: number, calendarData: Day[][]) => {
-      // Find the position of the previously selected day
-      for (let i = 0; i < calendarData.length; i++) {
-        for (let j = 0; j < calendarData[i].length; j++) {
-          if (calendarData[i][j].selected) {
-            let startRow = i;
-            let startDay = j;
-            let endRow = rowIndex;
-            let endDay = dayIndex;
+    const checkLockedDaysBetween = (
+      rowIndex: number, dayIndex: number,
+      calendarDataCurrentMonth: Day[][], calendarDataNextMonth: Day[][]
+    ) => {
+      console.log("Checking locked days between");
     
-            // Determine the start and end positions based on the clicked day and previously selected day
-            if (rowIndex < startRow || (rowIndex === startRow && dayIndex < startDay)) {
-              endRow = startRow;
-              endDay = startDay;
-              startRow = rowIndex;
-              startDay = dayIndex;
-            }
+      // Find the selected day in the current and next month calendars
+      let selectedDay = null;
+      let selectedRow = -1;
+      let selectedDayIndex = -1;
+      let isCurrentMonthSelected = false;
     
-            // Check if there are locked days between start and end positions
-            for (let r = startRow; r <= endRow; r++) {
-              for (let c = (r === startRow ? startDay : 0); c <= (r === endRow ? endDay : 6); c++) {
-                if (calendarData[r][c].locked) {
-                  return true; // If locked day found, return true
-                }
-              }
-            }
-            return false; // If no locked day found between start and end positions
+      // Find the selected day in the current month calendar
+      for (let i = 0; i < calendarDataCurrentMonth.length; i++) {
+        for (let j = 0; j < calendarDataCurrentMonth[i].length; j++) {
+          if (calendarDataCurrentMonth[i][j].selected) {
+            selectedDay = calendarDataCurrentMonth[i][j];
+            selectedRow = i;
+            selectedDayIndex = j;
+            isCurrentMonthSelected = true;
+            break;
           }
         }
+        if (isCurrentMonthSelected) break;
       }
-      return false; // If no previously selected day found
-    };
     
-    // posle vybraná data pomoci http requestu
-    const sendSelectedDates = async () => {
-      const selectedDates = calendarDataCurrentMonth
-        .flatMap(row => row.filter(day => day.selected))
-        .map(day => new Date(currentYear, currentMonth, parseInt(day.day as string)));
-
-      // Extracting the first and last dates
-      const firstDate = selectedDates.length > 0 ? selectedDates[0] : null;
-      const lastDate = selectedDates.length > 0 ? selectedDates[selectedDates.length - 1] : null;
-      
-      try {
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/rezervaces`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            // Add any other headers as needed
-          },
-          body: JSON.stringify({ 
-            data: {
-              start: firstDate ? firstDate.toISOString() : null, // Convert to ISO string format if not null
-              end: lastDate ? lastDate.toISOString() : null, // Convert to ISO string format if not null
-              jmeno: formData.jmeno,
-              prijmeni: formData.prijmeni,
-              mail: formData.mail,
-              cislo: formData.cislo
+      // If not found in current month, check the next month
+      if (!isCurrentMonthSelected) {
+        for (let i = 0; i < calendarDataNextMonth.length; i++) {
+          for (let j = 0; j < calendarDataNextMonth[i].length; j++) {
+            if (calendarDataNextMonth[i][j].selected) {
+              selectedDay = calendarDataNextMonth[i][j];
+              selectedRow = i;
+              selectedDayIndex = j;
+              isCurrentMonthSelected = false;
+              break;
             }
-            
-          }),
-        });
-        console.log({data: {
-          start: firstDate ? firstDate.toISOString() : null, // Convert to ISO string format if not null
-          end: lastDate ? lastDate.toISOString() : null, // Convert to ISO string format if not null
-          jmeno: formData.jmeno,
-          prijmeni: formData.prijmeni,
-          mail: formData.mail,
-          cislo: formData.cislo
-        }})
-        if (response.ok) {
-          console.log('Dates sent successfully');
-        } else {
-          console.error('Failed to send dates:', response.statusText);
+          }
+          if (!isCurrentMonthSelected) break;
         }
-      } catch (error: any) { // Use type assertion to any
-        console.error('Error sending dates:', (error as any).message);
       }
-    };
-  
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-      const { name, value, type, checked } = e.target;
-      const val = type === 'checkbox' ? checked : value;
-  
-      setFormData({
-        ...formData,
-        [name]: val
-      });
+    
+      if (!selectedDay) {
+        console.log("No selected day found.");
+        return false; // No selected day found
+      }
+    
+      console.log("Selected day found:", selectedDay);
+    
+      // Determine if input day is in the same month as selectedDay
+      let isSameMonth = false;
+    
+      if (isCurrentMonthSelected) {
+        // If selected day is in current month, check if input day is in the current month too
+        if (rowIndex < calendarDataCurrentMonth.length) {
+          isSameMonth = true;
+        }
+      } else {
+        // If selected day is in next month, check if input day is in the next month too
+        if (rowIndex < calendarDataNextMonth.length) {
+          isSameMonth = true;
+        }
+      }
+    
+      // Case 1: If both days are in the same month
+      if (isSameMonth) {
+        // Scenario 1 (Same month as selectedDay): Check locked days between the selected day and the input day
+        let startRow = selectedRow;
+        let startDay = selectedDayIndex;
+        let endRow = rowIndex;
+        let endDay = dayIndex;
+    
+        // Determine the start and end positions based on the clicked day and the selected day
+        if (rowIndex < startRow || (rowIndex === startRow && dayIndex < startDay)) {
+          endRow = startRow;
+          endDay = startDay;
+          startRow = rowIndex;
+          startDay = dayIndex;
+        }
+    
+        // Check if there are locked days between the start and end positions
+        for (let r = startRow; r <= endRow; r++) {
+          for (let c = (r === startRow ? startDay : 0); c <= (r === endRow ? endDay : 6); c++) {
+            if (calendarDataCurrentMonth[r][c].locked || calendarDataNextMonth[r][c].locked) {
+              console.log("Locked day found:", calendarDataCurrentMonth[r][c]);
+              return true; // Found locked day between the selected day and the input day
+            }
+          }
+        }
+      } else {
+        console.log("Input day is not in the same month as the selected day.");
+      }
+    
+      // If no locked days are found, return false
+      return false;
     };
     
-    //zamezí refreshnutí stránky při odeslání
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-    };
+    
+    
+    
+    
+
     // názvy měsíců
     const monthNames = [
       "Leden", "Únor", "Březen", "Duben", "Květen", "Červen",
@@ -858,20 +828,20 @@ interface Day {
     const nextMonth = currentMonth === 11 ? 0 : currentMonth + 1;
     const nextYear = currentMonth === 11 ? currentYear + 1 : currentYear;
     const [selectedCount, setSelectedCount] = useState(0);
-  const [price, setPrice] = useState(0);
+    const [price, setPrice] = useState(0);
   
     //spočítá vybrané dny
-  const countSelectedDays = () => {
-    let selectedDaysCount = 0;
-    calendarDataCurrentMonth.forEach(array => {
-      array.forEach(item => {
-        if (item.selected) {
-          selectedDaysCount++;
-        }
+    const countSelectedDays = () => {
+      let selectedDaysCount = 0;
+      calendarDataCurrentMonth.forEach(array => {
+        array.forEach(item => {
+          if (item.selected) {
+            selectedDaysCount++;
+          }
+        });
       });
-    });
-    return selectedDaysCount;
-  };
+      return selectedDaysCount;
+    };
   const countSelectedDays2 = () => {
     let selectedDaysCount2 = 0;
     calendarDataNextMonth.forEach(array => {
@@ -1005,7 +975,7 @@ interface Day {
         </div>
         <div className="pujceni-counter">
           <p>Cena vypůjčení za zvolený termín: &nbsp;</p>
-          <h5>  {price}</h5>
+          <h5>  {price}Kč</h5>
         </div>
         <div className="pujceni-button">
         <button onClick={handleClick}>Objednat</button>

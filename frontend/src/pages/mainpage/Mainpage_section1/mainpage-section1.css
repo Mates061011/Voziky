@@ -1,6 +1,4 @@
-body {
-    overflow-x: hidden;
-}
+
 
 
 @keyframes vozikLoadAnim {
@@ -24,6 +22,14 @@ body {
         width: 100%;
     }
 }
+@keyframes barLoadAnim2 {
+    0% {
+        width: 0%;
+    }
+    100% {
+        width: 90vw;
+    }
+}
 @keyframes fadeInLoadAnim {
     0% {
         opacity: 0;
@@ -35,7 +41,6 @@ body {
         opacity: 1;
     }
 }
-
 
 .grey-bg>img{
     height: 760px;
@@ -257,4 +262,36 @@ body {
     height: 6px;
     background-color: #768078;
     border-radius: 5px;
+}
+@media (max-width: 479px) {
+    #section1-mp {
+        margin: 0 5%;
+        width: 90%;
+        
+        .text-part {
+            h1 {
+                font-size: 35px;
+            }
+        }
+        .picture-part {
+            background: none;
+            position: absolute;
+            top: 20%;
+            left: 40%;
+            height: fit-content;
+            width: 60%;
+            overflow-x: hidden;
+        }
+        .bar-part {
+            animation: barLoadAnim2 1.5s;
+            width: 90vw;
+            .bar-part-bg {
+                width: 100%;
+                div {
+                    margin: 5px;
+                }
+            }
+        }
+    }
+
 }

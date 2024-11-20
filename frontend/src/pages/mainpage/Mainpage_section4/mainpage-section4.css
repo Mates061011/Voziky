@@ -29,6 +29,11 @@
     background-color: #0775E2;
     color: white;
   }
+  .lastSelected {
+    background-color: #0775E2;
+    color: white;
+    border-radius: 2rem;
+  }
   .locked {
     background-color: #A20B0B; 
     color: white;
@@ -68,6 +73,7 @@
         color: #818181;
         margin-top: 160px;
         margin-bottom: 30px;
+        text-align: left;
     }
   }
   .calendar2 {
@@ -81,6 +87,7 @@
         color: #818181;
         margin-top: 160px;
         margin-bottom: 30px;
+        text-align: left;
     }
   }
 
@@ -156,4 +163,71 @@
     width: fit-content;
     color: #818181;
   }
+}
+
+
+@media (max-width: 479px) {
+  .calendarsWrapper {
+    width: auto;
+  }
+  .calendar {
+    
+    width: 90%;
+    margin: 50px 5% 0 5%;
+    .calendarsWrapper {
+      flex-direction: column;
+      align-items: center;
+      .calendar1, .calendar2 {
+        transform: scale(0.9);
+        h2 {
+          margin: 40px 0 10px 0;
+          text-align: center;
+        }
+      }
+    }
+    .popisky, .pujceni-info, .pujceni-button, .pujceni-counter {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    .popisky {
+      margin: 0;
+      justify-content: left;
+      gap: 10px;
+      .popisek1, .popisek2 {
+        gap: 5px;
+        padding: 0;
+        justify-content: left;
+        width: fit-content;
+        align-items: center;
+        div {
+          width: 25px;
+          height: 25px;
+        }
+        h3 {
+          font-size: 14px;
+          width: fit-content;
+          text-align: left;
+        }
+      }
+    }
+    .pujceni-info {
+      flex-direction: column;
+      gap: 10px;
+      align-items: flex-start;
+      p {
+        font-size: 14px;
+      }
+    }
+    .pujceni-counter {
+      align-items: end;
+      p {
+        font-size: 14px;
+      }
+      h5 {
+        font-weight: 800;
+      }
+    }
+  }
+
 }

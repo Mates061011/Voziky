@@ -95,3 +95,23 @@
         }
     }
 }
+@media (max-width: 479px) {
+    .section3 {
+        margin-top: 100px;
+        .nadpis-section3 {
+            width: 90%;
+            h3 {
+                font-size: 30px;
+                font-weight: 800;
+            }
+        }
+        .popis-a-kocarek {
+            width: 90%;
+            img {
+                width: 100%;
+                min-width: 300px;
+                opacity: 1;
+            }
+        }
+    }
+}

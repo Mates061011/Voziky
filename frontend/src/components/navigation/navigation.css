@@ -4,11 +4,17 @@
     padding: 0;
 }
 .navigation {
+
+}
+.navigation-wrap {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     height: 120px;
+    justify-content: space-between;
     align-items: center;
+    width: 70%;
+    margin: 0 15%;
 }
 .logo-cont {
     width: calc(9vw + 100px);
@@ -39,4 +45,14 @@
 .nav-link:hover {
     transform: scale(1.2);
     transition: 250ms;
+}
+@media (max-width: 479px) {
+    .navigation-wrap{
+        width: 90%;
+        margin: 0 5% ;
+        .nav-links-cont {
+            width: fit-content;
+            gap: 10px;
+        }
+    }
 }
