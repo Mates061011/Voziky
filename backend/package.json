@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "babel-node src/server.ts",
-    "build": "babel src --out-dir dist --extensions \".ts,.tsx\"",
+    "build": "npx babel src --out-dir dist --extensions \".ts,.tsx\"",
     "deploy": "node dist/server.js"
   },
   "keywords": [],
@@ -24,6 +24,7 @@
   "devDependencies": {
     "@babel/cli": "^7.25.9",
     "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
