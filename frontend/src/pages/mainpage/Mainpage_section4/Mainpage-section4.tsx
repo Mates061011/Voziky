@@ -3,7 +3,14 @@ import './mainpage-section4.css';
 import { count } from "console";
 import { waitFor } from "@testing-library/react";
 import { useNavigate } from 'react-router-dom';
-
+import {
+  startOfMonth,
+  endOfMonth,
+  eachDayOfInterval,
+  getDay,
+  addDays,
+  isSameMonth,
+} from 'date-fns';
 interface Day {
     day: number | string;
     selected: boolean;
@@ -63,7 +70,59 @@ interface Day {
       const currentMonth = currentDate.getMonth();
       generateCalendarData(currentYear, currentMonth);
     }, [data]);
-  
+    const generateCalendarDataTwoMonths = (targetYear: number, targetMonth: number) => {
+      const targetDate = new Date(targetYear, targetMonth, 1);
+    
+      // Get the first and last day of the current month
+      const startOfTargetMonth = startOfMonth(targetDate);
+      const endOfTargetMonth = endOfMonth(targetDate);
+    
+      // Get the first day of the next month
+      const startOfNextMonth = startOfMonth(addDays(endOfTargetMonth, 1));
+      const endOfNextMonth = endOfMonth(startOfNextMonth);
+    
+      // Helper function to generate the calendar for a month
+      const generateCalendarForMonth = (startOfMonthDate: Date, endOfMonthDate: Date) => {
+        const startDay = getDay(startOfMonthDate); // Sunday is 0, Monday is 1...
+        const startDate = addDays(startOfMonthDate, -((startDay + 6) % 7)); // Include previous month's padding
+        const totalDays = 42; // 6 weeks in the grid
+    
+        const calendarDays = Array.from({ length: totalDays }, (_, i) => {
+          const currentDate = addDays(startDate, i);
+          // Check if the day is locked and the last selected day
+          const { locked, lastSelected } = checkIfDaySelected(currentDate.getDate(), currentDate.getMonth(), currentDate.getFullYear());
+    
+          return {
+            day: currentDate.getDate(),
+            prevMonth: !isSameMonth(currentDate, startOfMonthDate) && currentDate < startOfMonthDate,
+            selected: false,
+            locked: locked,
+            endItem: lastSelected,
+          };
+        });
+    
+        return calendarDays;
+      };
+    
+      // Generate the current and next month calendars
+      const calendarDaysCurrentMonth = generateCalendarForMonth(startOfTargetMonth, endOfTargetMonth);
+      const calendarDaysNextMonth = generateCalendarForMonth(startOfNextMonth, endOfNextMonth);
+    
+      // Structure the calendar into rows of weeks (6 rows of 7 days)
+      const calendarRowsCurrentMonth = Array.from({ length: 6 }, (_, i) =>
+        calendarDaysCurrentMonth.slice(i * 7, i * 7 + 7)
+      );
+    
+      const calendarRowsNextMonth = Array.from({ length: 6 }, (_, i) =>
+        calendarDaysNextMonth.slice(i * 7, i * 7 + 7)
+      );
+      console.log(calendarDataCurrentMonth)
+      console.log(calendarDataNextMonth)
+      // Set the state with both current and next month calendars
+      setCalendarDataCurrentMonth(calendarRowsCurrentMonth);
+      setCalendarDataNextMonth(calendarRowsNextMonth);
+    };
+    
     const generateCalendarData = (targetYear: number, targetMonth: number) => {
       const targetDate = new Date(targetYear, targetMonth, 1);
       const targetMonthIndex = targetDate.getMonth();
@@ -148,7 +207,7 @@ interface Day {
         }
         calendarArrayNextMonth.push(nextMonthRow);
       }
-    
+      console.log("old way",calendarArrayCurrentMonth)
       setCalendarDataCurrentMonth(calendarArrayCurrentMonth);
       setCalendarDataNextMonth(calendarArrayNextMonth);
     };
