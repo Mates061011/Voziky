@@ -1,7 +1,5 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent, useCallback }  from "react"
 import './mainpage-section4.css';
-import { count } from "console";
-import { waitFor } from "@testing-library/react";
 import { useNavigate } from 'react-router-dom';
 import {
   startOfMonth,
