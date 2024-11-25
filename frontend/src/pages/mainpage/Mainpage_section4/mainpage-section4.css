@@ -1,242 +1,230 @@
-.calendar {
-    display: flex;
-    flex-direction: column; 
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
-  }
-  
-  .week {
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 10px;
-  }
-  
-  .day,.day-name {
-    text-align: center;
-    padding: 10px;
-    font-family: "Inter";
-    font-weight: 500;
-    color: #8A8A96;
-    height: 20px;
-    width: 20px;
-    line-height: 1.19;
-    cursor: pointer;
-    user-select: none;
-  }
-  .selected {
-    background-color: #0775E2;
-    color: white;
-  }
-  .lastSelected {
-    background-color: #0775E2;
-    color: white;
-    border-radius: 2rem;
-  }
-  .locked {
-    background-color: #A20B0B; 
-    color: white;
-    user-select: none;
-    pointer-events: none;
-    border-radius: 2rem;
-  }
-  .endItem {
-    border-top-right-radius: 2rem;
-    border-bottom-right-radius: 2rem;
-  }
-  .selected {
-    border-radius: 2rem;
-  }
-  .prevMonth {
-    color: rgb(180, 180, 180);
-  }
-  .week .day:last-child {
-    border-top-right-radius: 2rem;
-    border-bottom-right-radius: 2rem;
-  }
-  .calendarsWrapper {
-    width: 800px;
-    display: flex;
-    flex-direction: row;
-    justify-content:space-between;
-  }
-  .calendar1 {
-
-    width: fit-content;
-    display: flex;
-    flex-direction: column;
-    row-gap: 10px;
-    align-items: left;
-    h2 {
-        font-family: "Inter";
-        color: #818181;
-        margin-top: 160px;
-        margin-bottom: 30px;
-        text-align: left;
-    }
-  }
-  .calendar2 {
-    align-items: left;
-    width: fit-content;
-    display: flex;
-    flex-direction: column;
-    row-gap: 10px;
-    h2 {
-        font-family: "Inter";
-        color: #818181;
-        margin-top: 160px;
-        margin-bottom: 30px;
-        text-align: left;
-    }
-  }
-
-.popisky {
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Orbitron:wght@400..900&family=Oxanium:wght@200..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+:root {
+    --primary-color: #0775E2;
+    --disabled-color: #A20B0B;
+    --font-size-calendar: 18px;
+    --font-size-info: 20px;
+}
+.datePickerCont {
   display: flex;
   flex-direction: row;
-  width: 800px;
-  gap: 50px;
-  .popisek1, .popisek2 {
-    padding-top: 15px;
+  align-items: center;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.react-datepicker__day--selected.react-datepicker__day--range-start.react-datepicker__day--range-end.react-datepicker__day--in-range {
+    border-radius: 2rem;
+  }
+  
+.react-datepicker__current-month {
+    font-size: 20px;
+}
+.react-datepicker__day--today {
+    border-radius: 2rem;
+    background-color: lightgrey;
+}
+.react-datepicker__header__dropdown {
+    display: none;
+}
+.react-datepicker__navigation {
+    outline: none;
+    border: none;
+}
+.react-datepicker__day--disabled {
+    background-color: var(--disabled-color);
+    border-radius: 2rem;
+}
+.react-datepicker__day--selected {
+    background-color: var(--primary-color);
+    border-radius: 2rem;
+}
+.react-datepicker__day--range-end {
+    border-radius: 0.7rem 30px 30px 0.7rem;
+    background-color: var(--primary-color);
+    color: white;
+}
+.react-datepicker__day--range-start {
+    border-radius: 30px 0.7rem 0.7rem 30px;
+}
+.react-datepicker__day--selecting-range-start {
+    border-radius: 30px 0.7rem 0.7rem 30px;
+}
+.react-datepicker__day--selecting-range-end {
+    border-radius: 0.7rem 30px 30px 0.7rem;
+}
+.react-datepicker__day--in-range:not([aria-disabled=true]):hover, 
+.react-datepicker__month-text--selected:not([aria-disabled=true]):hover, 
+.react-datepicker__month-text--in-selecting-range:not([aria-disabled=true]):hover, 
+.react-datepicker__month-text--in-range:not([aria-disabled=true]):hover, 
+.react-datepicker__quarter-text--selected:not([aria-disabled=true]):hover, 
+.react-datepicker__quarter-text--in-selecting-range:not([aria-disabled=true]):hover, 
+.react-datepicker__quarter-text--in-range:not([aria-disabled=true]):hover, 
+.react-datepicker__year-text--selected:not([aria-disabled=true]):hover, 
+.react-datepicker__year-text--in-selecting-range:not([aria-disabled=true]):hover, 
+.react-datepicker__year-text--in-range:not([aria-disabled=true]):hover {
+    background-color: var(--primary-color);
+}
+.react-datepicker__day--selected, 
+.react-datepicker__day--in-selecting-range, 
+.react-datepicker__day--in-range, 
+.react-datepicker__month-text--selected, 
+.react-datepicker__month-text--in-selecting-range, 
+.react-datepicker__month-text--in-range, 
+.react-datepicker__quarter-text--selected, 
+.react-datepicker__quarter-text--in-selecting-range, 
+.react-datepicker__quarter-text--in-range, 
+.react-datepicker__year-text--selected, 
+.react-datepicker__year-text--in-selecting-range, 
+.react-datepicker__year-text--in-range {
+    background-color: var(--primary-color);
+}
+
+
+.react-datepicker__day:not([aria-disabled=true]):hover, .react- datepicker____month-text:not([aria-disabled=true]):hover, .react- datepicker_quarter-text:not([aria-disabled=true]):hover, .react- datepicker___year-text:not([aria-disabled=true]):hover {
+    border-radius: 2rem;
+}
+
+.react-datepicker__year-select, .react-datepicker__month-select {
+    font-size: var(--font-size-calendar);
+    padding: 5px 10px;
+    border: none;
+    border-radius: 2rem;
+}
+
+.react-datepicker__month-container {
+    float: none;
+}
+
+.react-datepicker {
+    width: 400px; /* Increase the calendar width */
+}
+
+
+.react-datepicker__day, .react-datepicker__day-name {
+    font-size: var(--font-size-calendar); 
+    padding: 10px; 
+}
+
+/* Make the calendar header buttons bigger */
+.react-datepicker__navigation {
+    font-size: 24px; /* Increase the size of navigation buttons */
+}
+    
+
+.react-datepicker {
     display: flex;
-    gap: 12px;
     flex-direction: row;
     width: fit-content;
-    justify-content: center;
-    div{ 
-      width: 28px;
-      height: 28px;
-      border-radius: 2rem;
-    }
-    h3 {
-      display: flex;
-      align-items: center;
-      font-family: "Inter";
-      font-weight: 500;
-      font-size: 18px;
-      color: #818181;
-    }
-  }
+}
+.react-datepicker__month{
+    width: auto;
+}
+
+.popisky, .pujceni-info, .pujceni-button, .pujceni-counter {
+    width: 100%;
+    margin: 0;
+    padding: 0;
 }
 .pujceni-info {
-  width: 800px;
-  display: flex;
-  align-items: center;
-  justify-content: left;
-  padding: 20px;
-  gap: 40px;
-  p {
-    font-family: "Inter";
-      font-weight: 500;
-      font-size: 18px;
-      color: #818181;
-  }
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+    width: 400px;
+    display: flex;
+    justify-content: left;
+    gap: 40px;
+    p {
+        font-size: 12px;
+        text-align: left;
+        font-weight: 500;
+        font-size: var(--font-size-info);
+        color: #818181;
+    }
+}
+.pujceni-counter {
+    align-items: end;
+    p {
+        font-size: 12px;
+        text-align: left;
+    }
+    h5 {
+        font-weight: 800;
+    }
 }
 .pujceni-button {
-  width: 850px;
-  display: flex;
-  align-items: center;
-  justify-content: left;
+    justify-content: center;
+    width: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
 }
+
 .popisek1>div {
-  background-color: #A20B0B;
+    background-color: var(--disabled-color);
 }
 .popisek2>div {
-  background-color: #0775E2;
+    background-color: var(--primary-color);
 }
-
+  
 .pujceni-counter {
-  width: 800px;
-  display: flex;
-  flex-wrap: nowrap;
-  flex-direction: row;
-  p {
-    font-family: "Inter";
-      font-weight: 500;
-      font-size: 18px;
-      color: #818181;
-  }
-  h5 {
-    font-family: "Inter";
-    font-weight: 500;
-    font-size: 18px;
-    width: fit-content;
-    color: #818181;
-  }
+    width: 400px;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    p {
+        font-weight: 500;
+        font-size: var(--font-size-info);
+        color: #818181;
+    }
+    h5 {
+        font-weight: 500;
+        font-size: var(--font-size-info);
+        width: fit-content;
+        color: #818181;
+    }
+}
+.popiskyCont {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 400px;
+}
+.popisky {
+    display: flex;
+    flex-direction: row;
+    width: 400px;
+    margin: 0;
+    gap: 10px;
+    justify-content: left;
 }
 
+.popisky .popisek1,
+.popisky .popisek2 {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    padding: 0;
+    width: fit-content;
+    align-items: center;
+    justify-content: left;
+}
 
-@media (max-width: 479px) {
-  .calendarsWrapper {
-    width: 100%;
+.popisky .popisek1 div,
+.popisky .popisek2 div {
+    width: 25px;
+    height: 25px;
+    border-radius: 2rem;
+}
 
-  }
-  .calendar2 {
-    translate: 0 -50px;
-  }
-  .calendar {
-    
-    width: 90%;
-    margin: 50px 5% 0 5%;
-    .calendarsWrapper {
-      flex-direction: column;
-      align-items: center;
-      .calendar1, .calendar2 {
-        transform: scale(0.8);
-        h2 {
-          margin: 40px 0 10px 0;
-          text-align: center;
-        }
-      }
-    }
-    .popisky, .pujceni-info, .pujceni-button, .pujceni-counter {
-      width: 100%;
-      margin: 0;
-      padding: 0;
-    }
-    .popisky {
-      margin: 0;
-      justify-content: left;
-      gap: 10px;
-      .popisek1, .popisek2 {
-        gap: 5px;
-        padding: 0;
-        justify-content: left;
-        width: fit-content;
-        align-items: center;
-        div {
-          width: 25px;
-          height: 25px;
-        }
-        h3 {
-          font-size: 12px;
-          width: fit-content;
-          text-align: left;
-        }
-      }
-    }
-    .pujceni-info {
-      flex-direction: column;
-      gap: 10px;
-      align-items: flex-start;
-      p {
-        font-size: 12px;
-        text-align: left;
-      }
-    }
-    .pujceni-counter {
-      align-items: end;
-      p {
-        font-size: 12px;
-        text-align: left;
-      }
-      h5 {
-        font-weight: 800;
-      }
-    }
-    .pujceni-button {
-      justify-content: center;
-    }
-  }
-
+.popisky .popisek1 h3,
+.popisky .popisek2 h3 {
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    font-size: 12px;
+    width: fit-content;
+    text-align: left;
+    color: #818181;
 }

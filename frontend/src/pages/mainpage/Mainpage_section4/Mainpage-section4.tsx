@@ -1,1046 +1,148 @@
-import React, { useState, useEffect, ChangeEvent, FormEvent, useCallback }  from "react"
-import './mainpage-section4.css';
-import { useNavigate } from 'react-router-dom';
-import {
-  startOfMonth,
-  endOfMonth,
-  eachDayOfInterval,
-  getDay,
-  addDays,
-  isSameMonth,
-} from 'date-fns';
-interface Day {
-    day: number | string;
-    selected: boolean;
-    firstSelected?: boolean;
-    lastSelected?: boolean;
-    locked?: boolean;
-    endItem?: boolean;
-    prevMonth?: boolean;
-  }
-  interface FormData {
-    jmeno: string;
-    prijmeni: string;
-    mail: string;
-    cislo: string;
-  }
-  const Section4 = () => {
-    const [isActive, setIsActive] = useState(true);
-    const [data, setData] = useState<any[]>([]);
-    const [formData, setFormData] = useState<FormData>({
-      jmeno: '',
-      prijmeni: '',
-      mail: '',
-      cislo: ''
-    });
-    useEffect(() => {
-      fetchData();
-    }, []);
-    //get reservated days
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/appointment`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch data');
-        }
-        const jsonData = await response.json();
-        if (Array.isArray(jsonData)) {
-          setData(jsonData); // Set data if it's an array
-        } else {
-          console.error('Data is not an array');
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    
+import { useEffect, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import DatePicker from "react-datepicker";
+import { registerLocale } from "react-datepicker";
+import { cs } from "date-fns/locale";
+import "react-datepicker/dist/react-datepicker.css";
+import "./mainpage-section4.css";
 
-    // Get the current year and month
-    const currentDate = new Date();
-    const [currentYear, setCurrentYear] = useState<number>(currentDate.getFullYear());
-    const [currentMonth, setCurrentMonth] = useState<number>(currentDate.getMonth());
-    const [calendarDataCurrentMonth, setCalendarDataCurrentMonth] = useState<Day[][]>([]);
-    const [calendarDataNextMonth, setCalendarDataNextMonth] = useState<Day[][]>([]);
-  
-    useEffect(() => {
-      const currentDate = new Date();
-      const currentYear = currentDate.getFullYear();
-      const currentMonth = currentDate.getMonth();
-      generateCalendarData(currentYear, currentMonth);
-    }, [data]);
-    const generateCalendarDataTwoMonths = (targetYear: number, targetMonth: number) => {
-      const targetDate = new Date(targetYear, targetMonth, 1);
-    
-      // Get the first and last day of the current month
-      const startOfTargetMonth = startOfMonth(targetDate);
-      const endOfTargetMonth = endOfMonth(targetDate);
-    
-      // Get the first day of the next month
-      const startOfNextMonth = startOfMonth(addDays(endOfTargetMonth, 1));
-      const endOfNextMonth = endOfMonth(startOfNextMonth);
-    
-      // Helper function to generate the calendar for a month
-      const generateCalendarForMonth = (startOfMonthDate: Date, endOfMonthDate: Date) => {
-        const startDay = getDay(startOfMonthDate); // Sunday is 0, Monday is 1...
-        const startDate = addDays(startOfMonthDate, -((startDay + 6) % 7)); // Include previous month's padding
-        const totalDays = 42; // 6 weeks in the grid
-    
-        const calendarDays = Array.from({ length: totalDays }, (_, i) => {
-          const currentDate = addDays(startDate, i);
-          // Check if the day is locked and the last selected day
-          const { locked, lastSelected } = checkIfDaySelected(currentDate.getDate(), currentDate.getMonth(), currentDate.getFullYear());
-    
-          return {
-            day: currentDate.getDate(),
-            prevMonth: !isSameMonth(currentDate, startOfMonthDate) && currentDate < startOfMonthDate,
-            selected: false,
-            locked: locked,
-            endItem: lastSelected,
-          };
-        });
-    
-        return calendarDays;
-      };
-    
-      // Generate the current and next month calendars
-      const calendarDaysCurrentMonth = generateCalendarForMonth(startOfTargetMonth, endOfTargetMonth);
-      const calendarDaysNextMonth = generateCalendarForMonth(startOfNextMonth, endOfNextMonth);
-    
-      // Structure the calendar into rows of weeks (6 rows of 7 days)
-      const calendarRowsCurrentMonth = Array.from({ length: 6 }, (_, i) =>
-        calendarDaysCurrentMonth.slice(i * 7, i * 7 + 7)
-      );
-    
-      const calendarRowsNextMonth = Array.from({ length: 6 }, (_, i) =>
-        calendarDaysNextMonth.slice(i * 7, i * 7 + 7)
-      );
-      console.log(calendarDataCurrentMonth)
-      console.log(calendarDataNextMonth)
-      // Set the state with both current and next month calendars
-      setCalendarDataCurrentMonth(calendarRowsCurrentMonth);
-      setCalendarDataNextMonth(calendarRowsNextMonth);
-    };
-    
-    const generateCalendarData = (targetYear: number, targetMonth: number) => {
-      const targetDate = new Date(targetYear, targetMonth, 1);
-      const targetMonthIndex = targetDate.getMonth();
-      const targetYearValue = targetDate.getFullYear();
-      const daysInTargetMonth = new Date(targetYearValue, targetMonthIndex + 1, 0).getDate();
-      const daysInNextMonth = new Date(targetYearValue, targetMonthIndex + 2, 0).getDate();
-    
-      let firstDayOfTargetMonth = new Date(targetYearValue, targetMonthIndex, 1).getDay();
-      firstDayOfTargetMonth = (firstDayOfTargetMonth === 0) ? 6 : firstDayOfTargetMonth - 1;
-    
-      let firstDayOfNextMonth = new Date(targetYearValue, targetMonthIndex + 1, 1).getDay();
-      firstDayOfNextMonth = (firstDayOfNextMonth === 0) ? 6 : firstDayOfNextMonth - 1;
-    
-      let calendarArrayCurrentMonth = [];
-      let calendarArrayNextMonth = [];
-      let currentRow = [];
-    
-      // Push space characters for days from the previous month
-      for (let i = firstDayOfTargetMonth - 1; i >= 0; i--) {
-        currentRow.push({
-          day: ' ',
-          selected: false,
-          prevMonth: true,
-        });
-      }
-    
-      // Push days from the target month
-      for (let i = 1; i <= daysInTargetMonth; i++) {
-        const { locked, lastSelected } = checkIfDaySelected(i, targetMonth, targetYearValue);
-        currentRow.push({
-          day: i,
-          selected: false,
-          prevMonth: false,
-          locked: locked,
-          endItem: lastSelected,
-        });
-    
-        if (i === daysInTargetMonth || currentRow.length === 7) {
-          calendarArrayCurrentMonth.push(currentRow);
-          currentRow = [];
-        }
-      }
-    
-      let nextMonthRow = [];
-      // Push space characters for days from the next month
-      for (let i = firstDayOfNextMonth - 1; i >= 0; i--) {
-        nextMonthRow.push({
-          day: ' ',
-          selected: false,
-          prevMonth: false,
-        });
-      }
-    
-      // Push remaining days from the next month if necessary
-      if (calendarArrayCurrentMonth.length < 6) {
-        for (let i = 1; i <= daysInNextMonth; i++) {
-          const { locked, lastSelected } = checkIfDaySelected(i, targetMonth + 1, targetYearValue); // Adjust month index for next month
-          nextMonthRow.push({
-            day: i,
-            selected: false,
-            prevMonth: true, // These days are from next month
-            locked: locked,
-            endItem: lastSelected,
-          });
-    
-          if (i === daysInNextMonth || nextMonthRow.length === 7) {
-            calendarArrayNextMonth.push(nextMonthRow);
-            nextMonthRow = [];
-          }
-        }
-      }
-    
-      // Push space characters for remaining days from the next month
-      while (calendarArrayCurrentMonth.length + calendarArrayNextMonth.length < 6) {
-        let nextMonthRow = [];
-        for (let i = 1; i <= 7; i++) {
-          nextMonthRow.push({
-            day: ' ',
-            selected: false,
-            prevMonth: false,
-          });
-        }
-        calendarArrayNextMonth.push(nextMonthRow);
-      }
-      console.log("old way",calendarArrayCurrentMonth)
-      setCalendarDataCurrentMonth(calendarArrayCurrentMonth);
-      setCalendarDataNextMonth(calendarArrayNextMonth);
-    };
-    
-    
-    const checkIfDaySelected = (day: number, month: number, year: number) => {
-      let lastSelected = false;
-    
-      if (!Array.isArray(data)) {
-        console.error('Data is not an array or is undefined');
-        return { locked: false, lastSelected };
-      }
-    
-      const currentDate = new Date(year, month, day);
-    
-      // Check if the day is locked and if it is the last selected day
-      const isDayLocked = data.some((item: any) => {
-        const startDate = new Date(item.startDate);
-        const endDate = new Date(item.endDate);
-    
-        // Only consider the day if userConfirmed is true
-        if (item.userConfirmed) {
-          // Check if the current day falls within the start and end date range
-          if ((currentDate >= startDate && currentDate <= endDate) || isStartDay(currentDate, startDate)) {
-            if (endDate.getDate() === day) {
-              lastSelected = true;
-            }
-            return true;
-          }
-        }
-        return false;
-      });
-    
-      return { locked: isDayLocked, lastSelected };
-    };
-    
-    
-    
-    
-    
+registerLocale("cs", cs);
 
-    const isStartDay = (currentDate: Date, startDate: Date) => {
-      return currentDate.getFullYear() === startDate.getFullYear() &&
-        currentDate.getMonth() === startDate.getMonth() &&
-        currentDate.getDate() === startDate.getDate();
-    };
-    
-    // vypočítá vzdálenost mezi dny, (vklad jsou dvoje souřadnice)
-    const calculateDistance = (row1: number, col1: number, row2: number, col2: number): number => {
-      return Math.sqrt((row2 - row1) ** 2 + (col2 - col1) ** 2);
-    };
-    
-    const handleDayClickNextMonth = (rowIndex: number, dayIndex: number) => {
-      console.log(`is Active: ${isActive}`);
-      let clickedDay: Day;
-      if(isActive == true) {
-          clickedDay = calendarDataNextMonth[rowIndex][dayIndex];
-          if (clickedDay.locked) {
-              return;
-          }
-          if (!clickedDay.prevMonth) {
-            return;
-          }
-          //vynuluje data
-          const updatedCalendarData = resetSelectedDays(calendarDataCurrentMonth);
-            const updatedCalendarDataX = resetSelectedDays(calendarDataNextMonth);
-            setCalendarDataCurrentMonth(updatedCalendarData);
-            setCalendarDataNextMonth(updatedCalendarDataX);
-          
-          //save the previous calendar data
-          setCalendarDataNextMonth((prevCalendarData) => {
-              const updatedCalendarData = prevCalendarData.map((row, rIndex) => {
-                  return row.map((day, dIndex) => {
-                      // Reset selected state for all days
-                      let updatedDay = { ...day, selected: false };
-          
-                      // Check if the current day matches the input day
-                      if (rIndex === rowIndex && dIndex === dayIndex) {
-                          updatedDay = { ...updatedDay, selected: true };
-                      }
-          
-                      return updatedDay;
-                  });
-              });
-      
-              return updatedCalendarData;
-          });
-          console.log(calendarDataCurrentMonth)
-          console.log(calendarDataNextMonth)
-      }
-      else {
-          // check if the clicked day is locked
-          const clickedDay = calendarDataNextMonth[rowIndex][dayIndex];
-          if (clickedDay.locked) {
-              return;
-          }
-          if (!clickedDay.prevMonth) {
-            return;
-          }
-          // Check if there are locked days between previously selected and newly selected days
-          if (checkLockedDaysBetween(rowIndex, dayIndex, calendarDataCurrentMonth, calendarDataNextMonth)) {
-            console.log("locked, exiting")
-              return;
-          }
-          // Check if there are any selected days in the current month
-          let selectedDayInCurrentMonth: Day | null = null;
-          for (let i = 0; i < calendarDataCurrentMonth.length; i++) {
-              for (let j = 0; j < calendarDataCurrentMonth[i].length; j++) {
-                  if (calendarDataCurrentMonth[i][j].selected) {
-                      selectedDayInCurrentMonth = calendarDataCurrentMonth[i][j];
-                      break;
-                  }
-              }
-              if (selectedDayInCurrentMonth) break;
-          }
-          if(selectedDayInCurrentMonth != null){
-            // Find the row and column index of the selected day in calendarDataCurrentMonth
-            const selectedRowIndex = calendarDataCurrentMonth.findIndex(row => row.includes(selectedDayInCurrentMonth as Day));
-            const selectedDayIndex = calendarDataCurrentMonth[selectedRowIndex].indexOf(selectedDayInCurrentMonth as Day);
-
-            for (let i = selectedRowIndex; i < calendarDataCurrentMonth.length; i++) {
-                const startColumn = (i === selectedRowIndex) ? (selectedDayIndex + 1) : 0;
-                for (let j = startColumn; j < calendarDataCurrentMonth[i].length; j++) {
-                    if (calendarDataCurrentMonth[i][j].prevMonth) {
-                        continue; // Skip days from the previous month
-                    }
-                    calendarDataCurrentMonth[i][j].selected = true; // Select days from the current month
-                }
-            }
-            const selectedRowIndex2 = calendarDataNextMonth.findIndex(row => row.includes(clickedDay as Day));
-            const selectedDayIndex2 = calendarDataNextMonth[selectedRowIndex2].indexOf(clickedDay as Day);
-
-            // Mark all days before the selected day as selected
-            for (let i = 0; i <= selectedRowIndex2; i++) {
-              const endColumn2 = (i === selectedRowIndex2) ? selectedDayIndex2 : calendarDataNextMonth[i].length - 1;
-              for (let j = 0; j <= endColumn2; j++) {
-                if (!calendarDataNextMonth[i][j].prevMonth) {
-                  continue; // Skip this day and continue to the next one
-                }
-                calendarDataNextMonth[i][j].selected = true;
-              }
-            }
-          }
-
-          //save the previous calendar data
-          setCalendarDataNextMonth((prevCalendarData) => {
-              let startRow = -1;
-              let startDay = -1;
-              let endRow = rowIndex;
-              let endDay = dayIndex;
-              let selectedExistsNextMonth = false; // Renamed selectedExists to selectedExistsNextMonth
-              if (selectedExistsNextMonth && endRow !== -1 && endDay !== -1) {
-                  endRow = rowIndex;
-                  endDay = dayIndex;
-              }
-              // Find the position of the previously selected day
-              for (let i = 0; i < prevCalendarData.length; i++) {
-                  for (let j = 0; j < prevCalendarData[i].length; j++) {
-                      if (prevCalendarData[i][j].selected) {
-                          startRow = i;
-                          startDay = j;
-                          selectedExistsNextMonth = true; // Renamed selectedExists to selectedExistsNextMonth
-                          break;
-                      }
-                  }
-                  if (selectedExistsNextMonth) break;
-              }
-              // Find the last selected item from prevCalendarData
-              let lastSelectedRow = -1;
-              let lastSelectedDay = -1;
-              for (let i = prevCalendarData.length - 1; i >= 0; i--) {
-                  for (let j = prevCalendarData[i].length - 1; j >= 0; j--) {
-                      if (prevCalendarData[i][j].selected) {
-                          lastSelectedRow = i;
-                          lastSelectedDay = j;
-                          break;
-                      }
-                  }
-                  if (lastSelectedRow !== -1 && lastSelectedDay !== -1) {
-                      break;
-                  }
-              }
-      
-              // Update endRow and endDay based on the last selected item from prevCalendarData
-              if (lastSelectedRow !== -1 && lastSelectedDay !== -1) {
-                  endRow = lastSelectedRow;
-                  endDay = lastSelectedDay;
-              }
-      
-              // Check if the clicked day comes after any previously selected day
-              const clickedAfterPrevious = selectedExistsNextMonth && ((rowIndex > startRow) || (rowIndex === startRow && dayIndex >= startDay));
-      
-              // Update start and end positions based on clicked day and previously selected day
-              if (selectedExistsNextMonth) {
-                  if (!clickedAfterPrevious) {
-                      // If clicked before any previously selected day, update start positions
-                      endRow = startRow;
-                      endDay = startDay;
-                      startRow = rowIndex;
-                      startDay = dayIndex;
-                  } else {
-                      // Update end positions
-                      endRow = rowIndex;
-                      endDay = dayIndex;
-                  }
-              }
-      
-              // Update the selected days based on the start and end positions
-              let updatedCalendarData = prevCalendarData.map((row, rIndex) => {
-                  return row.map((day, dIndex) => {
-                      // Reset firstSelected and lastSelected for all days
-                      let updatedDay = { ...day, firstSelected: false, lastSelected: false };
-      
-                      if (rIndex === rowIndex && dIndex === dayIndex) {
-                          // Clicked day
-                          if (!selectedExistsNextMonth) {
-                              // If no previous selection, mark as first selected
-                              updatedDay = { ...updatedDay, selected: true, firstSelected: true };
-                          } else {
-                              if ((rIndex === startRow && dIndex === startDay) || (rIndex === endRow && dIndex === endDay)) {
-                                  // If clicked day is first or last selected day, toggle its selection
-                                  updatedDay = { ...updatedDay, selected: !day.selected, lastSelected: clickedAfterPrevious };
-                              } else if ((rIndex > startRow && rIndex < endRow) ||
-                                  (rIndex === startRow && dIndex > startDay) ||
-                                  (rIndex === endRow && dIndex < endDay)) {
-                                  // Check if clicked day is between first and last selected days
-                                  // Determine which end (first or last selected day) is closer
-                                  const distanceToStart = Math.abs(startRow - rIndex) * 7 + Math.abs(startDay - dIndex);
-                                  const distanceToEnd = Math.abs(endRow - rIndex) * 7 + Math.abs(endDay - dIndex);
-                                  // Toggle selection based on proximity to the first or last selected day
-                                  updatedDay = { ...updatedDay, selected: distanceToStart <= distanceToEnd };
-                              } else {
-                                  updatedDay = { ...updatedDay, selected: true };
-                              }
-                          }
-                      } else if (selectedExistsNextMonth && ((rIndex === startRow && dIndex >= startDay && rIndex === endRow && dIndex <= endDay) ||
-                          (rIndex === startRow && dIndex >= startDay && rIndex < endRow) ||
-                          (rIndex === endRow && dIndex <= endDay && rIndex > startRow) ||
-                          (rIndex > startRow && rIndex < endRow))) {
-                          // Select all days between the previously selected day and the clicked day
-                          updatedDay = { ...updatedDay, selected: true };
-                      }
-      
-                      return updatedDay;
-                  });
-              });
-      
-              // Ensure that the clicked day becomes one of the marginal items if it lies between them
-              if (selectedExistsNextMonth && ((rowIndex !== startRow || dayIndex !== startDay) || (rowIndex !== endRow || dayIndex !== endDay))) {
-                  // Calculate distance of clicked item to the first selected item
-                  const distanceToStart = Math.abs(startRow - rowIndex) * 7 + Math.abs(startDay - dayIndex);
-                  const distanceToEnd = Math.abs(endRow - rowIndex) * 7 + Math.abs(dayIndex - endDay);
-      
-                  if (distanceToStart < distanceToEnd) {
-                      // Ensure that the clicked day becomes the start marginal item
-                      updatedCalendarData[startRow][startDay].selected = false;
-      
-                      for (let r = startRow; r <= rowIndex; r++) {
-                          const startColumn = r === startRow ? startDay : 0;
-                          const endColumn = r === rowIndex ? dayIndex : 6;
-      
-                          for (let c = startColumn; c <= endColumn; c++) {
-                              updatedCalendarData[r][c].selected = true;
-                          }
-                      }
-                  } else {
-                      // Ensure that the clicked day becomes the end marginal item
-                      updatedCalendarData[endRow][endDay].selected = false;
-      
-                      for (let r = rowIndex; r <= endRow; r++) {
-                          const startColumn = r === rowIndex ? dayIndex : 0;
-                          const endColumn = r === endRow ? endDay : 6;
-      
-                          for (let c = startColumn; c <= endColumn; c++) {
-                              updatedCalendarData[r][c].selected = true;
-                          }
-                      }
-                  }
-              }
-      
-              // Calculate distance of clicked item to the marginal selected items
-              const firstItemDistance = calculateDistance(startRow, startDay, rowIndex, dayIndex);
-              const lastItemDistance = calculateDistance(endRow, endDay, rowIndex, dayIndex);
-              // Log the distance to the console
-              // Mark only the last ever selected element as lastSelected
-              lastSelectedRow = -1;
-              lastSelectedDay = -1;
-              updatedCalendarData.forEach((row, rIndex) => {
-                  row.forEach((day, dIndex) => {
-                      if (day.selected) {
-                          lastSelectedRow = rIndex;
-                          lastSelectedDay = dIndex;
-                      }
-                  });
-              });
-      
-              if (lastSelectedRow !== -1 && lastSelectedDay !== -1) {
-                  updatedCalendarData[lastSelectedRow][lastSelectedDay].lastSelected = true;
-              }
-              // Find the last selected item and unselect all items after it
-              let lastSelectedFound = false;
-              for (let r = 0; r < updatedCalendarData.length; r++) {
-                  for (let c = 0; c < updatedCalendarData[r].length; c++) {
-                      const day = updatedCalendarData[r][c];
-                      if (day.selected && day.lastSelected) {
-                          lastSelectedFound = true;
-                      } else if (lastSelectedFound && day.selected) {
-                          // Unselect all items after the last selected item
-                          updatedCalendarData[r][c].selected = false;
-                      }
-                  }
-              }
-      
-              return updatedCalendarData;
-          });
-      }
-      setIsActive(!isActive)
-    }
-    const handleDayClickCurrentMonth = (rowIndex: number, dayIndex: number) => {
-      console.log(`is Active: ${isActive}`);
-      if (isActive) {
-          const clickedDay = calendarDataCurrentMonth[rowIndex][dayIndex];
-          if (clickedDay.locked || clickedDay.prevMonth) {
-              return;
-          }
-          
-          // Reset selected days
-          const updatedCalendarData = resetSelectedDays(calendarDataCurrentMonth);
-          const updatedCalendarDataX = resetSelectedDays(calendarDataNextMonth);
-          setCalendarDataCurrentMonth(updatedCalendarData);
-          setCalendarDataNextMonth(updatedCalendarDataX);
-          
-          // Save the previous calendar data
-          setCalendarDataCurrentMonth((prevCalendarData) => {
-              const updatedCalendarData = prevCalendarData.map((row, rIndex) => {
-                  return row.map((day, dIndex) => {
-                      // Reset selected state for all days
-                      let updatedDay = { ...day, selected: false };
-                      // Check if the current day matches the input day
-                      if (rIndex === rowIndex && dIndex === dayIndex) {
-                          updatedDay = { ...updatedDay, selected: true };
-                      }
-                      return updatedDay;
-                  });
-              });
-              return updatedCalendarData;
-          });
-          console.log(calendarDataCurrentMonth);
-          console.log(calendarDataNextMonth);
-      } else {
-          const clickedDay = calendarDataCurrentMonth[rowIndex][dayIndex];
-          if (clickedDay.locked || clickedDay.prevMonth) {
-              return;
-          }
-  
-          // Check for locked days between previously selected and newly selected days
-          if (checkLockedDaysBetween(rowIndex, dayIndex, calendarDataCurrentMonth, calendarDataNextMonth)) {
-              console.log("locked, exiting");
-              return;
-          }
-  
-          // Check for previously selected days in the next month
-          let selectedDayInNextMonth: Day | null = null;
-          for (let i = 0; i < calendarDataNextMonth.length; i++) {
-              for (let j = 0; j < calendarDataNextMonth[i].length; j++) {
-                  if (calendarDataNextMonth[i][j].selected) {
-                      selectedDayInNextMonth = calendarDataNextMonth[i][j];
-                      break;
-                  }
-              }
-              if (selectedDayInNextMonth) break;
-          }
-  
-          if (selectedDayInNextMonth != null) {
-              const selectedRowIndex = calendarDataNextMonth.findIndex(row => row.includes(selectedDayInNextMonth as Day));
-              const selectedDayIndex = calendarDataNextMonth[selectedRowIndex].indexOf(selectedDayInNextMonth as Day);
-  
-              // Mark all days before the selected day as selected
-              for (let i = 0; i <= selectedRowIndex; i++) {
-                  const endColumn = (i === selectedRowIndex) ? selectedDayIndex : calendarDataNextMonth[i].length - 1;
-                  for (let j = 0; j <= endColumn; j++) {
-                      if (!calendarDataNextMonth[i][j].prevMonth) {
-                          continue; // Skip this day
-                      }
-                      calendarDataNextMonth[i][j].selected = true;
-                  }
-              }
-  
-              const selectedRowIndexH = calendarDataCurrentMonth.findIndex(row => row.includes(clickedDay as Day ));
-              const selectedDayIndexH = calendarDataCurrentMonth[selectedRowIndexH].indexOf(clickedDay as Day);
-  
-              for (let i = selectedRowIndexH; i < calendarDataCurrentMonth.length; i++) {
-                  const startColumnH = (i === selectedRowIndexH) ? (selectedDayIndexH + 1) : 0;
-                  for (let j = startColumnH; j < calendarDataCurrentMonth[i].length; j++) {
-                      if (calendarDataCurrentMonth[i][j].prevMonth) {
-                          continue; // Skip days from the previous month
-                      }
-                      calendarDataCurrentMonth[i][j].selected = true; // Select days from the current month
-                  }
-              }
-          }
-  
-          // Save the previous calendar data
-          setCalendarDataCurrentMonth((prevCalendarData) => {
-              let startRow = -1;
-              let startDay = -1;
-              let endRow = rowIndex;
-              let endDay = dayIndex;
-              let selectedExistsNextMonth = false;
-  
-              // Find the position of the previously selected day
-              for (let i = 0; i < prevCalendarData.length; i++) {
-                  for (let j = 0; j < prevCalendarData[i].length; j++) {
-                      if (prevCalendarData[i][j].selected) {
-                          startRow = i;
-                          startDay = j;
-                          selectedExistsNextMonth = true;
-                          break;
-                      }
-                  }
-                  if (selectedExistsNextMonth) break;
-              }
-  
-              // Find the last selected item from prevCalendarData
-              let lastSelectedRow = -1;
-              let lastSelectedDay = -1;
-              for (let i = prevCalendarData.length - 1; i >= 0; i--) {
-                  for (let j = prevCalendarData[i].length - 1; j >= 0; j--) {
-                      if (prevCalendarData[i][j].selected) {
-                          lastSelectedRow = i;
-                          lastSelectedDay = j;
-                          break;
-                      }
-                  }
-                  if (lastSelectedRow !== -1 && lastSelectedDay !== -1) {
-                      break;
-                  }
-              }
-  
-              // Update endRow and endDay based on the last selected item from prevCalendarData
-              if (lastSelectedRow !== -1 && lastSelectedDay !== -1) {
-                  endRow = lastSelectedRow;
-                  endDay = lastSelectedDay;
-              }
-  
-              // Check if the clicked day comes after any previously selected day
-              const clickedAfterPrevious = selectedExistsNextMonth && ((rowIndex > startRow) || (rowIndex === startRow && dayIndex >= startDay));
-  
-              // Update start and end positions based on clicked day and previously selected day
-              if (selectedExistsNextMonth) {
-                  if (!clickedAfterPrevious) {
-                      endRow = startRow;
-                      endDay = startDay;
-                      startRow = rowIndex;
-                      startDay = dayIndex;
-                  } else {
-                      endRow = rowIndex;
-                      endDay = dayIndex;
-                  }
-              }
-  
-              // Update the selected days based on the start and end positions
-              let updatedCalendarData = prevCalendarData.map((row, rIndex) => {
-                  return row.map((day, dIndex) => {
-                      let updatedDay = { ...day, firstSelected: false, lastSelected: false };
-  
-                      if (rIndex === rowIndex && dIndex === dayIndex) {
-                          if (!selectedExistsNextMonth) {
-                              updatedDay = { ...updatedDay, selected: true, firstSelected: true };
-                          } else {
-                              if ((rIndex === startRow && dIndex === startDay) || (rIndex === endRow && dIndex === endDay)) {
-                                  updatedDay = { ...updatedDay, selected: !day.selected, lastSelected: clickedAfterPrevious };
-                              } else if ((rIndex > startRow && rIndex < endRow) ||
-                                  (rIndex === startRow && dIndex > startDay) ||
-                                  (rIndex === endRow && dIndex < endDay)) {
-                                  const distanceToStart = Math.abs(startRow - rIndex) * 7 + Math.abs(startDay - dIndex);
-                                  const distanceToEnd = Math.abs(endRow - rIndex) * 7 + Math.abs(endDay - dIndex);
-                                  updatedDay = { ...updatedDay, selected: distanceToStart <= distanceToEnd };
-                              } else {
-                                  updatedDay = { ...updatedDay, selected: true };
-                              }
-                          }
-                      } else if (selectedExistsNextMonth && ((rIndex === startRow && dIndex >= startDay && rIndex === endRow && dIndex <= endDay) ||
-                          (rIndex === startRow && dIndex >= startDay && rIndex < endRow) ||
-                          (rIndex === endRow && dIndex <= endDay && rIndex > startRow) ||
-                          (rIndex > startRow && rIndex < endRow))) {
-                          updatedDay = { ...updatedDay, selected: true };
-                      }
-  
-                      return updatedDay;
-                  });
-              });
-  
-              if (selectedExistsNextMonth && ((rowIndex !== startRow || dayIndex !== startDay) || (rowIndex !== endRow || dayIndex !== endDay))) {
-                  const distanceToStart = Math.abs(startRow - rowIndex) * 7 + Math.abs(startDay - dayIndex);
-                  const distanceToEnd = Math.abs(endRow - rowIndex) * 7 + Math.abs(dayIndex - endDay);
-  
-                  if (distanceToStart < distanceToEnd) {
-                      updatedCalendarData[startRow][startDay].selected = false;
-  
-                      for (let r = startRow; r <= rowIndex; r++) {
-                          const startColumn = r === startRow ? startDay : 0;
-                          const endColumn = r === rowIndex ? dayIndex : 6;
-  
-                          for (let c = startColumn; c <= endColumn; c++) {
-                              updatedCalendarData[r][c].selected = true;
-                          }
-                      }
-                  } else {
-                      updatedCalendarData[endRow][endDay].selected = false;
-  
-                      for (let r = rowIndex; r <= endRow; r++) {
-                          const startColumn = r === rowIndex ? dayIndex : 0;
-                          const endColumn = r === endRow ? endDay : 6;
-  
-                          for (let c = startColumn; c <= endColumn; c++) {
-                              updatedCalendarData[r][c].selected = true;
-                          }
-                      }
-                  }
-              }
-
-              updatedCalendarData.forEach((row, rIndex) => {
-                  row.forEach((day, dIndex) => {
-                      if (day.selected) {
-                          lastSelectedRow = rIndex;
-                          lastSelectedDay = dIndex;
-                      }
-                  });
-              });
-  
-              if (lastSelectedRow !== -1 && lastSelectedDay !== -1) {
-                  updatedCalendarData[lastSelectedRow][lastSelectedDay].lastSelected = true;
-              }
-  
-              let lastSelectedFound = false;
-              for (let r = 0; r < updatedCalendarData.length; r++) {
-                  for (let c = 0; c < updatedCalendarData[r].length; c++) {
-                      const day = updatedCalendarData[r][c];
-                      if (day.selected && day.lastSelected) {
-                          lastSelectedFound = true;
-                      } else if (lastSelectedFound && day.selected) {
-                          updatedCalendarData[r][c].selected = false;
-                      }
-                  }
-              }
-  
-              return updatedCalendarData;
-          });
-      }
-      setIsActive(!isActive);
-  }
-    
-    const resetSelectedDays = (calendarData: Day[][]) => {
-      return calendarData.map(row => {
-        return row.map(day => {
-          return {
-            ...day,
-            selected: false,
-            firstSelected: false,
-            lastSelected: false
-          };
-        });
-      });
-    };
-    
-    const checkLockedDaysBetween = (
-      rowIndex: number, dayIndex: number,
-      calendarDataCurrentMonth: Day[][], calendarDataNextMonth: Day[][]
-    ) => {
-      console.log("Checking locked days between");
-    
-      // Find the selected day in the current and next month calendars
-      let selectedDay = null;
-      let selectedRow = -1;
-      let selectedDayIndex = -1;
-      let isCurrentMonthSelected = false;
-    
-      // Find the selected day in the current month calendar
-      for (let i = 0; i < calendarDataCurrentMonth.length; i++) {
-        for (let j = 0; j < calendarDataCurrentMonth[i].length; j++) {
-          if (calendarDataCurrentMonth[i][j].selected) {
-            selectedDay = calendarDataCurrentMonth[i][j];
-            selectedRow = i;
-            selectedDayIndex = j;
-            isCurrentMonthSelected = true;
-            break;
-          }
-        }
-        if (isCurrentMonthSelected) break;
-      }
-    
-      // If not found in current month, check the next month
-      if (!isCurrentMonthSelected) {
-        for (let i = 0; i < calendarDataNextMonth.length; i++) {
-          for (let j = 0; j < calendarDataNextMonth[i].length; j++) {
-            if (calendarDataNextMonth[i][j].selected) {
-              selectedDay = calendarDataNextMonth[i][j];
-              selectedRow = i;
-              selectedDayIndex = j;
-              isCurrentMonthSelected = false;
-              break;
-            }
-          }
-          if (!isCurrentMonthSelected) break;
-        }
-      }
-    
-      if (!selectedDay) {
-        console.log("No selected day found.");
-        return false; // No selected day found
-      }
-    
-      console.log("Selected day found:", selectedDay);
-    
-      // Determine if input day is in the same month as selectedDay
-      let isSameMonth = false;
-    
-      if (isCurrentMonthSelected) {
-        // If selected day is in current month, check if input day is in the current month too
-        if (rowIndex < calendarDataCurrentMonth.length) {
-          isSameMonth = true;
-        }
-      } else {
-        // If selected day is in next month, check if input day is in the next month too
-        if (rowIndex < calendarDataNextMonth.length) {
-          isSameMonth = true;
-        }
-      }
-    
-      // Case 1: If both days are in the same month
-      if (isSameMonth) {
-        // Scenario 1 (Same month as selectedDay): Check locked days between the selected day and the input day
-        let startRow = selectedRow;
-        let startDay = selectedDayIndex;
-        let endRow = rowIndex;
-        let endDay = dayIndex;
-    
-        // Determine the start and end positions based on the clicked day and the selected day
-        if (rowIndex < startRow || (rowIndex === startRow && dayIndex < startDay)) {
-          endRow = startRow;
-          endDay = startDay;
-          startRow = rowIndex;
-          startDay = dayIndex;
-        }
-    
-        // Check if there are locked days between the start and end positions
-        for (let r = startRow; r <= endRow; r++) {
-          for (let c = (r === startRow ? startDay : 0); c <= (r === endRow ? endDay : 6); c++) {
-            if (calendarDataCurrentMonth[r][c].locked || calendarDataNextMonth[r][c].locked) {
-              console.log("Locked day found:", calendarDataCurrentMonth[r][c]);
-              return true; // Found locked day between the selected day and the input day
-            }
-          }
-        }
-      } else {
-        console.log("Input day is not in the same month as the selected day.");
-      }
-    
-      // If no locked days are found, return false
-      return false;
-    };
-    
-    
-    
-    
-    
-
-    // názvy měsíců
-    const monthNames = [
-      "Leden", "Únor", "Březen", "Duben", "Květen", "Červen",
-      "Červenec", "Srpen", "Září", "Říjen", "Listopad", "Prosinec"
-    ];
-    const thisMonth = new Date().getMonth();
-    const thisYear = new Date().getFullYear();
-  
-    const nextMonth = currentMonth === 11 ? 0 : currentMonth + 1;
-    const nextYear = currentMonth === 11 ? currentYear + 1 : currentYear;
-    const [selectedCount, setSelectedCount] = useState(0);
-    const [price, setPrice] = useState(0);
-  
-    //spočítá vybrané dny
-    const countSelectedDays = () => {
-      let selectedDaysCount = 0;
-      calendarDataCurrentMonth.forEach(array => {
-        array.forEach(item => {
-          if (item.selected) {
-            selectedDaysCount++;
-          }
-        });
-      });
-      return selectedDaysCount;
-    };
-  const countSelectedDays2 = () => {
-    let selectedDaysCount2 = 0;
-    calendarDataNextMonth.forEach(array => {
-      array.forEach(item => {
-        if (item.selected) {
-          selectedDaysCount2++;
-        }
-      });
-    });
-    return selectedDaysCount2;
-  };
-
-  const countPrice = useCallback(() => {
-    if (selectedCount === 0) {
-      setPrice(0);
-    } else if (selectedCount === 1) {
-      setPrice(300);
-    } else {
-      setPrice(selectedCount * 250);
-    }
-  }, [selectedCount]);
-
-  useEffect(() => {
-    const totalSelectedDays = countSelectedDays() + countSelectedDays2();
-    setSelectedCount(totalSelectedDays);
-  }, [calendarDataCurrentMonth, calendarDataNextMonth]);
-
-  useEffect(() => {
-    countPrice();
-  }, [selectedCount, countPrice]);
+const FullMonthDayRangePicker = () => {
+  const [dates, setDates] = useState<[Date | undefined, Date | undefined]>([undefined, undefined]);
+  const [lockedDates, setLockedDates] = useState<Date[]>([]);
+  const [selectedDaysCount, setSelectedDaysCount] = useState(0);
+  const [price, setPrice] = useState(0);
 
   const navigate = useNavigate();
 
-  const handleClick = () => {
-    // Combine selected days from both the current and next month's data
-    const selectedDates = [
-      ...calendarDataCurrentMonth
-        .flatMap(row => row.filter(day => day.selected))
-        .map(day => new Date(currentYear, currentMonth, parseInt(day.day as string))),
-      
-      ...calendarDataNextMonth
-        .flatMap(row => row.filter(day => day.selected))
-        .map(day => new Date(nextYear, nextMonth, parseInt(day.day as string))) // Adjust for next month's year and month
-    ];
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      try {
+        const response = await fetch("https://voziky.onrender.com/api/appointment");
+        const appointments = await response.json();
 
-    // Extracting the first and last dates
-    const startDate = selectedDates.length > 0 ? selectedDates[0] : null;
-    const endDate = selectedDates.length > 0 ? selectedDates[selectedDates.length - 1] : null;
+        const appointmentDates: Date[] = [];
+        appointments.forEach(({ startDate, endDate }: { startDate: string; endDate: string }) => {
+          let currentDate = new Date(startDate);
+          const end = new Date(endDate);
+          while (currentDate <= end) {
+            appointmentDates.push(new Date(currentDate));
+            currentDate.setDate(currentDate.getDate() + 1);
+          }
+        });
 
-    // Pass data using the 'state' property of the navigate function
-    navigate('/Cart', { state: { startDate, endDate } });
+        setLockedDates([...appointmentDates]);
+      } catch (error) {
+        console.error("Error fetching appointments:", error);
+      }
+    };
+
+    fetchAppointments();
+  }, []);
+
+  const isLockedDay = (date: Date) =>
+    lockedDates.some(
+      (lockedDate) =>
+        date.getDate() === lockedDate.getDate() &&
+        date.getMonth() === lockedDate.getMonth() &&
+        date.getFullYear() === lockedDate.getFullYear()
+    );
+
+  const isRangeValid = (start: Date | null, end: Date | null) => {
+    if (!start || !end) return true;
+    let currentDate = new Date(start);
+    while (currentDate <= end) {
+      if (isLockedDay(currentDate)) return false;
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+    return true;
   };
 
+  const calculateDaysCount = (start: Date | null, end: Date | null) => {
+    if (!start || !end) return 0;
+    const msInDay = 24 * 60 * 60 * 1000;
+    return Math.ceil((end.getTime() - start.getTime()) / msInDay) + 1; // Include both start and end dates
+  };
 
+  const countPrice = useCallback(() => {
+    if (selectedDaysCount === 0) {
+      setPrice(0);
+    } else if (selectedDaysCount === 1) {
+      setPrice(300);
+    } else {
+      setPrice(selectedDaysCount * 250);
+    }
+  }, [selectedDaysCount]);
 
-    return (
-      <div className="calendar">
-      <div className='calendarsWrapper'>
-        <div className='calendar1'>
-        <h2>{monthNames[currentMonth]} {currentYear}</h2>
-            <div className="week">
-                <div className="day-name">PO</div>
-                <div className="day-name">ÚT</div>
-                <div className="day-name">ST</div>
-                <div className="day-name">ČT</div>
-                <div className="day-name">PA</div>
-                <div className="day-name">SO</div>
-                <div className="day-name">NE</div>
-            </div>
-          {calendarDataCurrentMonth.map((row, rowIndex) => (
-            <div key={rowIndex} className="week">
-              {row.map((day, dayIndex) => {
-                return (
-                  <div
-                    key={dayIndex}
-                    className={`day ${day.selected ? 'selected' : ''} ${day.firstSelected ? 'firstSelected' : ''} ${day.lastSelected ? 'lastSelected' : ''} ${day.locked ? 'locked' : ''} ${day.endItem ? 'endItem' : ''}`}
-                    onClick={() => handleDayClickCurrentMonth(rowIndex, dayIndex)}
-                    data-row={rowIndex}
-                    data-day={dayIndex}
-                  >
-                    {day.day}
-                  </div>
-                );
-              })}
-            </div>
-          ))}
-        </div>
-         <div className='calendar2'>
-         <h2>{monthNames[nextMonth]} {nextYear}</h2>
-         <div className="week">
-                <div className="day-name">PO</div>
-                <div className="day-name">ÚT</div>
-                <div className="day-name">ST</div>
-                <div className="day-name">ČT</div>
-                <div className="day-name">PA</div>
-                <div className="day-name">SO</div>
-                <div className="day-name">NE</div>
-            </div>
-           {calendarDataNextMonth.map((row, rowIndex) => (
-             <div key={rowIndex} className="week">
-               {row.map((day, dayIndex) => {
-                  return (
-                    <div
-                      key={dayIndex}
-                     className={`day ${day.selected ? 'selected' : ''} ${day.firstSelected ? 'firstSelected' : ''} ${day.lastSelected ? 'lastSelected' : ''} ${day.locked ? 'locked' : ''} ${day.endItem ? 'endItem' : ''}`}
-                      onClick={() => handleDayClickNextMonth(rowIndex, dayIndex)}
-                      data-row={rowIndex}
-                      data-day={dayIndex} 
-                  >
-                    {day.day}
-                   </div>
-                  );
-                })}
-              </div>
-            ))}
-          </div>
-        </div>
+  useEffect(() => {
+    countPrice();
+  }, [selectedDaysCount, countPrice]);
+
+  const handleDateChange = (update: [Date | null, Date | null]) => {
+    const [start, end] = update;
+
+    if (isRangeValid(start, end)) {
+      setDates([start ?? undefined, end ?? undefined]);
+      const daysCount = calculateDaysCount(start, end);
+      setSelectedDaysCount(daysCount);
+    } else {
+      alert("Bohužel v tomto termínu produkt již někdo rezervoval");
+      setSelectedDaysCount(0);
+    }
+  };
+
+  const handleSubmit = () => {
+    if (dates[0] && dates[1]) {
+      navigate("/Cart", { state: { startDate: dates[0], endDate: dates[1] } });
+    } else {
+      alert("Vyberte prosím platné datumy před pokračováním.");
+    }
+  };
+
+  return (
+    <div className="datePickerCont">
+      <DatePicker
+        selected={dates[0]}
+        onChange={handleDateChange}
+        startDate={dates[0]}
+        endDate={dates[1]}
+        selectsRange
+        inline
+        dateFormat="MMMM d, yyyy"
+        showMonthDropdown
+        showYearDropdown
+        dropdownMode="select"
+        filterDate={(date) => !isLockedDay(date)}
+        locale="cs"
+      />
+      <div className="popiskyCont">
         <div className="popisky">
           <div className="popisek1">
-              <div></div>
-              <h3>Obsazený termín</h3>
+            <div></div>
+            <h3>Obsazený termín</h3>
           </div>
           <div className="popisek2">
-              <div></div>
-              <h3>Vybraný termín</h3>
+            <div></div>
+            <h3>Vybraný termín</h3>
           </div>
         </div>
         <div className="pujceni-info">
           <p>Cena za vypůjčení za 1 den: 300 Kč</p>
+        </div>
+        <div className="pujceni-info">
           <p>Cena za vypůjčení za 2 a více dní: 250 Kč</p>
         </div>
         <div className="pujceni-counter">
           <p>Cena vypůjčení za zvolený termín: &nbsp;</p>
-          <h5>  {price}Kč</h5>
+          <h5>{price} Kč</h5>
         </div>
         <div className="pujceni-button">
-        <button onClick={handleClick}>Objednat</button>
+          <button onClick={handleSubmit}>Objednat</button>
         </div>
       </div>
-    );
-    
-    
-  };
-  
-  export default Section4;
+    </div>
+  );
+};
+
+export default FullMonthDayRangePicker;
