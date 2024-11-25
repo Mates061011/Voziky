@@ -14,7 +14,6 @@ code {
  
 button {
   width: clamp(100px, 12vw, 210px);
-  margin: 20px;
   border-radius: 17px;
   border: 1px solid #FF6832;
   background-color: transparent;
