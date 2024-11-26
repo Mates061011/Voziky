@@ -1,5 +1,3 @@
-import React from "react";
-import Navigation from "../../components/navigation/Navigation";
 import Section1 from "./Mainpage_section1/Mainpage-section1";
 import Section2 from "./Mainpage_section2/Mainpage-section2";
 import Section3 from "./Mainpage_section3/Mainpage-section3";
