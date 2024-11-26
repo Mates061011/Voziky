@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import './mainpage-section1.css';
-import Vozik from './Vozik4xCuted.png';
-import calendarLogoLeft from './calendar-icon-left.svg';
-import calendarLogoRight from './calendar-icon-right.svg';
-import thuleLogo from './thule-logo.svg';
+import Vozik from '../../../assets/Vozik4xCuted.png';
+import calendarLogoLeft from '../../../assets/calendar-icon-left.svg';
+import calendarLogoRight from '../../../assets/calendar-icon-right.svg';
+import thuleLogo from '../../../assets/thule-logo.svg';
 
 export default function Section1() {
     const [minDate, setMinDate] = useState('');

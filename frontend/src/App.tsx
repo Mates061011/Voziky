@@ -1,4 +1,3 @@
-import React from 'react';
 import './App.css';
 import Mainpage from "./pages/mainpage/Mainpage";
 import About from './pages/about/About';

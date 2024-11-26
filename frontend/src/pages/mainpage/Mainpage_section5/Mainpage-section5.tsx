@@ -1,4 +1,3 @@
-import React from "react";
 import './mainpage-section5.css'
 export default function Section(){
     return(

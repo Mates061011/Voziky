@@ -24,17 +24,18 @@
     transition: 300ms;
 }
 
-.galleryPic1{
-    background-image: url(./Snímek\ obrazovky\ 2024-03-25\ v\ 19.34-1.jpg);
+.galleryPic1 {
+    background-image: url(/public/pic1.jpg);
     background-position: left;
 }
-.galleryPic2{
-    background-image: url(./Snímek\ obrazovky\ 2024-03-25\ v\ 19.34.jpg);
+.galleryPic2 {
+    background-image: url(/public/pic2.jpg);
 }
-.galleryPic3{
-    background-image: url(./Snímek\ obrazovky\ 2024-03-25\ v\ 19.34\ 1.jpg);
+.galleryPic3 {
+    background-image: url(/public/pic3.jpg);
     background-position: right;
 }
+
 
 @media screen and (max-width: 479px) {
     .sekce5 {

@@ -1,10 +1,9 @@
-import React from "react"
 import './mainpage-section2.css';
-import Path1 from './Vector 1.svg';
-import Path2 from './Vector 2.svg';
-import Calendar from './Calendar.svg';
-import Reserve from './Reserve.svg';
-import DeliveryTruck from './DeliveryTruck.svg';
+import Path1 from '../../../assets/Vector 1.svg';
+import Path2 from '../../../assets/Vector 2.svg';
+import Calendar from '../../../assets/Calendar.svg';
+import Reserve from '../../../assets/Reserve.svg';
+import DeliveryTruck from '../../../assets/DeliveryTruck.svg';
 
 export default function Section2(){
     return(

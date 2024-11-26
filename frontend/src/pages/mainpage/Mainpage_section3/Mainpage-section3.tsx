@@ -1,5 +1,4 @@
-import React from "react"
-import Vozik from './vozíkTrimmed.png';
+import Vozik from '../../../assets/vozíkTrimmed.png';
 import './mainpage-section3.css';
 export default function Section3() {
     return(
