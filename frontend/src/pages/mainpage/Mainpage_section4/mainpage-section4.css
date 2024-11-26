@@ -2,7 +2,7 @@
 :root {
     --primary-color: #0775E2;
     --disabled-color: #A20B0B;
-    --font-size-calendar: 18px;
+    --font-size-calendar: 15px;
     --font-size-info: 20px;
 }
 .datePickerCont {
@@ -19,7 +19,13 @@
   }
   
 .react-datepicker__current-month {
-    font-size: 20px;
+    font-size: 25px;
+    color: #818181;
+}
+
+
+.react-datepicker__current-month::first-letter {
+    text-transform: capitalize;
 }
 .react-datepicker__day--today {
     border-radius: 2rem;
@@ -28,9 +34,15 @@
 .react-datepicker__header__dropdown {
     display: none;
 }
+.react-datepicker__header {
+    border: none;
+    background-color: transparent;
+    padding-bottom: 0;
+}
 .react-datepicker__navigation {
     outline: none;
     border: none;
+    margin: 7px 13px;
 }
 .react-datepicker__day--disabled {
     background-color: var(--disabled-color);
@@ -99,17 +111,21 @@
 
 .react-datepicker {
     width: 400px; /* Increase the calendar width */
+    border: none;
 }
 
 
 .react-datepicker__day, .react-datepicker__day-name {
     font-size: var(--font-size-calendar); 
     padding: 10px; 
+    text-transform: uppercase;
 }
 
-/* Make the calendar header buttons bigger */
 .react-datepicker__navigation {
-    font-size: 24px; /* Increase the size of navigation buttons */
+    font-size: 24px; 
+    span::before{
+        color: black;
+    }
 }
     
 
@@ -120,6 +136,7 @@
 }
 .react-datepicker__month{
     width: auto;
+    margin-top: 0;
 }
 
 .popisky, .pujceni-info, .pujceni-button, .pujceni-counter {
@@ -159,6 +176,7 @@
     display: flex;
     align-items: center;
     justify-content: left;
+    
 }
 
 .popisek1>div {
@@ -227,4 +245,8 @@
     width: fit-content;
     text-align: left;
     color: #818181;
+}
+.react-datepicker__day-names {
+    margin-top: 20px;
+    font-size: var(--font-size-calendar)-2px;
 }
