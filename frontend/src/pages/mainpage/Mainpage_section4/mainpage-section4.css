@@ -284,3 +284,23 @@
         }
     }
 }
+/* Disable hover effects on devices with touch screens or smaller widths */
+@media (hover: none), (pointer: coarse), (max-width: 768px) {
+    .react-datepicker__day:not([aria-disabled=true]):hover,
+    .react-datepicker__month-text:not([aria-disabled=true]):hover,
+    .react-datepicker__quarter-text:not([aria-disabled=true]):hover,
+    .react-datepicker__year-text:not([aria-disabled=true]):hover,
+    .react-datepicker__day--in-range:not([aria-disabled=true]):hover,
+    .react-datepicker__month-text--selected:not([aria-disabled=true]):hover,
+    .react-datepicker__month-text--in-selecting-range:not([aria-disabled=true]):hover,
+    .react-datepicker__month-text--in-range:not([aria-disabled=true]):hover,
+    .react-datepicker__quarter-text--selected:not([aria-disabled=true]):hover,
+    .react-datepicker__quarter-text--in-selecting-range:not([aria-disabled=true]):hover,
+    .react-datepicker__quarter-text--in-range:not([aria-disabled=true]):hover,
+    .react-datepicker__year-text--selected:not([aria-disabled=true]):hover,
+    .react-datepicker__year-text--in-selecting-range:not([aria-disabled=true]):hover,
+    .react-datepicker__year-text--in-range:not([aria-disabled=true]):hover {
+      background-color: unset;
+    }
+  }
+  
