@@ -177,7 +177,7 @@ const Section4 = () => {
             <h5>{price}Kč</h5>
           </div>
           <div className="pujceni-button">
-            <button onClick={handleSubmit}>Objednat</button>
+            <button onClick={handleSubmit}>Rezervovat</button>
           </div>
         </div>
       </div>
