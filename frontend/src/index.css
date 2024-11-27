@@ -11,15 +11,14 @@ body {
 button {
   width: clamp(100px, 12vw, 210px);
   border-radius: 17px;
-  border: 1px solid #FF6832;
+  border: 1px solid grey;
   background-color: transparent;
   font-size: clamp(13px, 1.5vw, 19px);
   font-family: "Inter";
   font-weight: 600;
-  padding: 0 20px;
+  padding: 12px 20px;
   color: black;
   cursor: pointer;
   z-index: 1000000;
   outline: none;
-  padding: 20px;
 }

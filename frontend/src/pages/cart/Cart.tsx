@@ -69,7 +69,7 @@ const Cart: React.FC = () => {
     setError(null);
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/appointment`, {
+      const response = await fetch(`https://voziky.onrender.com/api/appointment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

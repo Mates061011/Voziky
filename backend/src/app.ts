@@ -4,8 +4,7 @@ import appointmentRoute from './routes/appointmentRoute';
 
 const app: Application = express();
 
-// Middleware
-app.use(cors());  // Enable CORS globally
+app.use(cors());
 app.use(express.json());
 
 // Routes

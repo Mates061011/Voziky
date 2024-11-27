@@ -191,6 +191,8 @@
     display: flex;
     flex-wrap: nowrap;
     flex-direction: row;
+    align-items: flex-start;
+    
     p {
         font-weight: 500;
         font-size: var(--font-size-info);
@@ -201,6 +203,7 @@
         font-size: var(--font-size-info);
         width: fit-content;
         color: #818181;
+        font-weight: 700;
     }
 }
 .popiskyCont {
@@ -249,4 +252,17 @@
 .react-datepicker__day-names {
     margin-top: 20px;
     font-size: var(--font-size-calendar)-2px;
+}
+.past-day {
+    opacity: 0.5;
+    pointer-events: none; 
+}
+.react-datepicker__day {
+    user-select: none;
+}
+.react-datepicker__day--keyboard-selected {
+    background-color: transparent;
+}
+.react-datepicker__day--range-end {
+    background-color: var(--primary-color);
 }

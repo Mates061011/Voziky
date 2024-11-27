@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import { registerLocale } from "react-datepicker";
 import { cs } from "date-fns/locale";
+import { add } from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
 import "./mainpage-section4.css";
 
@@ -13,7 +14,8 @@ const Section4 = () => {
     const [lockedDates, setLockedDates] = useState<Date[]>([]);
     const [selectedDaysCount, setSelectedDaysCount] = useState(0);
     const [price, setPrice] = useState(0);
-  
+    const [isResetStep, setIsResetStep] = useState(false);
+
     const navigate = useNavigate();
   
     useEffect(() => {
@@ -81,17 +83,49 @@ const Section4 = () => {
   
     const handleDateChange = (update: [Date | null, Date | null]) => {
       const [start, end] = update;
-  
-      if (isRangeValid(start, end)) {
+    
+      if (isResetStep) {
+        // If in reset step, clear the selection
+        setDates([undefined, undefined]);
+        setSelectedDaysCount(0);
+        setIsResetStep(false); // Move out of reset step
+        return;
+      }
+    
+      if (start && end && isRangeValid(start, end)) {
+        // If valid range selected, set dates and calculate days
         setDates([start ?? undefined, end ?? undefined]);
         const daysCount = calculateDaysCount(start, end);
         setSelectedDaysCount(daysCount);
+        setIsResetStep(true); // Enter reset step after setting a range
+      } else if (!end) {
+        // If starting a new selection (clearing range), allow normal behavior
+        setDates([start ?? undefined, undefined]);
+        setSelectedDaysCount(0);
+        setIsResetStep(false);
       } else {
+        // Invalid range
         alert("Bohužel v tomto termínu produkt již někdo rezervoval");
         setSelectedDaysCount(0);
+        setIsResetStep(false);
       }
     };
-  
+    
+    const getDayClassName = (date: Date) => {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Normalize to midnight
+    
+      if (isLockedDay(date)) {
+        return "locked-day"; // Red background for locked dates
+      }
+    
+      if (date < today) {
+        return "past-day"; // Reduced opacity for past days
+      }
+    
+      return ""; // No additional classes for valid days
+    };
+    
     const handleSubmit = () => {
       if (dates[0] && dates[1]) {
         navigate("/Cart", { state: { startDate: dates[0], endDate: dates[1] } });
@@ -103,19 +137,24 @@ const Section4 = () => {
     return (
       <div className="datePickerCont">
         <DatePicker
-          selected={dates[0]}
+          selected={null} // Explicitly set selected to null to prevent preselection
           onChange={handleDateChange}
-          startDate={dates[0]}
-          endDate={dates[1]}
+          startDate={dates[0]} // Highlight range start
+          endDate={dates[1]} // Highlight range end
           selectsRange
           inline
           dateFormat="MMMM d, yyyy"
           showMonthDropdown
           showYearDropdown
           dropdownMode="select"
-          filterDate={(date) => !isLockedDay(date)}
+          filterDate={(date) => !isLockedDay(date)} // Prevent selecting locked days
+          dayClassName={getDayClassName} // Apply custom day classes
           locale="cs"
+          openToDate={add(new Date(), { weeks: 1 })} // Open to one week from today
         />
+
+
+
         <div className="popiskyCont">
           <div className="popisky">
             <div className="popisek1">
@@ -135,7 +174,7 @@ const Section4 = () => {
           </div>
           <div className="pujceni-counter">
             <p>Cena vypůjčení za zvolený termín: &nbsp;</p>
-            <h5>{price} Kč</h5>
+            <h5>{price}Kč</h5>
           </div>
           <div className="pujceni-button">
             <button onClick={handleSubmit}>Objednat</button>
