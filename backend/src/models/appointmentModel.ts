@@ -24,7 +24,7 @@ const appointmentSchema = new Schema<IAppointment>({
   endDate: { type: Date, required: true },
   user: { type: userSchema, required: true },
   userConfirmed: { type: Boolean, default: false },
-  adminConfirmed: { type: Boolean, default: false },
+  price: { type: Number, default: 0 }
 });
 
 export default mongoose.model<IAppointment>('Appointment', appointmentSchema);

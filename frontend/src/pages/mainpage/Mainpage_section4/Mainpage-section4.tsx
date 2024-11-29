@@ -15,13 +15,13 @@ const Section4 = () => {
     const [selectedDaysCount, setSelectedDaysCount] = useState(0);
     const [price, setPrice] = useState(0);
     const [isResetStep, setIsResetStep] = useState(false);
-
+    const baseUrl = import.meta.env.VITE_API_BASE_URL;
     const navigate = useNavigate();
   
     useEffect(() => {
       const fetchAppointments = async () => {
         try {
-          const response = await fetch("https://voziky.onrender.com/api/appointment");
+          const response = await fetch(`${baseUrl}/api/appointment`);
           const appointments = await response.json();
   
           const appointmentDates: Date[] = [];

@@ -9,6 +9,9 @@ interface UserData {
 }
 
 const Cart: React.FC = () => {
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
+
+
   const { state } = useLocation();
   const { startDate, endDate } = state || {};
 
@@ -69,7 +72,7 @@ const Cart: React.FC = () => {
     setError(null);
 
     try {
-      const response = await fetch(`https://voziky.onrender.com/api/appointment`, {
+      const response = await fetch(`${baseUrl}/api/appointment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -101,11 +104,9 @@ const Cart: React.FC = () => {
     <div>
       <h1>Appointment Details</h1>
 
-      {/* Display selected dates */}
       <p>Start Date: {startDate ? new Date(startDate).toLocaleString() : 'Not selected'}</p>
       <p>End Date: {endDate ? new Date(endDate).toLocaleString() : 'Not selected'}</p>
 
-      {/* Display time selectors */}
       <div>
         <label>
           Start Time:
@@ -129,7 +130,6 @@ const Cart: React.FC = () => {
         </label>
       </div>
 
-      {/* Show confirmation or form based on submission status */}
       {submitted ? (
         <div>
           <h2>Zkontrolujte si email a dokončete rezervaci potvrzením</h2>

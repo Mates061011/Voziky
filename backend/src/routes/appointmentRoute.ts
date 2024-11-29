@@ -1,82 +1,85 @@
 import express, { Request, Response, NextFunction } from 'express';
 import Appointment, { IAppointment } from '../models/appointmentModel';
 import sendEmail from '../utils/sendMail';
+import dayjs from 'dayjs';
 
 const router = express.Router();
 
-// Create an appointment handler
+// Create Appointment
 const createAppointment = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { startDate, endDate, user } = req.body;
+
   try {
-    // Check if the new appointment overlaps with any existing appointments
     const overlappingAppointments = await Appointment.find({
-      $or: [
-        { startDate: { $lt: endDate }, endDate: { $gt: startDate } },
-      ],
+      startDate: { $lt: endDate },
+      endDate: { $gt: startDate },
     });
 
     if (overlappingAppointments.length > 0) {
       res.status(400).json({
         message: 'V tomto čase už bohužel má vozík vypůjčený někdo jiný.',
       });
-      return; // exit early after sending the response
+      return;
     }
 
-    // Create new appointment and set default values for userConfirmed and adminConfirmed
+    const start = dayjs(startDate);
+    const end = dayjs(endDate);
+    const selectedDaysCount = end.diff(start, 'day') + 1;
+
+    let price = 0;
+    if (selectedDaysCount === 1) {
+      price = 300;
+    } else if (selectedDaysCount > 1) {
+      price = selectedDaysCount * 250;
+    }
+
     const appointment: IAppointment = new Appointment({
       startDate,
       endDate,
       user,
-      userConfirmed: false, // default value
-      adminConfirmed: false, // default value
+      userConfirmed: false,
+      price,
     });
 
     const savedAppointment = await appointment.save();
 
-    // Send confirmation email to the user
     await sendEmail(
       user.email,
       'Potvrzení vypůjčky',
       `Please confirm your appointment by clicking this link: ${process.env.BASE_URL}/api/appointment/confirm/${savedAppointment._id}`
     );
 
-    res.status(201).json(savedAppointment); // Return the created appointment in the response
+    res.status(201).json(savedAppointment);
   } catch (error) {
-    next(error); // Pass error to the next error handler
+    next(error);
   }
 };
-// Define the confirmAppointment handler
+
+// Confirm Appointment
 const confirmAppointment = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { id } = req.params;
-
-    // Attempt to find the appointment by ID
     const appointment = await Appointment.findById(id);
 
     if (!appointment) {
       res.status(404).json({ message: 'Žádná taková vypůjčka neexistuje' });
-      return; // Exit the function early as we already sent the response
+      return;
     }
 
-    // Update the appointment confirmation status
     appointment.userConfirmed = true;
     await appointment.save();
 
-    // Set Content-Type to text/html to indicate we're sending HTML
     res.setHeader('Content-Type', 'text/html');
-
-    // Send HTML response
     res.status(200).send(`
       <html>
         <body style="font-family: Arial, sans-serif; text-align: center;">
           <h2 style="color: #28a745;">Potvrzeno!</h2>
-          <p style="font-size: 16px;">Tvoje vypůjčka na ${appointment.startDate.toLocaleString()} byla potvrzena.</p>
+          <p style="font-size: 16px;">Tvoje vypůjčka na ${dayjs(appointment.startDate).format('DD.MM.YYYY HH:mm')} byla potvrzena.</p>
           <p>Pokud se jedná o chybu nebo jste si vypůjčku nenaplánovali, ihned nás prosím kontaktujte.</p>
         </body>
       </html>
     `);
 
-    // Prepare appointment information for the email
     const appointmentDetails = `
       Appointment Details:
       - Start Date: ${appointment.startDate}
@@ -86,44 +89,47 @@ const confirmAppointment = async (req: Request, res: Response, next: NextFunctio
       - User Phone: ${appointment.user.phone}
     `;
 
-    // Send confirmation email to the admin with appointment details
     await sendEmail(
-      "vozikybackend@gmail.com",  // Admin's email
-      'Vypůjčka potvrzena!',     // Email subject
-      `Uživatel potvrdil zapůjčku, zde jsou detaily:\n\n${appointmentDetails}`  // Email body with appointment info
+      "vozikybackend@gmail.com",
+      'Vypůjčka potvrzena!',
+      `Uživatel potvrdil zapůjčku, zde jsou detaily:\n\n${appointmentDetails}`
     );
     
   } catch (error) {
-    next(error); // Pass errors to the error handler
+    next(error);
   }
 };
+
+// Get Appointments for Current and Next Month
 const getAppointmentsForCurrentAndNextMonth = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const currentDate = new Date();
-    const startOfCurrentMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-    const endOfCurrentMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0, 23, 59, 59, 999);
+    const currentDate = dayjs();
+    const startOfCurrentMonth = currentDate.startOf('month').toDate();
+    const endOfCurrentMonth = currentDate.endOf('month').toDate();
 
-    // Get start and end of the next month
-    const startOfNextMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
-    const endOfNextMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 2, 0, 23, 59, 59, 999);
+    const startOfNextMonth = currentDate.add(1, 'month').startOf('month').toDate();
+    const endOfNextMonth = currentDate.add(1, 'month').endOf('month').toDate();
 
-    // Find appointments that are within the current and next month range
     const appointments = await Appointment.find({
       startDate: {
-        $gte: startOfCurrentMonth, // appointments starting after or on the first day of the current month
-        $lt: endOfNextMonth, // appointments ending before the last day of the next month
+        $gte: startOfCurrentMonth,
+        $lt: endOfNextMonth,
       },
-    }).select('startDate endDate userConfirmed'); // Only select the required fields
+    }).select('startDate endDate userConfirmed');
 
-    res.status(200).json(appointments); // Return filtered appointments
+    res.status(200).json(appointments);
   } catch (error) {
-    next(error); // Pass any errors to the next error handler
+    next(error);
   }
 };
+
 // Route for creating an appointment
 router.post('/', createAppointment);
+
 // Route for confirming an appointment
 router.get('/confirm/:id', confirmAppointment);
-// Route to get all appointments from this month and next month
+
+// Route for getting appointments from the current and next month
 router.get('/', getAppointmentsForCurrentAndNextMonth);
+
 export default router;

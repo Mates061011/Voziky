@@ -5,5 +5,5 @@ export interface Appointment {
     endDate: Date;
     user: User;
     userConfirmed: boolean;
-    adminConfirmed: boolean;
+    price: number;
 }
