@@ -43,6 +43,7 @@ const createAppointment = async (req: Request, res: Response, next: NextFunction
 
     const savedAppointment = await appointment.save();
 
+    
     await sendEmail(
       user.email,
       'Potvrzení vypůjčky',
