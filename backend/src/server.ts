@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import app from './app';
 import connectDB from './config/db';
-
+import './controllers/cronJobs'; 
 dotenv.config();
 
 // Connect to MongoDB

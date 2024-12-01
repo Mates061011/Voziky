@@ -10,9 +10,13 @@ const createAppointment = async (req: Request, res: Response, next: NextFunction
   const { startDate, endDate, user } = req.body;
 
   try {
+    // Ensure that startDate and endDate are in ISO 8601 format
+    const parsedStartDate = dayjs(startDate).toISOString();
+    const parsedEndDate = dayjs(endDate).toISOString();
+
     const overlappingAppointments = await Appointment.find({
-      startDate: { $lt: endDate },
-      endDate: { $gt: startDate },
+      startDate: { $lt: parsedEndDate },
+      endDate: { $gt: parsedStartDate },
     });
 
     if (overlappingAppointments.length > 0) {
@@ -22,8 +26,8 @@ const createAppointment = async (req: Request, res: Response, next: NextFunction
       return;
     }
 
-    const start = dayjs(startDate);
-    const end = dayjs(endDate);
+    const start = dayjs(parsedStartDate);
+    const end = dayjs(parsedEndDate);
     const selectedDaysCount = end.diff(start, 'day') + 1;
 
     let price = 0;
@@ -34,8 +38,8 @@ const createAppointment = async (req: Request, res: Response, next: NextFunction
     }
 
     const appointment: IAppointment = new Appointment({
-      startDate,
-      endDate,
+      startDate: parsedStartDate,
+      endDate: parsedEndDate,
       user,
       userConfirmed: false,
       price,
@@ -43,7 +47,6 @@ const createAppointment = async (req: Request, res: Response, next: NextFunction
 
     const savedAppointment = await appointment.save();
 
-    
     await sendEmail(
       user.email,
       'Potvrzení vypůjčky',
@@ -95,7 +98,7 @@ const confirmAppointment = async (req: Request, res: Response, next: NextFunctio
       'Vypůjčka potvrzena!',
       `Uživatel potvrdil zapůjčku, zde jsou detaily:\n\n${appointmentDetails}`
     );
-    
+
   } catch (error) {
     next(error);
   }

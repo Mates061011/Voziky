@@ -11,7 +11,6 @@ interface UserData {
 const Cart: React.FC = () => {
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
-
   const { state } = useLocation();
   const { startDate, endDate } = state || {};
 
@@ -54,8 +53,8 @@ const Cart: React.FC = () => {
     setCurrentEndDate(updatedEndDate);
   }, [startTime, endTime]);
 
-  const formattedStartDate = currentStartDate.toISOString();
-  const formattedEndDate = currentEndDate.toISOString();
+  const formattedStartDate = currentStartDate.toLocaleDateString() + ' ' + currentStartDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const formattedEndDate = currentEndDate.toLocaleDateString() + ' ' + currentEndDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -67,10 +66,25 @@ const Cart: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+  
     setLoading(true);
     setError(null);
-
+  
+    // Use the current Date objects for start and end date
+    const updatedStartDate = new Date(currentStartDate);
+    const [startHour, startMinute] = startTime.split(":").map(Number);
+    updatedStartDate.setHours(startHour, startMinute, 0, 0); // Set the start time correctly
+  
+    // Add 1 hour to the start date
+    updatedStartDate.setHours(updatedStartDate.getHours() + 1);
+  
+    const updatedEndDate = new Date(currentEndDate);
+    const [endHour, endMinute] = endTime.split(":").map(Number);
+    updatedEndDate.setHours(endHour, endMinute, 0, 0); // Set the end time correctly
+  
+    // Add 1 hour to the end date
+    updatedEndDate.setHours(updatedEndDate.getHours() + 1);
+  
     try {
       const response = await fetch(`${baseUrl}/api/appointment`, {
         method: 'POST',
@@ -78,19 +92,19 @@ const Cart: React.FC = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          startDate: formattedStartDate,
-          endDate: formattedEndDate,
+          startDate: updatedStartDate, // Send updated startDate
+          endDate: updatedEndDate,     // Send updated endDate
           user: userData,
         }),
       });
-
+  
       if (!response.ok) {
         throw new Error('Failed to submit the appointment');
       }
-
+  
       const data = await response.json();
       console.log('Appointment successfully created:', data);
-
+  
       setSubmitted(true);
     } catch (error) {
       console.error('Error creating appointment:', error);
@@ -104,8 +118,8 @@ const Cart: React.FC = () => {
     <div>
       <h1>Appointment Details</h1>
 
-      <p>Start Date: {startDate ? new Date(startDate).toLocaleString() : 'Not selected'}</p>
-      <p>End Date: {endDate ? new Date(endDate).toLocaleString() : 'Not selected'}</p>
+      <p>Start Date: {formattedStartDate ? formattedStartDate : 'Not selected'}</p>
+      <p>End Date: {formattedEndDate ? formattedEndDate : 'Not selected'}</p>
 
       <div>
         <label>

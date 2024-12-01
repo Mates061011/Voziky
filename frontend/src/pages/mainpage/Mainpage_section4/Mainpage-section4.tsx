@@ -23,25 +23,34 @@ const Section4 = () => {
         try {
           const response = await fetch(`${baseUrl}/api/appointment`);
           const appointments = await response.json();
-  
+    
           const appointmentDates: Date[] = [];
           appointments.forEach(({ startDate, endDate }: { startDate: string; endDate: string }) => {
             let currentDate = new Date(startDate);
             const end = new Date(endDate);
+    
+            // Manually set the time to midnight in the UTC time zone
+            currentDate.setUTCHours(0, 0, 0, 0);
+            end.setUTCHours(23, 59, 59, 999); // Set the end date to the last possible moment of the day in UTC
+    
+            // Push each date between start and end into the array
             while (currentDate <= end) {
               appointmentDates.push(new Date(currentDate));
-              currentDate.setDate(currentDate.getDate() + 1);
+              currentDate.setUTCDate(currentDate.getUTCDate() + 1); // Increment the day in UTC
             }
           });
-  
+    
+          console.log("Locked Dates:", appointmentDates); // Log the processed dates
           setLockedDates([...appointmentDates]);
         } catch (error) {
           console.error("Error fetching appointments:", error);
         }
       };
-  
+    
       fetchAppointments();
     }, []);
+    
+    
   
     const isLockedDay = (date: Date) =>
       lockedDates.some(
