@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-
+import './cart.css';
 interface UserData {
   name: string;
   surname: string;
@@ -115,97 +115,99 @@ const Cart: React.FC = () => {
   };
 
   return (
-    <div>
-      <h1>Appointment Details</h1>
+    <div className='cartCont'>
+      <div className="cartWrap">
+        <h1>Appointment Details</h1>
 
-      <p>Start Date: {formattedStartDate ? formattedStartDate : 'Not selected'}</p>
-      <p>End Date: {formattedEndDate ? formattedEndDate : 'Not selected'}</p>
+        <p>Start Date: {formattedStartDate ? formattedStartDate : 'Not selected'}</p>
+        <p>End Date: {formattedEndDate ? formattedEndDate : 'Not selected'}</p>
 
-      <div>
-        <label>
-          Start Time:
-          <input
-            type="time"
-            value={startTime}
-            onChange={(e) => setStartTime(e.target.value)}
-            required
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          End Time:
-          <input
-            type="time"
-            value={endTime}
-            onChange={(e) => setEndTime(e.target.value)}
-            required
-          />
-        </label>
-      </div>
-
-      {submitted ? (
         <div>
-          <h2>Zkontrolujte si email a dokončete rezervaci potvrzením</h2>
+          <label>
+            Start Time:
+            <input
+              type="time"
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+              required
+            />
+          </label>
         </div>
-      ) : (
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label>
-              Name:
-              <input
-                type="text"
-                name="name"
-                value={userData.name}
-                onChange={handleChange}
-                required
-              />
-            </label>
-          </div>
-          <div>
-            <label>
-              Surname:
-              <input
-                type="text"
-                name="surname"
-                value={userData.surname}
-                onChange={handleChange}
-                required
-              />
-            </label>
-          </div>
-          <div>
-            <label>
-              Email:
-              <input
-                type="email"
-                name="email"
-                value={userData.email}
-                onChange={handleChange}
-                required
-              />
-            </label>
-          </div>
-          <div>
-            <label>
-              Phone:
-              <input
-                type="tel"
-                name="phone"
-                value={userData.phone}
-                onChange={handleChange}
-                required
-              />
-            </label>
-          </div>
+        <div>
+          <label>
+            End Time:
+            <input
+              type="time"
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
+              required
+            />
+          </label>
+        </div>
 
-          <button type="submit" disabled={loading}>
-            {loading ? 'Submitting...' : 'Submit Appointment'}
-          </button>
-        </form>
-      )}
+        {submitted ? (
+          <div>
+            <h2>Zkontrolujte si email a dokončete rezervaci potvrzením</h2>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit}>
+            <div>
+              <label>
+                Name:
+                <input
+                  type="text"
+                  name="name"
+                  value={userData.name}
+                  onChange={handleChange}
+                  required
+                />
+              </label>
+            </div>
+            <div>
+              <label>
+                Surname:
+                <input
+                  type="text"
+                  name="surname"
+                  value={userData.surname}
+                  onChange={handleChange}
+                  required
+                />
+              </label>
+            </div>
+            <div>
+              <label>
+                Email:
+                <input
+                  type="email"
+                  name="email"
+                  value={userData.email}
+                  onChange={handleChange}
+                  required
+                />
+              </label>
+            </div>
+            <div>
+              <label>
+                Phone:
+                <input
+                  type="tel"
+                  name="phone"
+                  value={userData.phone}
+                  onChange={handleChange}
+                  required
+                />
+              </label>
+            </div>
 
-      {error && <p>{error}</p>}
+            <button type="submit" disabled={loading}>
+              {loading ? 'Submitting...' : 'Submit Appointment'}
+            </button>
+          </form>
+        )}
+
+        {error && <p>{error}</p>}
+      </div>
     </div>
   );
 };

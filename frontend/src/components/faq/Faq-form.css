@@ -1,0 +1,38 @@
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    margin-left: 20px;
+    h2 {
+        width: fit-content;
+        text-align: left;
+    }
+    form {
+        width: 80%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        .form-group {
+            display: flex;
+            
+        }
+        button {
+            align-self: flex-end;
+        }
+    }
+}
+.resizable-horizontal {
+    resize: vertical;
+    min-height: 25px;
+  }
+  
+@media (max-width:479px) {
+    .contact-form>form>button {
+        align-self: center;
+    }
+}
+@media (max-width:479px) {
+    .css-gq97pi-MuiButtonBase-root-MuiAccordionSummary-root {
+        padding: 0 !important;
+    }
+}

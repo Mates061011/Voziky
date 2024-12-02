@@ -1,0 +1,13 @@
+.MuiContainer-root{
+    padding: 0 !important;
+}
+.qaaCont {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+}
+@media (max-width: 479px) {
+    .qaaCont {
+        align-items: center;
+    }
+}

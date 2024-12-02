@@ -1,0 +1,26 @@
+.cartCont {
+    width: 100%;
+    text-align: left;
+    display: flex;
+    justify-content: center;
+    .cartWrap {
+        width: 25%;
+        min-width: 300px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            button {
+                align-self: center;
+            }
+        }
+    }
+}
+@media (max-width: 479px) {
+    .cartWrap {
+        transform: scale(0.8);
+    }
+}

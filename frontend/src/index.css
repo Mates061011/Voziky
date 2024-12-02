@@ -11,14 +11,30 @@ body {
 button {
   width: clamp(100px, 12vw, 210px);
   border-radius: 17px;
-  border: 1px solid grey;
-  background-color: transparent;
+  background-color: #FF6832;
+  border: none;
   font-size: clamp(13px, 1.5vw, 19px);
   font-family: "Inter";
   font-weight: 600;
-  padding: 12px 20px;
-  color: black;
+  padding: 18px 20px;
+  color: white;
   cursor: pointer;
   z-index: 1000000;
   outline: none;
+}
+input, textarea {
+  width: 100%;
+  border: none;
+  border-bottom: 2px solid black;
+  background-color: transparent;
+  padding: 10px;
+}
+input::placeholder, textarea::placeholder {
+  color: black;
+  font-size: larger;
+}
+@media (max-width: 479px) {
+  button {
+    width: auto;
+  }
 }
