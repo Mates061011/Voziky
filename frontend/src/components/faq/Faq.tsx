@@ -13,7 +13,7 @@ import arrowDownIconUrl from '../../assets/Group 21 (1).svg';
 // Styled Accordion (remove border)
 const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
-))(({ theme }) => ({
+))(() => ({
   border: 'none',
   '&:not(:last-child)': {
     borderBottom: 'none',
@@ -64,10 +64,10 @@ const Faq = () => {
     }, []);
   
     const handleChange =
-      (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
-        setExpanded(newExpanded ? panel : false);
-      };
-  
+    (panel: string) => (_: React.SyntheticEvent, newExpanded: boolean) => {
+      setExpanded(newExpanded ? panel : false);
+    };
+    
     return (
       <div className='qaaCont'>
         {data.map((item, index) => (
