@@ -2,7 +2,7 @@ import express, { Application } from 'express';
 import cors from 'cors';
 import rateLimit from 'express-rate-limit';  // Import express-rate-limit
 import appointmentRoute from './routes/appointmentRoute';
-
+import faqRoute from './routes/faqRoute';
 const app: Application = express();
 
 // Rate limiting setup
@@ -21,6 +21,7 @@ app.use(express.json());
 
 // Routes
 app.use('/api/appointment', appointmentRoute);
+app.use('/api/faq', faqRoute);
 
 // Global Error Handler
 app.use((err, req, res, next) => {

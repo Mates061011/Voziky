@@ -32,6 +32,7 @@ input, textarea {
 input::placeholder, textarea::placeholder {
   color: black;
   font-size: larger;
+  font-family: "Inter", sans-serif;
 }
 @media (max-width: 479px) {
   button {
