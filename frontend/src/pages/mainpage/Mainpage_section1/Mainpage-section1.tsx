@@ -4,8 +4,11 @@ import Vozik from '../../../assets/Vozik4xCuted.png';
 import calendarLogoLeft from '../../../assets/calendar-icon-left.svg';
 import calendarLogoRight from '../../../assets/calendar-icon-right.svg';
 import thuleLogo from '../../../assets/thule-logo.svg';
-
+import { useScrollContext } from '../../../context/ScrollContext';
 export default function Section1() {
+
+    const ref = useScrollContext();
+
     const [minDate, setMinDate] = useState('');
     const [maxDate, setMaxDate] = useState('');
 
@@ -24,9 +27,10 @@ export default function Section1() {
         setMaxDate(max);
     }, []);
 
-    const scrollToPixels = (pixels:number) => {
-        window.scrollTo({ top: pixels, left: 0, behavior: "smooth" });
+    const handleScroll = () => {
+        ref?.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     };
+      
 
     return (
         <div id="section1-mp">
@@ -66,7 +70,7 @@ export default function Section1() {
                             onBlur={(e) => e.target.type = 'text'}
                         />
                     </div>
-                    <button onClick={() => scrollToPixels(2000)} className="overit-dostupnost">Ověřit dostupnost</button>
+                    <button onClick={handleScroll} className="overit-dostupnost">Ověřit dostupnost</button>
                 </div>
             </div>
         </div>

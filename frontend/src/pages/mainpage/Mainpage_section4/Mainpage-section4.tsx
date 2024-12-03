@@ -6,10 +6,12 @@ import { cs } from "date-fns/locale";
 import { add } from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
 import "./mainpage-section4.css";
-
+import { useScrollContext } from '../../../context/ScrollContext';
 registerLocale("cs", cs);
 
 const Section4 = () => {
+    const ref = useScrollContext();
+
     const [dates, setDates] = useState<[Date | undefined, Date | undefined]>([undefined, undefined]);
     const [lockedDates, setLockedDates] = useState<Date[]>([]);
     const [selectedDaysCount, setSelectedDaysCount] = useState(0);
@@ -144,7 +146,7 @@ const Section4 = () => {
     };
   
     return (
-      <div className="datePickerCont">
+      <div className="datePickerCont" ref={ref}>
         <DatePicker
           selected={null} // Explicitly set selected to null to prevent preselection
           onChange={handleDateChange}

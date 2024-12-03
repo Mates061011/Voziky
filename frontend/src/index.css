@@ -21,6 +21,14 @@ button {
   cursor: pointer;
   z-index: 1000000;
   outline: none;
+  transition: 200ms;
+}
+button:active {
+  transform: scale(0.95);
+  transition: 50ms;
+}
+button:hover {
+  transform: scale(1.03);
 }
 input, textarea {
   width: 100%;
@@ -38,4 +46,10 @@ input::placeholder, textarea::placeholder {
   button {
     width: auto;
   }
+}
+
+h4 {
+  font-weight: 700;
+  color: #818181;
+  font-size: 20px;
 }

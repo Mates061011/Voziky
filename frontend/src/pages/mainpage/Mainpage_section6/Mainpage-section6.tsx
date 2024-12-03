@@ -5,9 +5,7 @@ import ContactForm from '../../../components/faq/Faq-form';
 
 const Section6 = () => (
   <Container>
-    <Typography variant="h6" gutterBottom sx={{ fontWeight: 500, color: '#818181' }}>
-      FAQ
-    </Typography>
+    <h4>FAQ</h4>
     <Typography
       variant="h3"
       gutterBottom

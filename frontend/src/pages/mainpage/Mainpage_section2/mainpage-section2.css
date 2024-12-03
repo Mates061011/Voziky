@@ -19,7 +19,7 @@
 @keyframes rotationFadeIn {
     to {
         opacity: 1;
-        transform: rotate(0) scale(1);
+        transform: scale(1);
     }
 }
 .section2 {
@@ -32,11 +32,7 @@
     gap: 80px;
     .nadpisy {
         width: 60vw;
-        p {
-            font-family: "Inter";
-            font-weight: 700;
-            color: #818181;
-            font-size: 20px;
+        h4 {
             animation: fadeIn linear forwards;
             animation-timeline: view();
             animation-range-start: contain - 100%;
@@ -89,13 +85,12 @@
             animation-range-start: contain - 50%;
             animation-range-end: 300px;
             opacity: 0;
-            transform: rotate(5deg) scale(0.5);
             flex-basis: 300px;
             height: 280px;
             display: flex;
             align-items: center;
             flex-direction: column;
-            h4 {
+            h5 {
                 margin: 0;
                 margin-top: 30px;
                 font-size: 28px;

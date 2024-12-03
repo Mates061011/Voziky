@@ -17,11 +17,7 @@
         justify-content: center;
         flex-direction: column;
         
-        p {
-            font-family: "Inter";
-            font-weight: 600;
-            font-size: 20px;
-            color: #818181;
+        h4 {
             width: fit-content;
             text-align: center;
             animation: fadeIn linear forwards;

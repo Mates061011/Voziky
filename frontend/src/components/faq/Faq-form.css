@@ -35,4 +35,12 @@
     .css-gq97pi-MuiButtonBase-root-MuiAccordionSummary-root {
         padding: 0 !important;
     }
+    .contact-form{
+        width: 80%;
+        justify-self: center;
+        margin: 0;
+        form {
+            width: 100%;
+        }
+    }
 }

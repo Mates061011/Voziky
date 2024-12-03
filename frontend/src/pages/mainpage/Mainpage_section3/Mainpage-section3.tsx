@@ -4,7 +4,7 @@ export default function Section3() {
     return(
         <div className="section3">
             <div className="nadpis-section3">
-                <p>VOZÍK</p>
+                <h4>VOZÍK</h4>
                 <h3>Thule Chariot Lite 1 Agave 2021</h3>
             </div>
             <div className="popis-a-kocarek">

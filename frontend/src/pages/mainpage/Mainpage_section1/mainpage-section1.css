@@ -157,10 +157,6 @@
             transition: 500ms;
             animation: fadeInLoadAnim 2.5s;
         }
-        .overit-dostupnost:active {
-            transform: scale(0.95);
-            transition: 50ms;
-        }
         .datum-pujceni, .datum-vraceni {
             animation: fadeInLoadAnim 1s;
             width: 20vw;
