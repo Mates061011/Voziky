@@ -284,4 +284,7 @@
         }
     }
 }
+.react-datepicker__day--range-start.react-datepicker__day--range-end {
+    border-radius: 2rem;
+}
 

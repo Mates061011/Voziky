@@ -7,192 +7,210 @@ import { add } from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
 import "./mainpage-section4.css";
 import { useScrollContext } from '../../../context/ScrollContext';
+import { useDateContext } from '../../../context/DateContext';
+
 registerLocale("cs", cs);
 
 const Section4 = () => {
-    const ref = useScrollContext();
+  const ref = useScrollContext();
+  const { dates, setDates } = useDateContext(); // Use dates and setDates from context
 
-    const [dates, setDates] = useState<[Date | undefined, Date | undefined]>([undefined, undefined]);
-    const [lockedDates, setLockedDates] = useState<Date[]>([]);
-    const [selectedDaysCount, setSelectedDaysCount] = useState(0);
-    const [price, setPrice] = useState(0);
-    const [isResetStep, setIsResetStep] = useState(false);
-    const baseUrl = import.meta.env.VITE_API_BASE_URL;
-    const navigate = useNavigate();
-  
-    useEffect(() => {
-      const fetchAppointments = async () => {
-        try {
-          const response = await fetch(`${baseUrl}/api/appointment`);
-          const appointments = await response.json();
-    
-          const appointmentDates: Date[] = [];
-          appointments.forEach(({ startDate, endDate }: { startDate: string; endDate: string }) => {
-            let currentDate = new Date(startDate);
-            const end = new Date(endDate);
-    
-            // Manually set the time to midnight in the UTC time zone
-            currentDate.setUTCHours(0, 0, 0, 0);
-            end.setUTCHours(23, 59, 59, 999); // Set the end date to the last possible moment of the day in UTC
-    
-            // Push each date between start and end into the array
-            while (currentDate <= end) {
-              appointmentDates.push(new Date(currentDate));
-              currentDate.setUTCDate(currentDate.getUTCDate() + 1); // Increment the day in UTC
-            }
-          });
-    
-          console.log("Locked Dates:", appointmentDates); // Log the processed dates
-          setLockedDates([...appointmentDates]);
-        } catch (error) {
-          console.error("Error fetching appointments:", error);
-        }
-      };
-    
-      fetchAppointments();
-    }, []);
-    
-    
-  
-    const isLockedDay = (date: Date) =>
-      lockedDates.some(
-        (lockedDate) =>
-          date.getDate() === lockedDate.getDate() &&
-          date.getMonth() === lockedDate.getMonth() &&
-          date.getFullYear() === lockedDate.getFullYear()
-      );
-  
-    const isRangeValid = (start: Date | null, end: Date | null) => {
-      if (!start || !end) return true;
-      let currentDate = new Date(start);
-      while (currentDate <= end) {
-        if (isLockedDay(currentDate)) return false;
-        currentDate.setDate(currentDate.getDate() + 1);
+  const [lockedDates, setLockedDates] = useState<Date[]>([]);
+  const [selectedDaysCount, setSelectedDaysCount] = useState(0);
+  const [price, setPrice] = useState(0);
+  const [isResetStep, setIsResetStep] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(""); // State to store error message
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      try {
+        const response = await fetch(`${baseUrl}/api/appointment`);
+        const appointments = await response.json();
+
+        const appointmentDates: Date[] = [];
+        appointments.forEach(({ startDate, endDate }: { startDate: string; endDate: string }) => {
+          let currentDate = new Date(startDate);
+          const end = new Date(endDate);
+
+          currentDate.setUTCHours(0, 0, 0, 0);
+          end.setUTCHours(23, 59, 59, 999);
+
+          while (currentDate <= end) {
+            appointmentDates.push(new Date(currentDate));
+            currentDate.setUTCDate(currentDate.getUTCDate() + 1);
+          }
+        });
+
+        console.log("Locked Dates:", appointmentDates);
+        setLockedDates([...appointmentDates]);
+      } catch (error) {
+        console.error("Error fetching appointments:", error);
       }
-      return true;
     };
-  
-    const calculateDaysCount = (start: Date | null, end: Date | null) => {
-      if (!start || !end) return 0;
-      const msInDay = 24 * 60 * 60 * 1000;
-      return Math.ceil((end.getTime() - start.getTime()) / msInDay) + 1; // Include both start and end dates
-    };
-  
-    const countPrice = useCallback(() => {
-      if (selectedDaysCount === 0) {
-        setPrice(0);
-      } else if (selectedDaysCount === 1) {
-        setPrice(300);
+
+    fetchAppointments();
+  }, []);
+
+  const isLockedDay = (date: Date) =>
+    lockedDates.some(
+      (lockedDate) =>
+        date.getDate() === lockedDate.getDate() &&
+        date.getMonth() === lockedDate.getMonth() &&
+        date.getFullYear() === lockedDate.getFullYear()
+    );
+
+  const isRangeValid = (start: Date | null, end: Date | null) => {
+    if (!start || !end) return true;
+    let currentDate = new Date(start);
+    while (currentDate <= end) {
+      if (isLockedDay(currentDate)) return false;
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+    return true;
+  };
+
+  const calculateDaysCount = (start: Date | null, end: Date | null) => {
+    if (!start || !end) return 0;
+    const msInDay = 24 * 60 * 60 * 1000;
+    return Math.ceil((end.getTime() - start.getTime()) / msInDay) + 1;
+  };
+
+  const countPrice = useCallback(() => {
+    if (selectedDaysCount === 0) {
+      setPrice(0);
+    } else if (selectedDaysCount === 1) {
+      setPrice(300);
+    } else {
+      setPrice(selectedDaysCount * 250);
+    }
+  }, [selectedDaysCount]);
+
+  useEffect(() => {
+    countPrice();
+  }, [selectedDaysCount, countPrice]);
+
+  // Check if dates from context are valid and not locked
+  useEffect(() => {
+    if (dates[0] && dates[1]) {
+      if (!isRangeValid(dates[0], dates[1])) {
+        setErrorMessage("Bohužel, vybrané datumy jsou již obsazeny.");
       } else {
-        setPrice(selectedDaysCount * 250);
+        setErrorMessage("");
       }
-    }, [selectedDaysCount]);
-  
-    useEffect(() => {
-      countPrice();
-    }, [selectedDaysCount, countPrice]);
-  
-    const handleDateChange = (update: [Date | null, Date | null]) => {
-      const [start, end] = update;
-    
-      if (isResetStep) {
-        // If in reset step, clear the selection
-        setDates([undefined, undefined]);
-        setSelectedDaysCount(0);
-        setIsResetStep(false); // Move out of reset step
-        return;
-      }
-    
-      if (start && end && isRangeValid(start, end)) {
-        // If valid range selected, set dates and calculate days
-        setDates([start ?? undefined, end ?? undefined]);
-        const daysCount = calculateDaysCount(start, end);
-        setSelectedDaysCount(daysCount);
-        setIsResetStep(true); // Enter reset step after setting a range
-      } else if (!end) {
-        // If starting a new selection (clearing range), allow normal behavior
-        setDates([start ?? undefined, undefined]);
-        setSelectedDaysCount(0);
-        setIsResetStep(false);
-      } else {
-        // Invalid range
-        alert("Bohužel v tomto termínu produkt již někdo rezervoval");
-        setSelectedDaysCount(0);
-        setIsResetStep(false);
-      }
-    };
-    
-    const getDayClassName = (date: Date) => {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0); // Normalize to midnight
-    
-      if (isLockedDay(date)) {
-        return "locked-day"; // Red background for locked dates
-      }
-    
-      if (date < today) {
-        return "past-day"; // Reduced opacity for past days
-      }
-    
-      return ""; // No additional classes for valid days
-    };
-    
-    const handleSubmit = () => {
-      if (dates[0] && dates[1]) {
-        navigate("/Cart", { state: { startDate: dates[0], endDate: dates[1] } });
-      } else {
-        alert("Vyberte prosím platné datumy před pokračováním.");
-      }
-    };
-  
-    return (
-      <div className="datePickerCont" ref={ref}>
-        <DatePicker
-          selected={null} // Explicitly set selected to null to prevent preselection
-          onChange={handleDateChange}
-          startDate={dates[0]} // Highlight range start
-          endDate={dates[1]} // Highlight range end
-          selectsRange
-          inline
-          dateFormat="MMMM d, yyyy"
-          showMonthDropdown
-          showYearDropdown
-          dropdownMode="select"
-          filterDate={(date) => !isLockedDay(date)} // Prevent selecting locked days
-          dayClassName={getDayClassName} // Apply custom day classes
-          locale="cs"
-          openToDate={add(new Date(), { weeks: 1 })} // Open to one week from today
-        />
+    }
+  }, [dates, lockedDates]);
 
+  const handleDateChange = (update: [Date | null, Date | null]) => {
+    const [start, end] = update;
 
+    if (isResetStep) {
+      setDates([undefined, undefined]);
+      setSelectedDaysCount(0);
+      setIsResetStep(false); // Reset after clearing selection
+      return;
+    }
 
-        <div className="popiskyCont">
-          <div className="popisky">
-            <div className="popisek1">
-              <div></div>
-              <h3>Obsazený termín</h3>
-            </div>
-            <div className="popisek2">
-              <div></div>
-              <h3>Vybraný termín</h3>
-            </div>
+    if (start && end && isRangeValid(start, end)) {
+      // If valid range selected, set dates and calculate days
+      setDates([start ?? undefined, end ?? undefined]);
+      const daysCount = calculateDaysCount(start, end);
+      setSelectedDaysCount(daysCount);
+      setIsResetStep(true); // Enter reset step after setting a range
+    } else if (!end) {
+      // Allow normal behavior when only the start date is selected
+      setDates([start ?? undefined, undefined]);
+      setSelectedDaysCount(0);
+      setIsResetStep(false);
+    } else {
+      // Invalid range - show alert if dates are locked
+      alert("Bohužel v tomto termínu produkt již někdo rezervoval");
+      setSelectedDaysCount(0);
+      setIsResetStep(false);
+    }
+  };
+
+  const getDayClassName = (date: Date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (isLockedDay(date)) {
+      return "locked-day"; // Mark locked dates with a specific class
+    }
+
+    if (date < today) {
+      return "past-day"; // Apply a past-day class for past dates
+    }
+
+    return ""; // No class for valid days
+  };
+
+  const handleSubmit = () => {
+    if (dates[0] && dates[1]) {
+      navigate("/Cart", { state: { startDate: dates[0], endDate: dates[1] } });
+    } else {
+      alert("Vyberte prosím platné datumy před pokračováním.");
+    }
+  };
+
+  return (
+    <div className="datePickerCont" ref={ref}>
+      <DatePicker
+        selected={null}
+        onChange={handleDateChange}
+        startDate={dates[0]} 
+        endDate={dates[1]} 
+        selectsRange
+        inline
+        dateFormat="MMMM d, yyyy"
+        showMonthDropdown
+        showYearDropdown
+        dropdownMode="select"
+        filterDate={(date) => !isLockedDay(date)} // Filter locked dates
+        dayClassName={getDayClassName}
+        locale="cs"
+        openToDate={add(new Date(), { weeks: 1 })}
+      />
+      
+      <div className="popiskyCont">
+      {errorMessage && <div className="error-message">{errorMessage}</div>}
+        <div className="popisky">
+          <div className="popisek1">
+            <div></div>
+            <h3>Obsazený termín</h3>
           </div>
-          <div className="pujceni-info">
-            <p>Cena za vypůjčení za 1 den: 300 Kč</p>
-          </div>
-          <div className="pujceni-info">
-            <p>Cena za vypůjčení za 2 a více dní: 250 Kč</p>
-          </div>
-          <div className="pujceni-counter">
-            <p>Cena vypůjčení za zvolený termín: &nbsp;</p>
-            <h5>{price}Kč</h5>
-          </div>
-          <div className="pujceni-button">
-            <button onClick={handleSubmit}>Rezervovat</button>
+          <div className="popisek2">
+            <div></div>
+            <h3>Vybraný termín</h3>
           </div>
         </div>
+        <div className="pujceni-info">
+          <p>Cena za vypůjčení za 1 den: 300 Kč</p>
+        </div>
+        <div className="pujceni-info">
+          <p>Cena za vypůjčení za 2 a více dní: 250 Kč</p>
+        </div>
+        <div className="pujceni-counter">
+          <p>Cena vypůjčení za zvolený termín: &nbsp;</p>
+          <h5>{price}Kč</h5>
+        </div>
+        <div className="pujceni-button">
+          <button 
+            onClick={handleSubmit} 
+            disabled={!!errorMessage} 
+            style={{
+              opacity: errorMessage ? 0.5 : 1,
+              cursor: errorMessage ? "not-allowed" : "pointer",
+            }}
+          >
+            Rezervovat
+          </button>
+        </div>
+
       </div>
-    );
+    </div>
+  );
 };
 
 export default Section4;

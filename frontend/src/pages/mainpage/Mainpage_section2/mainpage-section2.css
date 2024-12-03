@@ -123,13 +123,13 @@
     }
 }
 .icon-bg2 {
-    background-image: url(./Rectangle1.svg);
+    background-image: url(../../../assets/Rectangle2.svg);
     width: 100px;
     height: 100px;
     transition: 300ms;
 }
 .icon-bg {
-    background-image: url(./Rectangle1.svg);
+    background-image: url(../../../assets/Rectangle1.svg);
     width: 100px;
     height: 100px;
     transition: 300ms;
@@ -170,12 +170,16 @@
         .kroky {
             width: 90%;
             gap: 10px;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
             img {
                 display: none;
             }
             .krok {
-                width: 30%;
+                width: 90%;
                 height: fit-content;
+                flex-basis: auto;
                 .icon-bg, .icon-bg2 {
                     width: 50px;
                     height: 50px;
@@ -183,9 +187,9 @@
                         width: 20px;
                     }
                 }
-                h4 {
+                h5 {
                     font-size: 18px;
-                    margin-top: 20px;
+                    margin-top: 10px;
                     text-align: left;
                     font-weight: 500;
                 }
