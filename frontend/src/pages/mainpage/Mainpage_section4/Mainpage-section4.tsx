@@ -43,7 +43,6 @@ const Section4 = () => {
           }
         });
 
-        console.log("Locked Dates:", appointmentDates);
         setLockedDates([...appointmentDates]);
       } catch (error) {
         console.error("Error fetching appointments:", error);

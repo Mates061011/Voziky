@@ -3,8 +3,9 @@ import cors from 'cors';
 import rateLimit from 'express-rate-limit';  // Import express-rate-limit
 import appointmentRoute from './routes/appointmentRoute';
 import faqRoute from './routes/faqRoute';
-const app: Application = express();
+import adminRoute from './routes/adminRoute';
 
+const app: Application = express();
 // Rate limiting setup
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,  // 15 minutes window
@@ -22,6 +23,7 @@ app.use(express.json());
 // Routes
 app.use('/api/appointment', appointmentRoute);
 app.use('/api/faq', faqRoute);
+app.use('/api', adminRoute)
 
 // Global Error Handler
 app.use((err, req, res, next) => {

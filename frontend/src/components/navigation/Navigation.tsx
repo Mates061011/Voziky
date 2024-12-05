@@ -10,9 +10,9 @@ export default function Navigation(){
                 <Link to="/"><img src={Logo} alt="" /></Link>
                 </div>
                 <div className="nav-links-cont">
-                    <Link to="/About" className="nav-link">O NÁS</Link>
-                    <Link to="/FAQ" className="nav-link">FAQ</Link>
-                    <Link to="/Nabidka" className="nav-link">NABÍDKA</Link>    
+                    <p className="nav-link">O NÁS</p>
+                    <p className="nav-link">FAQ</p>
+                    <p className="nav-link">NABÍDKA</p>    
                 </div>
             </div>
         </div>

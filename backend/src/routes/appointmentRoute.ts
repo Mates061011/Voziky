@@ -2,7 +2,8 @@ import express, { Request, Response, NextFunction } from 'express';
 import Appointment, { IAppointment } from '../models/appointmentModel';
 import sendEmail from '../utils/sendMail';
 import dayjs from 'dayjs';
-
+import verifyToken from '../middleware/authMiddleware';
+import jwt from 'jsonwebtoken';
 const router = express.Router();
 
 // Create Appointment
@@ -73,7 +74,7 @@ const confirmAppointment = async (req: Request, res: Response, next: NextFunctio
     const appointment = await Appointment.findById(id);
 
     if (!appointment) {
-      res.status(404).json({ message: 'Žádná taková vypůjčka neexistuje' });
+      res.status(404).json({ message: 'Not found' });
       return;
     }
 
@@ -113,21 +114,44 @@ const confirmAppointment = async (req: Request, res: Response, next: NextFunctio
 };
 
 // Get Appointments for Current and Next Month
-const getAppointmentsForCurrentAndNextMonth = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+const getAppointmentsWithOptionalAuth = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const currentDate = dayjs();
     const startOfCurrentMonth = currentDate.startOf('month').toDate();
-    const endOfCurrentMonth = currentDate.endOf('month').toDate();
-
-    const startOfNextMonth = currentDate.add(1, 'month').startOf('month').toDate();
     const endOfNextMonth = currentDate.add(1, 'month').endOf('month').toDate();
 
-    const appointments = await Appointment.find({
-      startDate: {
-        $gte: startOfCurrentMonth,
-        $lt: endOfNextMonth,
-      },
-    }).select('startDate endDate userConfirmed');
+    const token = req.headers['authorization']?.split(' ')[1];
+    let appointments;
+
+    if (token) {
+      try {
+        // Verify token
+        jwt.verify(token, process.env.JWT_SECRET!);
+        // If token is valid, return full details
+        appointments = await Appointment.find({
+          startDate: {
+            $gte: startOfCurrentMonth,
+            $lt: endOfNextMonth,
+          },
+        });
+      } catch (error) {
+        // If token is invalid, fallback to partial data
+        appointments = await Appointment.find({
+          startDate: {
+            $gte: startOfCurrentMonth,
+            $lt: endOfNextMonth,
+          },
+        }).select('startDate endDate userConfirmed');
+      }
+    } else {
+      // If no token is provided, return partial data
+      appointments = await Appointment.find({
+        startDate: {
+          $gte: startOfCurrentMonth,
+          $lt: endOfNextMonth,
+        },
+      }).select('startDate endDate userConfirmed');
+    }
 
     res.status(200).json(appointments);
   } catch (error) {
@@ -139,9 +163,9 @@ const getAppointmentsForCurrentAndNextMonth = async (req: Request, res: Response
 router.post('/', createAppointment);
 
 // Route for confirming an appointment
-router.get('/confirm/:id', confirmAppointment);
+router.get('/confirm/:id', verifyToken, confirmAppointment);
 
 // Route for getting appointments from the current and next month
-router.get('/', getAppointmentsForCurrentAndNextMonth);
+router.get('/', getAppointmentsWithOptionalAuth);
 
 export default router;
