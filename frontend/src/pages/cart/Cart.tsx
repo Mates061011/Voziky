@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import './cart.css';
-import PaymentQR from '../../components/qrPay';
 interface UserData {
   name: string;
   surname: string;
