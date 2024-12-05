@@ -32,10 +32,10 @@ const AdminPanel: React.FC = () => {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
   const fetchAppointments = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/appointment", {
+      const response = await axios.get(`${baseUrl}/api/appointment`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -51,7 +51,7 @@ const AdminPanel: React.FC = () => {
   const confirmAppointment = async (id: string) => {
     try {
       await axios.get(
-        `http://localhost:5000/api/appointment/confirm/${id}`,
+        `${baseUrl}/api/appointment/confirm/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
