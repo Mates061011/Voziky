@@ -10,7 +10,7 @@ cron.schedule('*/1 * * * *', async () => {
   try {
     // Find all appointments where userConfirmed is false and createdAt is older than 2 days
     const appointmentsToDelete = await Appointment.find({
-      userConfirmed: false,
+      confirmed: false,
       createdAt: { $lt: twoDaysAgo }
     });
 

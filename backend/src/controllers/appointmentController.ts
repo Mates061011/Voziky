@@ -13,12 +13,12 @@ export const confirmAppointment = async (req: Request, res: Response, next: Next
       return res.status(404).json({ message: 'Appointment not found' });
     }
 
-    if (appointment.userConfirmed) {
+    if (appointment.confirmed) {
       return res.status(400).json({ message: 'Appointment already confirmed' });
     }
 
     // Confirm the appointment
-    appointment.userConfirmed = true;
+    appointment.confirmed = true;
     await appointment.save();
 
     res.status(200).json({

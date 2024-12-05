@@ -84,11 +84,14 @@ const ContactForm: React.FC = () => {
             className="resizable-horizontal"
           ></textarea>
         </div>
-        <button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Odesílám...' : 'Odeslat dotaz'}
-        </button>
+        {responseMessage ? (
+          <p style={{margin: "10px 0", textAlign: "right"}}>{responseMessage}</p>
+        ) : (
+          <button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? 'Odesílám...' : 'Odeslat dotaz'}
+          </button>
+        )}
       </form>
-      {responseMessage && <p>{responseMessage}</p>}
     </div>
   );
 };

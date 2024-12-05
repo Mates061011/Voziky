@@ -22,7 +22,7 @@ const appointmentSchema = new Schema<IAppointment>({
   startDate: { type: Date, required: true },
   endDate: { type: Date, required: true },
   user: { type: userSchema, required: true },
-  userConfirmed: { type: Boolean, default: false },
+  confirmed: { type: Boolean, default: false },
   price: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now },
 }, { versionKey: false });
@@ -32,7 +32,7 @@ appointmentSchema.index({ endDate: 1 }, { expireAfterSeconds: 1209600 }); // 14 
 
 // Pre-save hook to check if userConfirmed is false and it's older than 2 days
 appointmentSchema.pre('save', async function (next) {
-  if (!this.userConfirmed) {
+  if (!this.confirmed) {
     const now = new Date();
     
     // Ensure createdAt is defined

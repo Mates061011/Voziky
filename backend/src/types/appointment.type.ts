@@ -4,7 +4,7 @@ export interface Appointment {
     startDate: Date;
     endDate: Date;
     user: User;
-    userConfirmed: boolean;
+    confirmed: boolean;
     price: number;
     createdAt?: Date; 
     updatedAt?: Date;  

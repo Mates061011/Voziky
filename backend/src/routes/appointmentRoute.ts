@@ -41,16 +41,23 @@ const createAppointment = async (req: Request, res: Response, next: NextFunction
       startDate: parsedStartDate,
       endDate: parsedEndDate,
       user,
-      userConfirmed: false,
+      confirmed: false,
       price,
     });
 
     const savedAppointment = await appointment.save();
-
+    const paymentData = `SPD*1.0*ACC:CZ0806000000000242829671*AM:100.00*CC:CZK*MSG:${savedAppointment.user.name} ${savedAppointment.user.surname}*X-VS:${savedAppointment.user.name}`;
+    const userDetails = {
+      startDate: appointment.startDate,
+      endDate: appointment.endDate,
+      price: appointment.price
+    }
     await sendEmail(
       user.email,
       'Potvrzení vypůjčky',
-      `Please confirm your appointment by clicking this link: ${process.env.BASE_URL}/api/appointment/confirm/${savedAppointment._id}`
+      `Please confirm your appointment by clicking this link: ${process.env.BASE_URL}/api/appointment/confirm/${savedAppointment._id}`,
+      userDetails,
+      paymentData
     );
 
     res.status(201).json(savedAppointment);
@@ -70,7 +77,7 @@ const confirmAppointment = async (req: Request, res: Response, next: NextFunctio
       return;
     }
 
-    appointment.userConfirmed = true;
+    appointment.confirmed = true;
     await appointment.save();
 
     res.setHeader('Content-Type', 'text/html');
@@ -91,6 +98,7 @@ const confirmAppointment = async (req: Request, res: Response, next: NextFunctio
       - User: ${appointment.user.name} ${appointment.user.surname}
       - User Email: ${appointment.user.email}
       - User Phone: ${appointment.user.phone}
+      - Price: ${appointment.price}
     `;
 
     await sendEmail(
