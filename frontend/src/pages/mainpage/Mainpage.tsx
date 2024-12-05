@@ -8,7 +8,7 @@ import Section6 from "./Mainpage_section6/Mainpage-section6";
 import Bg from "../../assets/solid-color-image.jpeg";
 import { ScrollProvider } from "../../context/ScrollContext";
 import { DateProvider } from "../../context/DateContext";
-
+import { Link } from 'react-router-dom';
 export default function Mainpage() {
     const [password, setPassword] = useState("");
     const [accessGranted, setAccessGranted] = useState(false);
@@ -75,6 +75,7 @@ export default function Mainpage() {
                     <Section5 />
                     <Section6 />
                 </div>
+                <Link to='/login'>Admin</Link>
             </ScrollProvider>
         </DateProvider>
     );
