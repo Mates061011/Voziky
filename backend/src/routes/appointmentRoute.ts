@@ -47,7 +47,7 @@ const createAppointment = async (req: Request, res: Response, next: NextFunction
     });
 
     const savedAppointment = await appointment.save();
-    const paymentData = `SPD*1.0*ACC:CZ0806000000000242829671*AM:100.00*CC:CZK*MSG:${savedAppointment.user.name} ${savedAppointment.user.surname}*X-VS:${savedAppointment.user.name}`;
+    const paymentData = `SPD*1.0*ACC:CZ0806000000000242829671*AM:${savedAppointment.price.toFixed(2)}*CC:CZK*X-VS:${savedAppointment.vs}*MSG:${savedAppointment.user.name} ${savedAppointment.user.surname}`;
     const userDetails = {
       startDate: appointment.startDate,
       endDate: appointment.endDate,
