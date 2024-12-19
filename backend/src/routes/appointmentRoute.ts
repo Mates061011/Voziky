@@ -58,7 +58,10 @@ const createAppointment = async (req: Request, res: Response, next: NextFunction
       'Potvrzení vypůjčky',
       `Please confirm your appointment by clicking this link: ${process.env.BASE_URL}/api/appointment/confirm/${savedAppointment._id}`,
       userDetails,
-      paymentData
+      {
+          variableSymbol: savedAppointment.vs,
+          paymentInfo: paymentData
+      }
     );
 
     res.status(201).json(savedAppointment);

@@ -23,7 +23,10 @@ const sendEmail = async (
       endDate: Date;
       price: number;
     },
-    qrData?: string // Optional QR data
+    qrData?: {
+      variableSymbol: Number;
+      paymentInfo: string; // A string to generate the QR code
+    }
   ): Promise<void> => {
     const sanitizedTo = sanitizeInput(to);
     const sanitizedSubject = sanitizeInput(subject);
@@ -46,9 +49,7 @@ const sendEmail = async (
         const { startDate, endDate, price } = userDetails;
     }
     
-    // HTML content with dynamic user data
-    // HTML content with dynamic user data
-    // Helper function for localized date formatting in Czech
+
     const formatDateInCzech = (date: string | Date): string => {
         const utcDate = new Date(date);
         const formatter = new Intl.DateTimeFormat('cs-CZ', {
@@ -84,11 +85,12 @@ const sendEmail = async (
                 <div style="margin: 20px 0;">
                     <p style="margin: 5px 0; font-weight: bold; color: white;">Zaplatte zálohu 100kč pro potvrzení objednávky</p>
                     <img src="cid:qrcode" alt="qrcode" style="border-radius: 10px; width: 30%; margin: 5px 0;">
+                    
                     <p style="margin: 5px 0; color: rgb(209, 209, 209);">
-                        Číslo účtu:&nbsp;<strong style="color: white;">Čislo učtu</strong>
+                        Číslo účtu:&nbsp;<strong style="color: white;">Neuvedeno</strong>
                     </p>
                     <p style="margin: 5px 0; color: rgb(209, 209, 209);">
-                        Variabilní symbol:&nbsp;<strong style="color: white;">VS</strong>
+                        Variabilní symbol:&nbsp;<strong style="color: white;">${qrData?.variableSymbol || 'Neuvedeno'}</strong>
                     </p>
                 </div>
             </div>
@@ -105,7 +107,7 @@ const sendEmail = async (
     let qrCid: string | undefined;
     if (qrData) {
       const tempPath = path.join(__dirname, 'tempQRCode.png');
-      await QRCode.toFile(tempPath, qrData);
+      await QRCode.toFile(tempPath, qrData.paymentInfo);
       qrFilePath = tempPath;
       qrCid = 'qrcode';
     }

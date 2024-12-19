@@ -7,8 +7,8 @@ import MuiAccordionSummary, {
 } from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
-import arrowIconUrl from '../../assets/Group 19.svg';
-import arrowDownIconUrl from '../../assets/Group 21 (1).svg';
+import arrowIconUrl from '../../assets/PlusButton.svg';
+import arrowDownIconUrl from '../../assets/MinusButton.svg';
 
 // Styled Accordion (remove border)
 const Accordion = styled((props: AccordionProps) => (
@@ -83,7 +83,7 @@ const Faq = () => {
                 <img
                   src={expanded === `panel${index}` ? arrowDownIconUrl : arrowIconUrl}
                   alt="Expand Icon"
-                  style={{ width: '30px', height: '30px' }}
+                  style={{ width: '23px', height: '23px' }}
                 />
               }
             >
