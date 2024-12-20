@@ -36,6 +36,7 @@ input, textarea {
   border-bottom: 2px solid black;
   background-color: transparent;
   padding: 10px;
+  box-sizing: border-box;
 }
 input::placeholder, textarea::placeholder {
   color: black;

@@ -36,9 +36,14 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
       message: 'Přihlášení bylo úspěšné',
       token,
     });
-  } catch (error) {
-    res.status(500).json({ message: 'Chyba serveru', error: error.message });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: 'Chyba serveru', error: error.message });
+    } else {
+      res.status(500).json({ message: 'Chyba serveru' });
+    }
   }
+  
 });
 
 export default router;

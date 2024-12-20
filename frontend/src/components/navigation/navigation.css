@@ -3,9 +3,7 @@
     margin: 0;
     padding: 0;
 }
-.navigation {
 
-}
 .navigation-wrap {
     display: flex;
     flex-direction: row;
@@ -46,6 +44,11 @@
     transform: scale(1.2);
     transition: 250ms;
 }
+.breadcrumb-wrap {
+    width: 70%;
+    margin: 0 auto;
+    transform: translateY(-20px);
+}
 @media (max-width: 479px) {
     .navigation-wrap{
         width: 90%;
@@ -54,5 +57,9 @@
             width: fit-content;
             gap: 10px;
         }
+    }
+    .breadcrumb-wrap {
+        width: 90%;
+        margin: 0 5% ;
     }
 }

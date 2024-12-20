@@ -33,6 +33,7 @@ const AdminPanel: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
+
   const fetchAppointments = async () => {
     try {
       const response = await axios.get(`${baseUrl}/api/appointment`, {
@@ -77,60 +78,73 @@ const AdminPanel: React.FC = () => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
+  const formatDateInUTC = (date: string | Date): string => {
+    const utcDate = new Date(date);
+    const formatter = new Intl.DateTimeFormat("cs-CZ", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      timeZone: "UTC", // Force UTC
+    });
+    return formatter.format(utcDate);
+  };
+
   return (
     <div>
       <h1>Appointments</h1>
-      <div style={{display:'flex', justifyContent: 'center', flexWrap: 'wrap'}}>
+      <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
         {appointments.map((appointment) => (
-            <div
+          <div
             key={appointment._id}
-            style={{ border: "1px solid black", margin: "10px", padding: "10px", width: 'fit-content'}}
-            >
+            style={{ border: "1px solid black", margin: "10px", padding: "10px", width: 'fit-content' }}
+          >
             <p>
-                <strong>ID:</strong> {appointment._id}
+              <strong>ID:</strong> {appointment._id}
             </p>
             <p>
-                <strong>Start Date:</strong>{" "}
-                {new Date(appointment.startDate).toLocaleString()}
+              <strong>Start Date:</strong>{" "}
+              {formatDateInUTC(appointment.startDate)}
             </p>
             <p>
-                <strong>End Date:</strong>{" "}
-                {new Date(appointment.endDate).toLocaleString()}
+              <strong>End Date:</strong>{" "}
+              {formatDateInUTC(appointment.endDate)}
             </p>
             <p>
-                <strong>User:</strong> {appointment.user.name} {appointment.user.surname}
+              <strong>User:</strong> {appointment.user.name} {appointment.user.surname}
             </p>
             <p>
-                <strong>Email:</strong> {appointment.user.email}
+              <strong>Email:</strong> {appointment.user.email}
             </p>
             <p>
-                <strong>Phone:</strong> {appointment.user.phone}
+              <strong>Phone:</strong> {appointment.user.phone}
             </p>
             <p>
-                <strong>Price:</strong> {appointment.price} Kč
+              <strong>Price:</strong> {appointment.price} Kč
             </p>
             <p>
-                <strong>Confirmed:</strong> {appointment.confirmed ? "Yes" : "No"}
+              <strong>Confirmed:</strong> {appointment.confirmed ? "Yes" : "No"}
             </p>
             <p>
-                <strong>Created At:</strong>{" "}
-                {new Date(appointment.createdAt).toLocaleString()}
+              <strong>Created At:</strong>{" "}
+              {formatDateInUTC(appointment.createdAt)}
             </p>
             {!appointment.confirmed && (
-                <button
+              <button
                 onClick={() => confirmAppointment(appointment._id)}
                 style={{
-                    padding: "10px 20px",
-                    backgroundColor: "green",
-                    color: "white",
-                    border: "none",
-                    cursor: "pointer",
+                  padding: "10px 20px",
+                  backgroundColor: "green",
+                  color: "white",
+                  border: "none",
+                  cursor: "pointer",
                 }}
-                >
+              >
                 Confirm
-                </button>
+              </button>
             )}
-            </div>
+          </div>
         ))}
       </div>
     </div>

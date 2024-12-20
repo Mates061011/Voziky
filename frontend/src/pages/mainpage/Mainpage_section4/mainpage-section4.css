@@ -112,6 +112,7 @@
 .react-datepicker {
     width: 400px; /* Increase the calendar width */
     border: none;
+    background: none;
 }
 
 
@@ -274,13 +275,16 @@
 @media (max-width: 479px) {
     .datePickerCont {
         flex-direction: column;
-        transform: scale(0.7);
+        transform: scale(0.75);
         .pujceni-button {
             justify-content: right;
             button {
                 width: fit-content;
                 font-size: 20px;
             }
+        }
+        .popiskyCont{
+            transform: scale(0.9);
         }
     }
 }

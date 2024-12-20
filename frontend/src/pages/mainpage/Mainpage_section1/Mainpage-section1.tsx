@@ -14,14 +14,14 @@ export default function Section1() {
   const [endDay, setEndDay] = useState<Date | undefined>(undefined);
 
   const handleScroll = () => {
-    ref?.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-
     // Update the context with the selected dates when the button is clicked
     if (startDay && endDay) {
       setDates([startDay, endDay]);
     } else {
       alert("Please select both start and end dates.");
+      return;
     }
+    ref?.current?.scrollIntoView({ behavior: "smooth", block: "center" });    
   };
 
   const handleStartDayChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 
 interface DateContextProps {
   dates: [Date | undefined, Date | undefined];
@@ -9,6 +9,7 @@ const DateContext = createContext<DateContextProps | undefined>(undefined);
 
 export const DateProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [dates, setDates] = useState<[Date | undefined, Date | undefined]>([undefined, undefined]);
+
 
   return (
     <DateContext.Provider value={{ dates, setDates }}>

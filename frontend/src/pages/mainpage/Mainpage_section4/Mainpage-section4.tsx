@@ -101,34 +101,38 @@ const Section4 = () => {
     }
   }, [dates, lockedDates]);
 
-  const handleDateChange = (update: [Date | null, Date | null]) => {
-    const [start, end] = update;
+  const isMobile = window.innerWidth <= 768;  // Detect if the user is on mobile (adjust 768px as needed)
 
-    if (isResetStep) {
-      setDates([undefined, undefined]);
-      setSelectedDaysCount(0);
-      setIsResetStep(false); // Reset after clearing selection
-      return;
-    }
+const handleDateChange = (update: [Date | null, Date | null]) => {
+  const [start, end] = update;
 
-    if (start && end && isRangeValid(start, end)) {
-      // If valid range selected, set dates and calculate days
-      setDates([start ?? undefined, end ?? undefined]);
-      const daysCount = calculateDaysCount(start, end);
-      setSelectedDaysCount(daysCount);
-      setIsResetStep(true); // Enter reset step after setting a range
-    } else if (!end) {
-      // Allow normal behavior when only the start date is selected
-      setDates([start ?? undefined, undefined]);
-      setSelectedDaysCount(0);
-      setIsResetStep(false);
-    } else {
-      // Invalid range - show alert if dates are locked
-      alert("Bohužel v tomto termínu produkt již někdo rezervoval");
-      setSelectedDaysCount(0);
-      setIsResetStep(false);
-    }
-  };
+  if (isResetStep && !isMobile) {
+    setDates([undefined, undefined]);
+    setSelectedDaysCount(0);
+    setIsResetStep(false); // Reset after clearing selection
+    return;
+  }
+
+  if (start && end && isRangeValid(start, end)) {
+    // If valid range selected, set dates and calculate days
+    setDates([start ?? undefined, end ?? undefined]);  // Update the context with the selected range
+    const daysCount = calculateDaysCount(start, end);
+    setSelectedDaysCount(daysCount);
+    setIsResetStep(true); // Enter reset step after setting a range
+  } else if (!end) {
+    // Allow normal behavior when only the start date is selected
+    setDates([start ?? undefined, undefined]);
+    setSelectedDaysCount(0);
+    setIsResetStep(false);
+  } else {
+    // Invalid range - show alert if dates are locked
+    alert("Bohužel v tomto termínu produkt již někdo rezervoval");
+    setSelectedDaysCount(0);
+    setIsResetStep(false);
+  }
+};
+
+  
 
   const getDayClassName = (date: Date) => {
     const today = new Date();
@@ -152,7 +156,7 @@ const Section4 = () => {
       alert("Vyberte prosím platné datumy před pokračováním.");
     }
   };
-
+  
   return (
     <div className="datePickerCont" ref={ref}>
       <DatePicker

@@ -83,7 +83,7 @@ const Faq = () => {
                 <img
                   src={expanded === `panel${index}` ? arrowDownIconUrl : arrowIconUrl}
                   alt="Expand Icon"
-                  style={{ width: '23px', height: '23px' }}
+                  style={{ width: '20px', height: '20px' }}
                 />
               }
             >

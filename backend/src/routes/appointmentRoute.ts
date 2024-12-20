@@ -1,10 +1,30 @@
 import express, { Request, Response, NextFunction } from 'express';
 import Appointment, { IAppointment } from '../models/appointmentModel';
 import sendEmail from '../utils/sendMail';
-import dayjs from 'dayjs';
 import verifyToken from '../middleware/authMiddleware';
 import jwt from 'jsonwebtoken';
 const router = express.Router();
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+// Extend dayjs with the plugins
+dayjs.extend(utc);
+dayjs.extend(timezone);
+const formatDateInCzech = (date: string | Date): string => {
+  const utcDate = new Date(date);
+  const formatter = new Intl.DateTimeFormat('cs-CZ', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    timeZone: 'UTC', // Force UTC
+  });
+  return formatter.format(utcDate);
+};
+
+   
 
 // Create Appointment
 const createAppointment = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -53,14 +73,54 @@ const createAppointment = async (req: Request, res: Response, next: NextFunction
       endDate: appointment.endDate,
       price: appointment.price
     }
+
+    // HTML content for the email
+    const htmlContent = `
+    <html>
+        <head>
+          <title>Informace o objednávce</title>
+        </head>
+        <body>
+          <div style="margin: 0; padding: 0; font-family: Arial, sans-serif;">
+            <div style="width: 600px; background-color: #768078; padding: 20px; border-radius: 20px; color: white; font-family: Arial, sans-serif;">
+              <h1 style="margin: 0 0 20px 0;">Informace o vaší objednávce:</h1>
+              ${userDetails ? `
+              <div>
+                <p style="margin: 0 0 10px 0; color: rgb(209, 209, 209);">
+                  Datum a čas vyzvednutí:&nbsp;<strong style="color: white;">
+                    ${formatDateInCzech(userDetails.startDate)} - ${formatDateInCzech(userDetails.endDate)}
+                  </strong>
+                </p>
+                <p style="margin: 0 0 20px 0; color: rgb(209, 209, 209);">
+                  Celková cena:&nbsp;<strong style="color: white;">${userDetails.price}kč</strong>
+                </p>
+              </div>
+              ` : ''}
+              <div style="margin: 20px 0;">
+                <p style="margin: 5px 0; font-weight: bold; color: white;">Zaplatte zálohu 100kč pro potvrzení objednávky</p>
+                <img src="cid:qrcode" alt="qrcode" style="border-radius: 10px; width: 30%; margin: 5px 0;">
+                <p style="margin: 5px 0; color: rgb(209, 209, 209);">
+                  Číslo účtu:&nbsp;<strong style="color: white;">Neuvedeno</strong>
+                </p>
+                <p style="margin: 5px 0; color: rgb(209, 209, 209);">
+                  Variabilní symbol:&nbsp;<strong style="color: white;">${savedAppointment.vs}</strong>
+                </p>
+              </div>
+            </div>
+          </div>
+        </body>
+      </html>
+    `;
+
+    // Send email with the HTML content
     await sendEmail(
       user.email,
       'Potvrzení vypůjčky',
       `Please confirm your appointment by clicking this link: ${process.env.BASE_URL}/api/appointment/confirm/${savedAppointment._id}`,
-      userDetails,
+      htmlContent,
       {
-          variableSymbol: savedAppointment.vs,
-          paymentInfo: paymentData
+        variableSymbol: savedAppointment.vs,
+        paymentInfo: paymentData,
       }
     );
 
@@ -70,7 +130,6 @@ const createAppointment = async (req: Request, res: Response, next: NextFunction
   }
 };
 
-// Confirm Appointment
 const confirmAppointment = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { id } = req.params;
@@ -84,17 +143,13 @@ const confirmAppointment = async (req: Request, res: Response, next: NextFunctio
     appointment.confirmed = true;
     await appointment.save();
 
-    res.setHeader('Content-Type', 'text/html');
-    res.status(200).send(`
-      <html>
-        <body style="font-family: Arial, sans-serif; text-align: center;">
-          <h2 style="color: #28a745;">Potvrzeno!</h2>
-          <p style="font-size: 16px;">Tvoje vypůjčka na ${dayjs(appointment.startDate).format('DD.MM.YYYY HH:mm')} byla potvrzena.</p>
-          <p>Pokud se jedná o chybu nebo jste si vypůjčku nenaplánovali, ihned nás prosím kontaktujte.</p>
-        </body>
-      </html>
-    `);
+    // Send a simple confirmation message
+    res.status(200).send('Potvrzeno');
 
+    // Generate Google Calendar event link
+    const googleCalendarUrl = generateGoogleCalendarUrl(appointment);
+
+    // Prepare appointment details for email
     const appointmentDetails = `
       Appointment Details:
       - Start Date: ${appointment.startDate}
@@ -105,16 +160,55 @@ const confirmAppointment = async (req: Request, res: Response, next: NextFunctio
       - Price: ${appointment.price}
     `;
 
+    // Prepare HTML content
+    const htmlContent = `
+      <html>
+        <head>
+          <title>Vypůjčka potvrzena!</title>
+        </head>
+        <body style="font-family: Arial, sans-serif; text-align: center; padding: 20px;">
+          <h1 style="color: #28a745;">Potvrzeno!</h1>
+          <p style="font-size: 16px;">Vaše vypůjčka byla potvrzena.</p>
+          <p style="font-size: 16px;">Detaily vypůjčky:</p>
+          <p><strong>Začátek:</strong> ${formatDateInCzech(appointment.startDate)}</p>
+          <p><strong>Konec:</strong> ${formatDateInCzech(appointment.endDate)}</p>
+          <p><strong>Cena:</strong> ${appointment.price} kč</p>
+          <div style="margin-top: 20px;">
+            <a href="${googleCalendarUrl}" target="_blank" style="padding: 10px 20px; background-color: #0073e6; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
+              Přidat do Google Kalendáře
+            </a>
+          </div>
+        </body>
+      </html>
+    `;
+
+    // Send the email with the custom HTML content
     await sendEmail(
-      "vozikybackend@gmail.com",
+      appointment.user.email, // Send to the user's email
       'Vypůjčka potvrzena!',
-      `Uživatel potvrdil zapůjčku, zde jsou detaily:\n\n${appointmentDetails}`
+      `Vaše vypůjčka byla potvrzena!`,
+      htmlContent // Passing the htmlContent as an argument here
     );
 
   } catch (error) {
     next(error);
   }
 };
+
+
+const generateGoogleCalendarUrl = (appointment: any): string => {
+  // Subtract 1 hour from the start and end dates to fix the +1 hour issue
+  const startDate = dayjs(appointment.startDate).utc().subtract(1, 'hour').format('YYYYMMDDTHHmmss[Z]');
+  const endDate = dayjs(appointment.endDate).utc().subtract(1, 'hour').format('YYYYMMDDTHHmmss[Z]');
+
+  const summary = encodeURIComponent('Vyzvednout vozík THULE');
+  const location = encodeURIComponent('Kapitána Fechtnera, Kpt. Fechtnera, 500 09 Hradec Králové 9, Česko');
+  const description = encodeURIComponent(`Cena: ${appointment.price} Kč`);
+
+  return `https://www.google.com/calendar/render?action=TEMPLATE&text=${summary}&dates=${startDate}/${endDate}&details=${description}&location=${location}&sf=true&output=xml`;
+};
+
+
 
 // Get Appointments for Current and Next Month
 const getAppointmentsWithOptionalAuth = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -161,6 +255,7 @@ const getAppointmentsWithOptionalAuth = async (req: Request, res: Response, next
     next(error);
   }
 };
+
 
 // Route for creating an appointment
 router.post('/', createAppointment);
