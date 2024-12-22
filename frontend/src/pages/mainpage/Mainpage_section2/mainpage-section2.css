@@ -32,14 +32,6 @@
     gap: 80px;
     .nadpisy {
         width: 60vw;
-        h4 {
-            animation: fadeIn linear forwards;
-            animation-timeline: view();
-            animation-range-start: contain - 100%;
-            animation-range-end: 300px;
-            opacity: 0;
-            transform: scale(0.8);
-        }
         h2 {
             font-family: "Inter";
             font-size: 40px;
@@ -161,10 +153,6 @@
             gap: 0;
             p {
                 font-weight: 500;
-            }
-            h2 {
-                font-size: 35px;
-                font-weight: 800;
             }
         }
         .kroky {

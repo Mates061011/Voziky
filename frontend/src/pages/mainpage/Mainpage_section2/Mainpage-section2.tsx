@@ -10,7 +10,7 @@ export default function Section2(){
         <div className="section2">
             <div className="nadpisy">
                 <h4>JAK TO FUGNUJE?</h4>
-                <h2>Snadná rezervace ve 3 krocích</h2>
+                <h3>Snadná rezervace ve 3 krocích</h3>
             </div>
             <div className="kroky">
                 <div className="krok vyber">

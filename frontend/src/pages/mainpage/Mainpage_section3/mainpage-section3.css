@@ -16,15 +16,8 @@
         display: flex;
         justify-content: center;
         flex-direction: column;
-        
         h4 {
-            width: fit-content;
-            text-align: center;
-            animation: fadeIn linear forwards;
-            animation-timeline: view();
-            animation-range-start: contain - 100%;
-            animation-range-end: 300px;
-            opacity: 0;
+            text-align: left;
         }
         h3 {
             font-family: "Inter";

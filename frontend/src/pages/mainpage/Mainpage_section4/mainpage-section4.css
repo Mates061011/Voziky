@@ -4,6 +4,7 @@
     --disabled-color: #A20B0B;
     --font-size-calendar: 15px;
     --font-size-info: 20px;
+    
 }
 .datePickerCont {
   display: flex;
@@ -12,6 +13,7 @@
   gap: 20px;
   justify-content: center;
   margin-top: 50px;
+  
 }
 
 .react-datepicker__day--selected.react-datepicker__day--range-start.react-datepicker__day--range-end.react-datepicker__day--in-range {
@@ -120,6 +122,7 @@
     font-size: var(--font-size-calendar); 
     padding: 10px; 
     text-transform: uppercase;
+    transition: 200ms;
 }
 
 .react-datepicker__navigation {
@@ -154,10 +157,9 @@
     justify-content: left;
     gap: 40px;
     p {
-        font-size: 12px;
         text-align: left;
         font-weight: 500;
-        font-size: var(--font-size-info);
+        font-size: var(--font-size-calendar);
         color: #818181;
     }
 }
@@ -166,6 +168,7 @@
     p {
         font-size: 12px;
         text-align: left;
+        font-weight: 500;
     }
     h5 {
         font-weight: 800;
@@ -239,8 +242,8 @@
     border-radius: 2rem;
 }
 
-.popisky .popisek1 h3,
-.popisky .popisek2 h3 {
+.popisky .popisek1 p,
+.popisky .popisek2 p {
     display: flex;
     align-items: center;
     font-weight: 500;

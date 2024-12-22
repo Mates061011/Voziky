@@ -21,7 +21,7 @@ const Accordion = styled((props: AccordionProps) => (
   '&::before': {
     display: 'none',
   },
-  width: '85%',
+  width: '90%',
   textAlign: 'left',
   fontWeight: '700',
   backgroundColor: 'transparent',

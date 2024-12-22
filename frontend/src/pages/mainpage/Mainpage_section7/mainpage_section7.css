@@ -1,0 +1,113 @@
+.section7 {
+    margin-bottom: 150px !important;
+}
+
+.ant-row {
+    justify-content: center;
+}
+.gridWrap {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    h3, h4 {
+        text-align: left;
+    }
+    h3 {
+        margin-bottom: 25px;
+    }
+    p {
+        text-align: left;
+    }
+}
+.gridWrap > * {
+    width: 85%;
+    padding: 0px 16px;
+}
+.imgWrap>img {
+    width: 100%;
+}
+@media (max-width: 900px) {
+    .imgWrap {
+        width: 100% !important;
+        max-width: 85% !important; 
+    }
+    .NaVetviPic{
+        width: 50% !important;
+    }
+}
+
+  
+.paraExpanded {
+    display: block;
+    -webkit-line-clamp: unset;
+    overflow: unset;
+    text-overflow: unset;
+}
+  
+/* Style the clickable text */
+.readMoreText {
+    display: inline-block;
+    text-align: left;
+    cursor: pointer;
+    font-weight: bold;
+}
+/* Default state: Text will be truncated on smaller screens */
+.para {
+    display: block;
+    max-height: 193px; /* Adjust this value based on how much you want to show initially */
+    overflow: hidden;
+}
+
+/* On smaller screens (<= 900px), show the button and allow toggling */
+@media (max-width: 1000px) {
+    .paraExpanded {
+        max-height: none;
+        overflow: visible;
+    }
+
+    .readMoreText {
+        display: inline-block; 
+    }
+    .imgWrap2 {
+        height: 24rem  !important;
+    }
+}
+  
+/* On larger screens (> 900px), show the full text and hide the button */
+@media (min-width: 1001px) {
+    .para {
+        max-height: none;
+        overflow: visible;
+    }
+
+    .readMoreText {
+        display: none; /* Hide the button */
+    }
+}
+@media (max-width: 600px) {
+    .imgWrap {
+        width: 100% !important;
+        max-width: 100% !important; 
+    }
+    .gridWrap {
+        align-items: center;
+    }
+    .imgWrap>img {
+        width: 85%;
+        padding: 0px 16px;
+    }
+    .imgWrap2 {
+        height: 30rem  !important;
+        width: 90% !important;
+    }
+}
+.imgWrap2 {
+    background-image: url('../../../assets/NaVetviPic.jpg');
+    width: 100%;
+    height: 27rem;
+    background-size: cover; 
+    background-position: center;
+}
+
+  
+  

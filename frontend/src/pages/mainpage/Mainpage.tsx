@@ -5,10 +5,12 @@ import Section3 from "./Mainpage_section3/Mainpage-section3";
 import Section4 from "./Mainpage_section4/Mainpage-section4";
 import Section5 from "./Mainpage_section5/Mainpage-section5";
 import Section6 from "./Mainpage_section6/Mainpage-section6";
+import Section7 from "./Mainpage_section7/Mainpage_section7";
 import Bg from "../../assets/solid-color-image.jpeg";
 import { ScrollProvider } from "../../context/ScrollContext";
 import { DateProvider } from "../../context/DateContext";
 import { Link } from 'react-router-dom';
+
 export default function Mainpage() {
     const [password, setPassword] = useState("");
     const [accessGranted, setAccessGranted] = useState(false);
@@ -74,8 +76,9 @@ export default function Mainpage() {
                     <Section4 />
                     <Section5 />
                     <Section6 />
+                    <Section7 />
                 </div>
-                <Link to='/login'>Admin</Link>
+                
             </ScrollProvider>
         </DateProvider>
     );

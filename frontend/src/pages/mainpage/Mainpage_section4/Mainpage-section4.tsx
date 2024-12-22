@@ -181,11 +181,11 @@ const handleDateChange = (update: [Date | null, Date | null]) => {
         <div className="popisky">
           <div className="popisek1">
             <div></div>
-            <h3>Obsazený termín</h3>
+            <p>Obsazený termín</p>
           </div>
           <div className="popisek2">
             <div></div>
-            <h3>Vybraný termín</h3>
+            <p>Vybraný termín</p>
           </div>
         </div>
         <div className="pujceni-info">

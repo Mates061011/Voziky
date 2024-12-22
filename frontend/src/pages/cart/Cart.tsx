@@ -6,6 +6,7 @@ import Section4 from '../mainpage/Mainpage_section4/Mainpage-section4';
 import { DateProvider } from '../../context/DateContext';
 import { useDateContext } from "../../context/DateContext";
 import { ScrollProvider } from '../../context/ScrollContext';
+import InputMask from 'react-input-mask';
 
 interface UserData {
   name: string;
@@ -62,7 +63,6 @@ const Cart: React.FC = () => {
       setStep3(true);
     }
   };
-  
 
   // Handle form changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,10 +85,13 @@ const Cart: React.FC = () => {
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+  
     setLoading(true);
     setError(null);
-
+  
+    // Clean up the phone number by removing spaces
+    const cleanPhone = userData.phone.replace(/\s+/g, '');
+  
     try {
       const response = await fetch(`${baseUrl}/api/appointment`, {
         method: 'POST',
@@ -98,21 +101,21 @@ const Cart: React.FC = () => {
         body: JSON.stringify({
           startDate: currentStartDate,
           endDate: currentEndDate,
-          user: userData,
+          user: { ...userData, phone: cleanPhone }, // Use cleaned phone number
         }),
       });
-
+  
       if (!response.ok) {
         throw new Error('Failed to submit the appointment');
       }
-
+  
       const data = await response.json();
       console.log('Appointment successfully created:', data);
-
+  
       setStep2(false);
       setStep3(true);
       setCurrentStep(2);
-      setSubmitted(true)
+      setSubmitted(true);
     } catch (error: unknown) {
       console.error('Error creating appointment:', error);
   
@@ -125,10 +128,10 @@ const Cart: React.FC = () => {
       setLoading(false);
     }
   };
+  
 
   // Update dates in context when startDate and endDate change
   useEffect(() => {
-    // If dates are passed from Section4, update the states and context
     if (startDate && endDate) {
       const newStartDate = new Date(startDate);
       const newEndDate = new Date(endDate);
@@ -138,27 +141,20 @@ const Cart: React.FC = () => {
       setStartTime(newStartDate.toISOString().substring(11, 16));
       setEndTime(newEndDate.toISOString().substring(11, 16));
 
-      // Update context with new dates
       setDates([newStartDate, newEndDate]);
-
-      // Set the step to step 2 and update percent to 100%
-      setStep1(false); // Hide step 1
-      setStep2(true); // Show step 2
-      handleStepChange(1); // Move to step 2
+      setStep1(false);
+      setStep2(true);
+      handleStepChange(1);
     }
-  }, [startDate, endDate, setDates]); // Add setDates to the dependency array
+  }, [startDate, endDate, setDates]);
 
-  // Update the dates in context whenever start or end date changes
   useEffect(() => {
-    console.log('Updating context with dates:', currentStartDate, currentEndDate); // Debug log
+    console.log('Updating context with dates:', currentStartDate, currentEndDate);
     setDates([currentStartDate, currentEndDate]);
   }, [currentStartDate, currentEndDate, setDates]);
   
-
-  // Effect for updating percent based on dates when step1 is true
   useEffect(() => {
     if (step1) {
-      // Calculate percent based on the dates in step 1
       const [start, end] = dates;
       if (start && end) {
         setPercent(100);
@@ -168,14 +164,27 @@ const Cart: React.FC = () => {
         setPercent(0);
       }
     }
-  }, [dates, step1]); // This effect runs when step1 is true or when dates change
+  }, [dates, step1]);
 
-  // Effect for updating percent based on the form data when step1 is false
   useEffect(() => {
     if (!step1) {
-      setProgress(userData); // Calculate percent based on form data
+      setProgress(userData);
     }
-  }, [step1, userData]); // This effect runs when step1 changes or form data changes
+  }, [step1, userData]);
+
+  // Email input mask logic
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // Make sure '@' stays in place and users can type before and after it
+    if (value.indexOf('@') === -1 || value.length < userData.email.length) {
+      // No @ found or backspace was pressed
+      setUserData({ ...userData, email: value });
+    } else {
+      // The user is typing after '@'
+      const [localPart, domainPart] = value.split('@');
+      setUserData({ ...userData, email: `${localPart}@${domainPart || ''}` });
+    }
+  };
 
   return (
     <DateProvider>
@@ -240,10 +249,10 @@ const Cart: React.FC = () => {
                     <label>
                       Email:
                       <input
-                        type="email"
+                        type="text"
                         name="email"
                         value={userData.email}
-                        onChange={handleChange}
+                        onChange={handleEmailChange}
                         required
                       />
                     </label>
@@ -251,13 +260,21 @@ const Cart: React.FC = () => {
                   <div>
                     <label>
                       Telefon:
-                      <input
-                        type="tel"
+                      <InputMask
+                        mask="999 999 999"
+                        maskChar="_" // Use non-breaking space to create a small gap between the underscores
                         name="phone"
                         value={userData.phone}
                         onChange={handleChange}
                         required
-                      />
+                      >
+                        {(inputProps: any) => (
+                          <input
+                            {...inputProps}
+                            type="tel"
+                          />
+                        )}
+                      </InputMask>
                     </label>
                   </div>
                   <button type="submit" disabled={loading}>

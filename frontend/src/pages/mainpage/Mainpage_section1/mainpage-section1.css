@@ -1,6 +1,7 @@
 
 
 
+
 @keyframes vozikLoadAnim {
     0% {
         transform: perspective(500px) translate3d(-5px, -150px, -5px);
@@ -41,8 +42,11 @@
         opacity: 1;
     }
 }
-
+.grey-bg {
+    margin: 0 !important;
+}
 .grey-bg>img{
+    
     height: 760px;
     width: 100%;
     position: absolute;

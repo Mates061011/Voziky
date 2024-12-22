@@ -88,8 +88,9 @@ const ContactForm: React.FC = () => {
           <p style={{margin: "10px 0", textAlign: "right"}}>{responseMessage}</p>
         ) : (
           <button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Odesílám...' : 'Odeslat dotaz'}
+            {isSubmitting ? 'Odesílám...' : 'Odeslat\u00A0dotaz'}
           </button>
+
         )}
       </form>
     </div>

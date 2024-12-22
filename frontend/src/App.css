@@ -3,5 +3,19 @@
 .App {
     text-align: center;
     overflow-x: hidden;
+    height: 100vh;  /* Ensure that the App takes full height of the viewport */
 }
-  
+
+.content {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    position: relative;  /* This is important for absolute positioning inside it */
+}
+
+.main-cont > div {
+    margin-top: 150px;
+    margin-bottom: 0 !important;
+}
+
+

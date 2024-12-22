@@ -8,6 +8,7 @@ import AdminPanel from './pages/adminpanel/AdminPanel';
 import PrivateRoute from './components/PrivateRoute';
 import { ConfigProvider } from 'antd'; // Import ConfigProvider
 import { DateProvider } from './context/DateContext';
+import Footer from './components/footer/Footer';
 
 function App() {
   return (
@@ -22,16 +23,17 @@ function App() {
             },
           }}
         >
-          <div>
+          <div className="content">
             <Navigation />
             <Routes>
               <Route path="/" element={<Mainpage />} />
               <Route path="/Cart" element={<Cart />} />
-              <Route path='/login' element={<Admin />} />
-              <Route element={<PrivateRoute redirectPath="/login" />}>
+              <Route path='/loginAdmin' element={<Admin />} />
+              <Route element={<PrivateRoute redirectPath="/loginAdmin" />}>
                 <Route path="/adminPanel" element={<AdminPanel />} />
               </Route>
             </Routes>
+            <Footer/>
           </div>
         </ConfigProvider>
       </BrowserRouter>

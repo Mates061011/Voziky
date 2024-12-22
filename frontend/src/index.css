@@ -9,7 +9,6 @@ body {
   padding: 0;
 }
 button {
-  width: clamp(100px, 12vw, 210px);
   border-radius: 17px;
   background-color: #FF6832;
   border: none;
@@ -38,6 +37,10 @@ input, textarea {
   padding: 10px;
   box-sizing: border-box;
 }
+label {
+  font-size: 14px;
+  color: #818181;
+}
 input::placeholder, textarea::placeholder {
   color: black;
   font-size: larger;
@@ -50,7 +53,45 @@ input::placeholder, textarea::placeholder {
 }
 
 h4 {
-  font-weight: 700;
+  font-weight: 700 !important;
+  color: #818181 !important;
+  font-size: 20px !important;
+}
+h3 {
+  font-family: "Inter" !important;
+  font-weight: 700 !important;
+  font-size: 40px !important;
+}
+.para {
+    display: block;
+    text-align: left !important;
+    font-size: 18px;
+    color: #818181;
+    font-weight: 400;
+}
+b {
   color: #818181;
-  font-size: 20px;
+}
+@media (max-width: 900px) {
+  h4 {
+      font-size: 14px !important;
+  }
+  h3 {
+      font-size: 30px !important;
+  }
+  .para {
+      font-size: 15px;
+  }
+}
+
+@media (max-width: 600px) {
+    h4 {
+        font-size: 15px !important;
+    }
+    h3 {
+        font-size: 30px !important;
+    }
+    .para {
+        font-size: 15px;
+    }
 }
