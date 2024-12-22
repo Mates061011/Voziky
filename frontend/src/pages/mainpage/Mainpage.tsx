@@ -9,7 +9,6 @@ import Section7 from "./Mainpage_section7/Mainpage_section7";
 import Bg from "../../assets/solid-color-image.jpeg";
 import { ScrollProvider } from "../../context/ScrollContext";
 import { DateProvider } from "../../context/DateContext";
-import { Link } from 'react-router-dom';
 
 export default function Mainpage() {
     const [password, setPassword] = useState("");
