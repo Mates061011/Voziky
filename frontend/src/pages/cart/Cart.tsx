@@ -3,7 +3,6 @@ import './cart.css';
 import CartSteps from '../../components/CartSteps/CartSteps';
 import Section4 from '../mainpage/Mainpage_section4/Mainpage-section4';
 import { useDateContext } from "../../context/DateContext";
-import { ScrollProvider } from '../../context/ScrollContext';
 import InputMask from 'react-input-mask';
 
 interface UserData {
@@ -19,7 +18,7 @@ const Cart: React.FC = () => {
 }, []);
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
-  const { dates, setDates } = useDateContext(); // Get dates from context
+  const { dates } = useDateContext(); // Get dates from context
   console.log("Cart Dates from context:", dates);
 
   const [userData, setUserData] = useState<UserData>({
