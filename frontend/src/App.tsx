@@ -1,7 +1,7 @@
 import './App.css';
 import Mainpage from "./pages/mainpage/Mainpage";
 import Cart from './pages/cart/Cart'; // Import the Cart page
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route, HashRouter } from "react-router-dom";
 import Navigation from './components/navigation/Navigation';
 import Admin from './pages/admin/Admin';
 import AdminPanel from './pages/adminpanel/AdminPanel';
@@ -14,7 +14,7 @@ function App() {
   return (
     <div className="App">
       <DateProvider>
-        <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        <HashRouter>
           <ConfigProvider
             theme={{
               token: {
@@ -36,7 +36,7 @@ function App() {
               <Footer/>
             </div>
           </ConfigProvider>
-        </BrowserRouter>
+        </HashRouter>
       </DateProvider>
     </div>
   );
