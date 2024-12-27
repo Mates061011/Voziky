@@ -16,12 +16,7 @@
         transform: scale(1);
     }
 }
-@keyframes rotationFadeIn {
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
+
 .section2 {
     margin-top: 120px;
     width: 100%;
@@ -32,16 +27,6 @@
     gap: 80px;
     .nadpisy {
         width: 60vw;
-        h2 {
-            font-family: "Inter";
-            font-size: 40px;
-            animation: fadeIn linear forwards;
-            animation-timeline: view();
-            animation-range-start: contain - 100%;
-            animation-range-end: 300px;
-            opacity: 0;
-            transform: scale(0.8);
-        }
     }
     .kroky {
         display: flex;
@@ -53,11 +38,6 @@
         }
         .cesta1 {
             transform:scale(1.2) translateY(-25px);
-            animation: fade linear forwards;
-            animation-timeline: view();
-            animation-range-start: contain - 50%;
-            animation-range-end: 300px;
-            opacity: 0;
             user-select: none;
             -webkit-user-drag: none;
         }
@@ -72,11 +52,7 @@
             -webkit-user-drag: none;
         }
         .krok {
-            animation: rotationFadeIn linear forwards;
-            animation-timeline: view();
-            animation-range-start: contain - 50%;
-            animation-range-end: 300px;
-            opacity: 0;
+            opacity: 1;
             flex-basis: 300px;
             height: 280px;
             display: flex;

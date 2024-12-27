@@ -26,13 +26,15 @@
 }
 .nav-links-cont {
     width: 24%;
+    min-width:200px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    gap: 15px;
     .nav-link {
         font-family: "Roboto", sans-serif;
         font-weight: 400;
-        font-size: clamp(12px, 1vw, 17px);
+        font-size: clamp(14px, 1.1vw, 17px);
         text-decoration: none;
         color: black;
         user-select: none;
@@ -49,7 +51,10 @@
     margin: 0 auto;
     transform: translateY(-20px);
 }
-@media (max-width: 479px) {
+.hamburger-menu {
+    display: none !important;
+}
+@media (max-width: 600px) {
     .navigation-wrap{
         width: 90%;
         margin: 0 5% ;
@@ -61,5 +66,12 @@
     .breadcrumb-wrap {
         width: 90%;
         margin: 0 5% ;
+    }
+    .nav-links-cont {
+        display: none;
+    }
+
+    .hamburger-menu {
+        display: flex !important;
     }
 }

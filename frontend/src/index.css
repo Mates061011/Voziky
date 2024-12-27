@@ -18,7 +18,7 @@ button {
   padding: 18px 20px;
   color: white;
   cursor: pointer;
-  z-index: 1000000;
+  z-index: 1199;
   outline: none;
   transition: 200ms;
 }

@@ -156,7 +156,7 @@
             padding: 0 20px;
             color: white;
             cursor: pointer;
-            z-index: 1000000;
+            z-index: 1199;
             outline: none;
             transition: 500ms;
             animation: fadeInLoadAnim 2.5s;
@@ -177,7 +177,7 @@
                 font-family: "Inter";
                 width: 70%;
                 font-size: clamp(16px, 1.3vw, 17px);
-                z-index: 1000000;
+                z-index: 1199;
                 cursor: pointer;
             }
             input::-webkit-calendar-picker-indicator {
@@ -263,7 +263,7 @@
     background-color: #768078;
     border-radius: 5px;
 }
-@media (max-width: 479px) {
+@media (max-width: 600px) {
     #section1-mp {
         margin: 0 5%;
         width: 90%;
@@ -279,7 +279,6 @@
             left: 40%;
             height: fit-content;
             width: 60%;
-            overflow-x: hidden;
         }
         .bar-part {
             animation: barLoadAnim2 1.5s;
@@ -288,6 +287,10 @@
                 width: 100%;
                 div {
                     margin: 5px;
+                    justify-content: right;
+                    input {
+                        display: none;
+                    }
                 }
             }
         }
