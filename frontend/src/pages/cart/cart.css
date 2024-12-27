@@ -37,11 +37,17 @@
                 align-self: center;
             }
         }
+        button {
+            align-self: center;
+        }
     }
 }
 .cartWrap>.datePickerCont{
     width: fit-content;
     margin: 10px;
+}
+.cartWrap>div>.popiskyCont>.pujceni-button>button {
+    display: none;
 }
 @media (max-width: 479px) {
     .cartWrap {

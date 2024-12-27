@@ -14,29 +14,29 @@ function App() {
   return (
     <div className="App">
       <DateProvider>
-      <BrowserRouter>
-        <ConfigProvider
-          theme={{
-            token: {
-              colorPrimary: '#FF6832',
-              colorError: '#A20B0B',
-            },
-          }}
-        >
-          <div className="content">
-            <Navigation />
-            <Routes>
-              <Route path="/" element={<Mainpage />} />
-              <Route path="/Cart" element={<Cart />} />
-              <Route path='/loginAdmin' element={<Admin />} />
-              <Route element={<PrivateRoute redirectPath="/loginAdmin" />}>
-                <Route path="/adminPanel" element={<AdminPanel />} />
-              </Route>
-            </Routes>
-            <Footer/>
-          </div>
-        </ConfigProvider>
-      </BrowserRouter>
+        <BrowserRouter>
+          <ConfigProvider
+            theme={{
+              token: {
+                colorPrimary: '#FF6832',
+                colorError: '#A20B0B',
+              },
+            }}
+          >
+            <div className="content">
+              <Navigation />
+              <Routes>
+                <Route path="/" element={<Mainpage />} />
+                <Route path="/Kosik" element={<Cart />} />
+                <Route path='/loginAdmin' element={<Admin />} />
+                <Route element={<PrivateRoute redirectPath="/loginAdmin" />}>
+                  <Route path="/adminPanel" element={<AdminPanel />} />
+                </Route>
+              </Routes>
+              <Footer/>
+            </div>
+          </ConfigProvider>
+        </BrowserRouter>
       </DateProvider>
     </div>
   );

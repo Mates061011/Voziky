@@ -293,5 +293,9 @@
 }
 .react-datepicker__day--range-start.react-datepicker__day--range-end {
     border-radius: 2rem;
+    background-color: var(--primary-color) !important;
 }
-
+.react-datepicker__day--in-range {
+    background-color: var(--primary-color) !important;
+    color: white;
+}

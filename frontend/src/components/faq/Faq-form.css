@@ -26,7 +26,9 @@
     min-height: 25px;
   }
   
-
+.MuiAccordionSummary-content {
+    margin-left: 0 !important;
+}
 @media (max-width:600px) {
     .css-gq97pi-MuiButtonBase-root-MuiAccordionSummary-root {
         padding: 0 !important;

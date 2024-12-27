@@ -14,7 +14,6 @@ registerLocale("cs", cs);
 const Section4 = () => {
   const ref = useScrollContext();
   const { dates, setDates } = useDateContext(); // Use dates and setDates from context
-
   const [lockedDates, setLockedDates] = useState<Date[]>([]);
   const [selectedDaysCount, setSelectedDaysCount] = useState(0);
   const [price, setPrice] = useState(0);
@@ -151,7 +150,7 @@ const handleDateChange = (update: [Date | null, Date | null]) => {
 
   const handleSubmit = () => {
     if (dates[0] && dates[1]) {
-      navigate("/Cart", { state: { startDate: dates[0], endDate: dates[1] } });
+      navigate("/Kosik", { state: { startDate: dates[0], endDate: dates[1] } });
     } else {
       alert("Vyberte prosím platné datumy před pokračováním.");
     }

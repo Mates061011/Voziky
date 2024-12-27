@@ -21,6 +21,8 @@ button {
   z-index: 1199;
   outline: none;
   transition: 200ms;
+  width: fit-content;
+min-width: 150px;
 }
 button:active {
   transform: scale(0.95);

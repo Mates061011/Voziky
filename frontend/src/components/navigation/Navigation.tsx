@@ -5,13 +5,12 @@ import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Divider from "@mui/material/Divider";
 import Logo from "./SiteLogo.svg";
 import "./navigation.css";
-import { Breadcrumb } from "antd";
+import { Breadcrumb } from 'antd';
 
 export default function Navigation() {
   const location = useLocation();
@@ -24,22 +23,19 @@ export default function Navigation() {
 
   // Add the Home path as the first breadcrumb item
   const breadcrumbItems = [
-    <ListItem key="/" disablePadding>
-      <ListItemButton component={Link} to="/">
-        <ListItemText primary="Home" />
-      </ListItemButton>
-    </ListItem>,
-    ...pathSnippets.map((_, index) => {
-      const url = `/${pathSnippets.slice(0, index + 1).join("/")}`;
-      return (
-        <ListItem key={url} disablePadding>
-          <ListItemButton component={Link} to={url}>
-            <ListItemText primary={url.replace("/", "")} />
-          </ListItemButton>
-        </ListItem>
-      );
-    }),
+      <Breadcrumb.Item key="/">
+          <Link to="/">Home</Link>
+      </Breadcrumb.Item>,
+      ...pathSnippets.map((_, index) => {
+          const url = `/${pathSnippets.slice(0, index + 1).join('/')}`;
+          return (
+              <Breadcrumb.Item key={url}>
+                  <Link to={url}>{pathSnippets[index]}</Link>
+              </Breadcrumb.Item>
+          );
+      }),
   ];
+
 
   return (
     <div className="navigation">
@@ -52,9 +48,9 @@ export default function Navigation() {
 
         {/* Desktop Nav Links */}
         <div className="nav-links-cont">
-          <p className="nav-link">O NÁS</p>
-          <p className="nav-link">FAQ</p>
-          <p className="nav-link">NABÍDKA</p>
+          <Link className="nav-link" to="/">O NÁS</Link>
+          <Link className="nav-link" to="/Nabidka">NABÍDKA</Link>
+          <Link className="nav-link" to="/Kosik">KOŠÍK</Link>
         </div>
 
         {/* Hamburger Icon */}
@@ -80,12 +76,9 @@ export default function Navigation() {
           >
             <List>
               <ListItemButton component={Link} to="/">
-                <ListItemText primary="O NÁS" />
+                <ListItemText primary="Domů" />
               </ListItemButton>
-              <ListItemButton component={Link} to="/faq">
-                <ListItemText primary="FAQ" />
-              </ListItemButton>
-              <ListItemButton component={Link} to="/nabidka">
+              <ListItemButton component={Link} to="/Nabidka">
                 <ListItemText primary="NABÍDKA" />
               </ListItemButton>
             </List>

@@ -102,10 +102,7 @@
     height: 100px;
     transition: 300ms;
 }
-.icon-bg:hover, .icon-bg2:hover {
-    width: 110px;
-    transition: 300ms;
-}
+
 @media screen and (max-width: 1550px) {
     .kroky {
         width: 70vw;

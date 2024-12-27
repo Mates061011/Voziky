@@ -8,7 +8,6 @@ import Section6 from "./Mainpage_section6/Mainpage-section6";
 import Section7 from "./Mainpage_section7/Mainpage_section7";
 import Bg from "../../assets/solid-color-image.jpeg";
 import { ScrollProvider } from "../../context/ScrollContext";
-import { DateProvider } from "../../context/DateContext";
 
 export default function Mainpage() {
     const [password, setPassword] = useState("");
@@ -63,22 +62,20 @@ export default function Mainpage() {
     }
 
     return (
-        <DateProvider>
-            <ScrollProvider>
-                <div className="main-cont">
-                    <div className="grey-bg">
-                        <img src={Bg} alt="" />
-                    </div>
-                    <Section1 />
-                    <Section2 />
-                    <Section3 />
-                    <Section4 />
-                    <Section5 />
-                    <Section6 />
-                    <Section7 />
+        <ScrollProvider>
+            <div className="main-cont">
+                <div className="grey-bg">
+                    <img src={Bg} alt="" />
                 </div>
-                
-            </ScrollProvider>
-        </DateProvider>
+                <Section1 />
+                <Section2 />
+                <Section3 />
+                <Section4 />
+                <Section5 />
+                <Section6 />
+                <Section7 />
+            </div>
+            
+        </ScrollProvider>
     );
 }

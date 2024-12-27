@@ -10,9 +10,21 @@ const DateContext = createContext<DateContextProps | undefined>(undefined);
 export const DateProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [dates, setDates] = useState<[Date | undefined, Date | undefined]>([undefined, undefined]);
 
+  const adjustToLocalTimezone = (date: Date): Date => {
+    const localDate = new Date(date);
+    const offset = localDate.getTimezoneOffset(); // Get the timezone offset in minutes
+    localDate.setMinutes(localDate.getMinutes() - offset); // Adjust the date by the offset
+    return localDate;
+  };
+
+  // Ensure that the array has exactly two elements
+  const adjustedDates: [Date | undefined, Date | undefined] = [
+    dates[0] ? adjustToLocalTimezone(dates[0]) : undefined,
+    dates[1] ? adjustToLocalTimezone(dates[1]) : undefined,
+  ];
 
   return (
-    <DateContext.Provider value={{ dates, setDates }}>
+    <DateContext.Provider value={{ dates: adjustedDates, setDates }}>
       {children}
     </DateContext.Provider>
   );
