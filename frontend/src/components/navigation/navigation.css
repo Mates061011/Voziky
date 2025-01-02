@@ -20,7 +20,7 @@
     justify-content: start;
     a>img {
         width: 140px;
-        height: auto;
+        height: 50px;
         user-select: none;
         -webkit-user-drag: none;
     }
