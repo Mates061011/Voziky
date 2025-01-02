@@ -164,6 +164,7 @@
         .datum-pujceni, .datum-vraceni {
             animation: fadeInLoadAnim 1s;
             width: 30%;
+            height: auto;
             display: flex;
             flex-direction: row;
             align-items: center;
