@@ -118,14 +118,14 @@
         width: 48vw;
     }
 }
-@media (max-width: 479px) {
+@media (max-width: 600px) {
     .section2  {
         gap: 40px;
         .nadpisy {
-            width: 100%;
+            width: 90%;
             gap: 0;
-            p {
-                font-weight: 500;
+            h3, h4 {
+                text-align: left;
             }
         }
         .kroky {
@@ -133,32 +133,45 @@
             gap: 10px;
             flex-direction: column;
             align-items: center;
-            gap: 30px;
             img {
                 display: none;
             }
             .krok {
-                width: 90%;
-                height: fit-content;
-                flex-basis: auto;
+                display: grid;
+                grid-template-columns: repeat(5, 1fr);
+                grid-template-rows: repeat(2, 1fr);
+                grid-column-gap: 0px;
+                grid-row-gap: 0px;
+                max-height: 100px;
+                width: 100%;
+                align-items: flex-start;
                 .icon-bg, .icon-bg2 {
-                    width: 50px;
-                    height: 50px;
+                    width: 60px;
+                    height: 60px;
+                    grid-area: 1 / 1 / 3 / 2;
+                    justify-self: end;
+                    align-self: center;
+                    border-radius: 3rem;
+                    margin-right: 15px;
                     img {
                         width: 20px;
                     }
                 }
                 h5 {
-                    font-size: 18px;
+                    font-size: 20px;
                     margin-top: 10px;
                     text-align: left;
                     font-weight: 500;
+                    grid-area: 1 / 2 / 2 / 6;
+                    align-self: flex-end;
                 }
                 p {
-                    font-size: 10px;
+                    font-size: 12px;
                     width: fit-content;
                     height: fit-content;
-                    margin-top: 10px;
+                    text-align: left;
+                    margin-top: 5px;
+                    grid-area: 2 / 2 / 3 / 6;
                 }
                 img {
                     display: inline;

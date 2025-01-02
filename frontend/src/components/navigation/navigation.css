@@ -15,11 +15,11 @@
     margin: 0 15%;
 }
 .logo-cont {
-    width: calc(9vw + 100px);
+    width: fit-content;
     display: flex;
     justify-content: start;
     a>img {
-        width: clamp(120px, 9vw, 160px);
+        width: 140px;
         user-select: none;
         -webkit-user-drag: none;
     }
@@ -53,6 +53,8 @@
 }
 .hamburger-menu {
     display: none !important;
+    min-width: 0 !important;
+    border-radius: 8px !important;
 }
 @media (max-width: 600px) {
     .navigation-wrap{

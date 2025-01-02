@@ -65,7 +65,7 @@ export default function Mainpage() {
         <ScrollProvider>
             <div className="main-cont">
                 <div className="grey-bg">
-                    <img src={Bg} alt="" />
+                    <div></div>
                 </div>
                 <Section1 />
                 <Section2 />

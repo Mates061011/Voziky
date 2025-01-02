@@ -24,7 +24,7 @@ export default function Navigation() {
   // Add the Home path as the first breadcrumb item
   const breadcrumbItems = [
       <Breadcrumb.Item key="/">
-          <Link to="/">Home</Link>
+          <Link to="/">Domů</Link>
       </Breadcrumb.Item>,
       ...pathSnippets.map((_, index) => {
           const url = `/${pathSnippets.slice(0, index + 1).join('/')}`;
@@ -38,11 +38,11 @@ export default function Navigation() {
 
 
   return (
-    <div className="navigation">
+    <nav className="navigation">
       <div className="navigation-wrap">
         <div className="logo-cont">
           <Link to="/">
-            <img src={Logo} alt="Logo" />
+            <img src={Logo} alt="Company Name Logo" />
           </Link>
         </div>
 
@@ -50,7 +50,7 @@ export default function Navigation() {
         <div className="nav-links-cont">
           <Link className="nav-link" to="/">O NÁS</Link>
           <Link className="nav-link" to="/Nabidka">NABÍDKA</Link>
-          <Link className="nav-link" to="/Kosik">KOŠÍK</Link>
+          <Link className="nav-link" to="/Objednat">OBJEDNAT</Link>
         </div>
 
         {/* Hamburger Icon */}
@@ -96,6 +96,6 @@ export default function Navigation() {
           <Breadcrumb>{breadcrumbItems}</Breadcrumb>
         </div>
       )}
-    </div>
+    </nav>
   );
 }

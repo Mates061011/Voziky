@@ -150,7 +150,7 @@ const handleDateChange = (update: [Date | null, Date | null]) => {
 
   const handleSubmit = () => {
     if (dates[0] && dates[1]) {
-      navigate("/Kosik", { state: { startDate: dates[0], endDate: dates[1] } });
+      navigate("/Objednat", { state: { startDate: dates[0], endDate: dates[1] } });
     } else {
       alert("Vyberte prosím platné datumy před pokračováním.");
     }

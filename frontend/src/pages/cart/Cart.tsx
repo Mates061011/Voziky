@@ -18,7 +18,7 @@ const Cart: React.FC = () => {
 }, []);
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
-  const { dates } = useDateContext(); // Get dates from context
+  const { dates, setDates } = useDateContext(); // Get dates from context
   console.log("Cart Dates from context:", dates);
 
   const [userData, setUserData] = useState<UserData>({
@@ -129,6 +129,7 @@ const Cart: React.FC = () => {
       setStep3(true);
       setCurrentStep(2);
       setSubmitted(true);
+      setDates([undefined, undefined]);
     } catch (error: unknown) {
       console.error('Error creating appointment:', error);
 

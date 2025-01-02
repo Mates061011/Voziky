@@ -27,7 +27,7 @@ function App() {
               <Navigation />
               <Routes>
                 <Route path="/" element={<Mainpage />} />
-                <Route path="/Kosik" element={<Cart />} />
+                <Route path="/Objednat" element={<Cart />} />
                 <Route path='/loginAdmin' element={<Admin />} />
                 <Route element={<PrivateRoute redirectPath="/loginAdmin" />}>
                   <Route path="/adminPanel" element={<AdminPanel />} />
