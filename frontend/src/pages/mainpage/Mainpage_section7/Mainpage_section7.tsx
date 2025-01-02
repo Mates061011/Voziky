@@ -55,7 +55,7 @@ const Section7 = () => {
             flexDirection: 'column',
             alignItems: 'center',
           }}>
-            <div className="imgWrap2">.</div>
+            <div className="imgWrap2"></div>
           </Grid>
         </Grid>
       </Grid>

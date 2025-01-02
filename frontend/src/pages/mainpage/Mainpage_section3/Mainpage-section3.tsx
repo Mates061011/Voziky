@@ -1,4 +1,4 @@
-import Vozik from '../../../assets/vozíkTrimmed.png';
+import Vozik from '../../../assets/vozíkTrimmed.webp';
 import './mainpage-section3.css';
 export default function Section3() {
     return(

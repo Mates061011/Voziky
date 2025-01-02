@@ -25,14 +25,14 @@
 }
 
 .galleryPic1 {
-    background-image: url(/pic1.jpg);
+    background-image: url(/pic1.webp);
     background-position: left;
 }
 .galleryPic2 {
-    background-image: url(/pic2.jpg);
+    background-image: url(/pic2.webp);
 }
 .galleryPic3 {
-    background-image: url(/pic3.jpg);
+    background-image: url(/pic3.webp);
     background-position: right;
 }
 

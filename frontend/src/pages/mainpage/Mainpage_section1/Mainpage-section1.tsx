@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Helmet } from 'react-helmet';
 
 // Import images to ensure correct bundling
-import Vozik from "../../../assets/Vozik4xCuted-min.png";
+import Vozik from "../../../assets/Vozik4xCuted-min.webp";
 import calendarLogoLeft from "../../../assets/calendar-icon-left.svg";
 import calendarLogoRight from "../../../assets/calendar-icon-right.svg";
 import thuleLogo from "../../../assets/thule-logo.svg";
