@@ -6,7 +6,6 @@ import Section4 from "./Mainpage_section4/Mainpage-section4";
 import Section5 from "./Mainpage_section5/Mainpage-section5";
 import Section6 from "./Mainpage_section6/Mainpage-section6";
 import Section7 from "./Mainpage_section7/Mainpage_section7";
-import Bg from "../../assets/solid-color-image.jpeg";
 import { ScrollProvider } from "../../context/ScrollContext";
 
 export default function Mainpage() {
