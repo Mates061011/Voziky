@@ -76,110 +76,40 @@ const createAppointment = async (req: Request, res: Response, next: NextFunction
 
     // HTML content for the email
     const htmlContent = `
-    <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Details</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
-
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            width: 100%;
-            height: 100vh;
-            background-color: white;
-        }
-
-        .imgWrap {
-            height: 200px;
-            width: 500px;
-        }
-
-        .imgWrap img {
-            width: 100%;
-            height: auto;
-            transform: translate(0, -35px);
-        }
-
-        .order-details {
-            max-width: 600px;
-            background-color: #768078;
-            padding: min(5%, 40px);
-            padding-top: 150px;
-            border-radius: 20px;
-            color: white;
-            font-family: Arial, sans-serif;
-        }
-
-        .order-details h1 {
-            margin: 0 0 20px 0;
-        }
-
-        .details {
-            margin: 0 0 10px 0;
-            color: rgb(209, 209, 209);
-        }
-
-        .details .highlight {
-            color: white;
-        }
-
-        .payment-section {
-            margin: 20px 0;
-        }
-
-        .payment-instruction {
-            margin: 5px 0;
-            font-weight: bold;
-            color: white;
-        }
-
-        .qrcode {
-            border-radius: 10px;
-            width: 30%;
-            margin: 5px 0;
-        }
-    </style>
-    </head>
-    <body>
-        <div class="container">
-            <h1>Informace o vaší objednávce:</h1>
-            <div class="imgWrap">
-                <img src="http://localhost:5173/src/assets/mailpic.png" alt="Obrázek vozíku">
+    <html>
+        <head>
+          <title>Informace o objednávce</title>
+        </head>
+        <body>
+          <div style="margin: 0; padding: 0; font-family: Arial, sans-serif;">
+            <div style="width: 600px; background-color: #768078; padding: 20px; border-radius: 20px; color: white; font-family: Arial, sans-serif;">
+              <h1 style="margin: 0 0 20px 0;">Informace o vaší objednávce:</h1>
+              ${userDetails ? `
+              <div>
+                <p style="margin: 0 0 10px 0; color: rgb(209, 209, 209);">
+                  Datum a čas vyzvednutí:&nbsp;<strong style="color: white;">
+                    ${formatDateInCzech(userDetails.startDate)} - ${formatDateInCzech(userDetails.endDate)}
+                  </strong>
+                </p>
+                <p style="margin: 0 0 20px 0; color: rgb(209, 209, 209);">
+                  Celková cena:&nbsp;<strong style="color: white;">${userDetails.price}kč</strong>
+                </p>
+              </div>
+              ` : ''}
+              <div style="margin: 20px 0;">
+                <p style="margin: 5px 0; font-weight: bold; color: white;">Zaplatte zálohu 100kč pro potvrzení objednávky</p>
+                <img src="cid:qrcode" alt="qrcode" style="border-radius: 10px; width: 30%; margin: 5px 0;">
+                <p style="margin: 5px 0; color: rgb(209, 209, 209);">
+                  Číslo účtu:&nbsp;<strong style="color: white;">Neuvedeno</strong>
+                </p>
+                <p style="margin: 5px 0; color: rgb(209, 209, 209);">
+                  Variabilní symbol:&nbsp;<strong style="color: white;">${savedAppointment.vs}</strong>
+                </p>
+              </div>
             </div>
-            <div class="order-details">
-                ${userDetails ? `
-                <div>
-                    <p class="details">
-                        Datum a čas vyzvednutí:&nbsp;<strong class="highlight">
-                            ${formatDateInCzech(userDetails.startDate)} - ${formatDateInCzech(userDetails.endDate)}
-                        </strong>
-                    </p>
-                    <p class="details">
-                        Celková cena:&nbsp;<strong class="highlight">${userDetails.price}kč</strong>
-                    </p>
-                </div>
-                ` : ''}
-                <div class="payment-section">
-                    <p class="payment-instruction">Zaplatte zálohu 100kč pro potvrzení objednávky</p>
-                    <img src="cid:qrcode" alt="qrcode" class="qrcode">
-                    <p class="details">
-                        Číslo účtu:&nbsp;<strong class="highlight">Neuvedeno</strong>
-                    </p>
-                    <p class="details">
-                        Variabilní symbol:&nbsp;<strong class="highlight">${savedAppointment.vs}</strong>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </body>
+          </div>
+        </body>
+      </html>
     `;
 
     // Send email with the HTML content
