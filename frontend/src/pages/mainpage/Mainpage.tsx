@@ -62,7 +62,7 @@ export default function Mainpage() {
 
     return (
         <ScrollProvider>
-            <div className="main-cont">
+            <main className="main-cont">
                 <div className="grey-bg">
                     <div></div>
                 </div>
@@ -73,7 +73,7 @@ export default function Mainpage() {
                 <Section5 />
                 <Section6 />
                 <Section7 />
-            </div>
+            </main>
             
         </ScrollProvider>
     );
