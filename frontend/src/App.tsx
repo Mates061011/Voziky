@@ -1,14 +1,17 @@
 import './App.css';
-import Mainpage from "./pages/mainpage/Mainpage";
-import Cart from './pages/cart/Cart'; // Import the Cart page
 import { Routes, Route, HashRouter } from "react-router-dom";
+import { Suspense, lazy } from 'react';
 import Navigation from './components/navigation/Navigation';
-import Admin from './pages/admin/Admin';
-import AdminPanel from './pages/adminpanel/AdminPanel';
-import PrivateRoute from './components/PrivateRoute';
 import { ConfigProvider } from 'antd'; // Import ConfigProvider
 import { DateProvider } from './context/DateContext';
 import Footer from './components/footer/Footer';
+import PrivateRoute from './components/PrivateRoute';
+
+// Lazy load the components for routes
+const Mainpage = lazy(() => import("./pages/mainpage/Mainpage"));
+const Cart = lazy(() => import('./pages/cart/Cart'));
+const Admin = lazy(() => import('./pages/admin/Admin'));
+const AdminPanel = lazy(() => import('./pages/adminpanel/AdminPanel'));
 
 function App() {
   return (
@@ -25,14 +28,16 @@ function App() {
           >
             <div className="content">
               <Navigation />
-              <Routes>
-                <Route path="/" element={<Mainpage />} />
-                <Route path="/Objednat" element={<Cart />} />
-                <Route path='/loginAdmin' element={<Admin />} />
-                <Route element={<PrivateRoute redirectPath="/loginAdmin" />}>
-                  <Route path="/adminPanel" element={<AdminPanel />} />
-                </Route>
-              </Routes>
+              <Suspense fallback={<div>Loading...</div>}>
+                <Routes>
+                  <Route path="/" element={<Mainpage />} />
+                  <Route path="/Objednat" element={<Cart />} />
+                  <Route path='/loginAdmin' element={<Admin />} />
+                  <Route element={<PrivateRoute redirectPath="/loginAdmin" />}>
+                    <Route path="/adminPanel" element={<AdminPanel />} />
+                  </Route>
+                </Routes>
+              </Suspense>
               <Footer/>
             </div>
           </ConfigProvider>
