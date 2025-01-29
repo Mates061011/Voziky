@@ -50,14 +50,23 @@
 }
 @media (max-width: 479px) {
     .cartWrap {
-        transform: scale(0.8);
+        transform: scale(0.85);
         width: 90% !important;
         margin: 0 5% ;
         min-width: 0 !important;
+        height: fit-content;
+        height: 580px;
     }
     .ant-steps {
         width: 90% !important;
         margin: 0 5% ;
         min-width: 0 !important;
+    }
+    .cartWrap>.datePickerCont {
+        transform:scale(0.85) translate(0,-40px);
+        width: auto;
+    }
+    .cartWrap>button {
+        transform: translate(0, -80px);
     }
 }
