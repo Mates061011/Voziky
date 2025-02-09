@@ -25,10 +25,6 @@ const ItemContainer: React.FC = () => {
         setItems(data);
         setLoading(false);
       })
-      .catch((err) => {
-        setError('Failed to fetch items');
-        setLoading(false);
-      });
   }, []);
 
   if (loading) {

@@ -10,7 +10,7 @@ interface ItemProps {
   img: string;
 }
 
-const Item: React.FC<ItemProps> = ({ name, desc, pricePerDay, pricePerDays, type, img }) => {
+const Item: React.FC<ItemProps> = ({ name, pricePerDay, pricePerDays, type, img }) => {
     const imagePath = `/items/${img}`; // Path to public/assets/
   
     return (

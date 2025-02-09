@@ -49,6 +49,7 @@ const AdminPanelItem: React.FC = () => {
           Authorization: `Bearer ${token}`,
         },
       });
+      console.log(response)
       alert("Item created successfully!");
       // Reset the form fields after successful creation
       setName("");
