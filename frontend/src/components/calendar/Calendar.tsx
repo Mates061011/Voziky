@@ -137,14 +137,6 @@ const Section4 = () => {
     return ""; // No class for valid days
   };
 
-  const handleSubmit = () => {
-    if (dates[0] && dates[1]) {
-      navigate("/Objednat", { state: { startDate: dates[0], endDate: dates[1] } });
-    } else {
-      alert("Vyberte prosím platné datumy před pokračováním.");
-    }
-  };
-
   const handleKeyDown = (e: React.KeyboardEvent) => {
     // Prevent focus on the last day if it's selected
     if (dates[1] && e.key === "Tab") {
