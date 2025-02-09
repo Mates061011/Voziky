@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDateContext } from "../../context/DateContext"; // Update the path as necessary
 import calendarLogoLeft from "../../assets/calendar-icon-left.svg";
 import calendarLogoRight from "../../assets/calendar-icon-right.svg";
@@ -7,35 +7,81 @@ import "./resbar.css";
 import { useNavigate } from "react-router-dom";
 
 const ResBar = () => {
-    const [showSection4, setShowSection4] = useState(false);
-    const { dates } = useDateContext(); // Access dates from context
-    const navigate = useNavigate();
+  const [showSection4, setShowSection4] = useState(false);
+  const [activeButton, setActiveButton] = useState<"start" | "end" | null>(null);
+  const { dates, setDates } = useDateContext(); // Access dates and setDates function from context
+  const navigate = useNavigate();
 
-    const toggleSection4 = () => {
-        setShowSection4((prevState) => !prevState);
-    };
-    
-    const handleSubmit = () => {
-        if (dates[0] && dates[1]) {
-        navigate("/Objednat", { state: { startDate: dates[0], endDate: dates[1] } });
-        } else {
-        alert("Vyberte prosím platné datumy před pokračováním.");
-        }
-    };
-    const [startDate, endDate] = dates;
+  const toggleSection4 = (button: "start" | "end") => {
+    setShowSection4(true);
+    setActiveButton(button);
+  };
+
+  const handleSubmit = () => {
+    if (dates[0] && dates[1]) {
+      navigate("/Objednat", { state: { startDate: dates[0], endDate: dates[1] } });
+    } else {
+      alert("Vyberte prosím platné datumy před pokračováním.");
+    }
+  };
+
+  const [startDate, endDate] = dates;
+
+  useEffect(() => {
+    // Automatically slide to end if startDate is selected
+    if (startDate && !endDate) {
+      setActiveButton("end"); // Automatically select "end" once "start" is picked
+    }
+  }, [startDate, endDate]);
+
+  const handleStartDateClick = () => {
+    // Reset the dates when the first button is clicked
+    setDates([undefined, undefined]);
+    setShowSection4(true);
+    setActiveButton("start");
+  };
+
+  const isButtonDisabled = !startDate || !endDate; // Check if either date is undefined
 
   return (
     <div className="bar-part2">
       <div className="bar-part-bg2">
-        <button className="datum-pujceni2" onClick={toggleSection4}>
-          <img src={calendarLogoRight} alt="Calendar logo for start date" />
-          <p>{startDate ? startDate.toLocaleDateString() : "Datum vyzvednutí"}</p>
+        <div className="button-container">
+          <button
+            className={`datum-pujceni2 ${activeButton === "start" ? "active" : ""}`}
+            onClick={handleStartDateClick} // Update the click handler
+          >
+            <img src={calendarLogoRight} alt="Calendar logo for start date" />
+            <p>{startDate ? startDate.toLocaleDateString() : "Datum vyzvednutí"}</p>
+          </button>
+          <button
+            className={`datum-vraceni2 ${activeButton === "end" ? "active" : ""}`}
+            onClick={() => startDate && toggleSection4("end")}  // Only allow toggle if start date is selected
+            disabled={!startDate} // Disable the second button if start date is not selected
+          >
+            <img src={calendarLogoLeft} alt="Calendar logo for end date" />
+            <p>{endDate ? endDate.toLocaleDateString() : "Datum vrácení"}</p>
+          </button>
+
+          {/* Conditionally render and animate blue bar only if both dates are not selected */}
+          {showSection4 && !(startDate && endDate) && (
+            <div
+              className="blue-bar"
+              style={{
+                transform: `translateX(${startDate && activeButton === "end" ? "162%" : "0"})`, 
+              }}
+            />
+          )}
+        </div>
+
+        {/* Conditionally apply background color */}
+        <button
+          className="overit-dostupnost2"
+          onClick={handleSubmit}
+          style={{ backgroundColor: isButtonDisabled ? "#D9D9D9" : "" }} // Apply color when disabled
+        >
+          Rezervovat
         </button>
-        <button className="datum-vraceni2">
-          <img src={calendarLogoLeft} alt="Calendar logo for end date" />
-          <p>{endDate ? endDate.toLocaleDateString() : "Datum vrácení"}</p>
-        </button>
-        <button className="overit-dostupnost2" onClick={handleSubmit} >Rezervovat</button>
       </div>
       <div className={`section4-container ${showSection4 ? "visible" : ""}`}>
         <Calendar />

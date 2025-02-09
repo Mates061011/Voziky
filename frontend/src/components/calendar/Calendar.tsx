@@ -118,15 +118,22 @@ const Section4 = () => {
   const getDayClassName = (date: Date) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-
+  
+    // Check if the date is in the locked dates
     if (isLockedDay(date)) {
       return "locked-day"; // Mark locked dates with a specific class
     }
-
+  
+    // Check if the date is part of the selected range and not the last day
+    if (dates[0] && dates[1] && (date.getTime() === dates[1].getTime())) {
+      return ""; // Do not apply the class to the last date
+    }
+  
+    // Apply a past-day class for past dates
     if (date < today) {
       return "past-day"; // Apply a past-day class for past dates
     }
-
+  
     return ""; // No class for valid days
   };
 
@@ -138,10 +145,35 @@ const Section4 = () => {
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    // Prevent focus on the last day if it's selected
+    if (dates[1] && e.key === "Tab") {
+      const lastSelectedDate = dates[1].toLocaleDateString();
+      const focusedElement = document.activeElement;
+      if (focusedElement && focusedElement.getAttribute("aria-label") === lastSelectedDate) {
+        e.preventDefault(); // Prevent keyboard navigation for the last selected day
+      }
+    }
+  };
+
+  useEffect(() => {
+    const handleTabIndexReset = () => {
+      if (dates[1]) {
+        const lastSelectedDay = document.querySelector(`[aria-label="${dates[1].toLocaleDateString()}"]`);
+        if (lastSelectedDay) {
+          (lastSelectedDay as HTMLElement).setAttribute("tabindex", "-1"); // Prevent tabbing on last day
+        }
+      }
+    };
+
+    handleTabIndexReset();
+  }, [dates]);
+
   return (
     <div className="datePickerCont" ref={ref}>
       <DatePicker
-        selected={null}
+        key={dates[0]?.toString() || 'default-key'}  // Use a dynamic key based on the dates
+        selected={dates[0] || null}
         onChange={handleDateChange}
         startDate={dates[0]} 
         endDate={dates[1]} 
@@ -155,10 +187,13 @@ const Section4 = () => {
         dayClassName={getDayClassName}
         locale="cs"
         openToDate={add(new Date(), { weeks: 1 })}
+        onKeyDown={handleKeyDown} // Intercept keyboard navigation
       />
+
       
-      <div className="popiskyCont">
+      {/* Your other content */}
       {errorMessage && <div className="error-message">{errorMessage}</div>}
+      <div className="popiskyCont">
         <div className="popisky">
           <div className="popisek1">
             <div></div>
@@ -179,19 +214,6 @@ const Section4 = () => {
           <p>Cena vypůjčení za zvolený termín: &nbsp;</p>
           <h5>{price}Kč</h5>
         </div>
-        <div className="pujceni-button">
-          <button 
-            onClick={handleSubmit} 
-            disabled={!!errorMessage} 
-            style={{
-              opacity: errorMessage ? 0.5 : 1,
-              cursor: errorMessage ? "not-allowed" : "pointer",
-            }}
-          >
-            Rezervovat
-          </button>
-        </div>
-
       </div>
     </div>
   );
