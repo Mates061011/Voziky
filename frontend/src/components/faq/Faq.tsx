@@ -87,10 +87,10 @@ const Faq = () => {
                 />
               }
             >
-              <Typography style={{ fontWeight: '700' }}>{item.question}</Typography>
+              <Typography style={{ fontWeight: '500' }}>{item.question}</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Typography>{item.answer}</Typography>
+              <Typography style={{color: "#818181"}}>{item.answer}</Typography>
             </AccordionDetails>
           </Accordion>
         ))}

@@ -118,7 +118,8 @@
 }
 @media screen and (min-width: 1300px) {
     .picture-part img {
-        width: 900px;
+        width: 700px;
+        transform: translate(-12vw, -110px);
     }
     .bar-part-bg  {
         height: 70%;

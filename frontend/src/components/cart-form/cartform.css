@@ -12,10 +12,6 @@
     flex-direction: column;
   }
   
-  .form-column label {
-    display: block;
-    margin-bottom: 5px;
-  }
   
   .form-column input {
     width: 100%;

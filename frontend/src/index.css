@@ -38,10 +38,22 @@ input, textarea {
   padding: 15px 20px;
   box-sizing: border-box;
   border-radius: 10px;
+  height: 50px;
+}
+input:focus {
+  outline: 1.5px solid #8A8A96;
+}
+textarea:focus {
+  outline: 1.5px solid #8A8A96;
 }
 label {
   font-size: 14px;
   color: #818181;
+  font-weight: 500;
+  margin-bottom: 3px;
+}
+textarea {
+  min-height: 50px;
 }
 input::placeholder, textarea::placeholder {
   color: black;
@@ -67,7 +79,7 @@ h3 {
 .para {
     display: block;
     text-align: left !important;
-    font-size: 18px;
+    font-size: 18px !important;
     color: #818181;
     font-weight: 400;
 }
@@ -85,7 +97,7 @@ b {
     font-size: 35px !important;
   }
   .para {
-      font-size: 15px;
+      font-size: 15px !important;
   }
 }
 
@@ -94,12 +106,12 @@ b {
         font-size: 15px !important;
     }
     h3 {
-        font-size: 30px !important;
+        font-size: 25px !important;
     }
     h1 {
-      font-size: 25px !important;
+      font-size: 27px !important;
     }
     .para {
-        font-size: 15px;
+        font-size: 15px !important;
     }
 }
