@@ -1,5 +1,5 @@
 import React from 'react';
-import './CartItem.css'; // Import styles for the CartItem component
+import './cartitem.css'; // Import styles for the CartItem component
 import { useDateContext } from '../../context/DateContext'; // Import DateContext to get the date range
 import CloseImg from '../../assets/close.svg';
 interface CartItemProps {
