@@ -18,26 +18,23 @@ const Cart: React.FC = () => {
     window.scrollTo(0, 0); // Scroll to the top of the page
   }, []);
 
-  const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
-  const { dates, setDates } = useDateContext(); // Get dates from context
-  const { userData, setUserData } = useUserContext(); // Get user data from context
+  const { dates } = useDateContext(); // Get dates from context
+  const { userData } = useUserContext(); // Get user data from context
   console.log("Cart Dates from context:", dates);
 
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  //const [error, setError] = useState<string | null>(null);
+  //const [loading, setLoading] = useState(false);
   const [step3, setStep3] = useState(false);
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [percent, setPercent] = useState(0);
   const [step1, setStep1] = useState(true); // Default step1 is true
   const [step2, setStep2] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  //const [submitted, setSubmitted] = useState(false);
 
-  const [currentStartDate, setCurrentStartDate] = useState<Date>(dates[0] || new Date());
-  const [currentEndDate, setCurrentEndDate] = useState<Date>(dates[1] || new Date());
+  const currentStartDate = dates[0] || new Date();
+  const currentEndDate = dates[1] || new Date();
 
-  const [startTime, setStartTime] = useState<string>(currentStartDate.toISOString().substring(11, 16));
-  const [endTime, setEndTime] = useState<string>(currentEndDate.toISOString().substring(11, 16));
 
   const handleStepChange = (currentStep: number) => {
     setCurrentStep(currentStep);
@@ -64,70 +61,7 @@ const Cart: React.FC = () => {
     setPercent(progress);
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
   
-    setLoading(true);
-    setError(null);
-  
-    // Clean up the phone number by removing spaces
-    const cleanPhone = userData.phone.replace(/\s+/g, '');
-  
-    try {
-      const response = await fetch(`${baseUrl}/api/appointment`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          startDate: currentStartDate,
-          endDate: currentEndDate,
-          user: { ...userData, phone: cleanPhone }, // Use cleaned phone number
-        }),
-      });
-  
-      if (!response.ok) {
-        throw new Error('Failed to submit the appointment');
-      }
-  
-      const data = await response.json();
-      console.log('Appointment successfully created:', data);
-  
-      // After successful submission, move to the next step
-      setStep2(false); // Hide step 2
-      setStep3(true);  // Show step 3
-      setCurrentStep(2);  // Update the current step to 2
-  
-      setSubmitted(true);
-      setDates([undefined, undefined]); // Reset dates after submission
-  
-      handleStepChange(2); // This changes the step to 2
-    } catch (error: unknown) {
-      console.error('Error creating appointment:', error);
-  
-      if (error instanceof Error) {
-        setError(error.message); // Set the error message
-      } else {
-        setError('There was an error submitting your data.');
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (dates && dates.length === 2) {
-      setCurrentStartDate(dates[0] || new Date());
-      setCurrentEndDate(dates[1] || new Date());
-      if (dates[0]) {
-        setStartTime(dates[0].toISOString().substring(11, 16));
-      }
-      if (dates[1]) {
-        setEndTime(dates[1].toISOString().substring(11, 16));
-      }
-    }
-  }, [dates]);
-
   useEffect(() => {
     const savedStep = localStorage.getItem('currentStep');
     if (savedStep) {
@@ -155,15 +89,6 @@ const Cart: React.FC = () => {
     }
   }, [step1, userData]);
 
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if (value.indexOf('@') === -1 || value.length < userData.email.length) {
-      setUserData({ ...userData, email: value });
-    } else {
-      const [localPart, domainPart] = value.split('@');
-      setUserData({ ...userData, email: `${localPart}@${domainPart || ''}` });
-    }
-  };
 
   const isFormComplete = () => {
     // Check if all user data fields are filled

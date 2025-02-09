@@ -1,4 +1,5 @@
 
+import Items from '../../../components/item-container/Items';
 import ResBar from '../../../components/reservation-bar/ResBar';
 import './mainpage-section4.css';
 const Section42 = () => {
@@ -9,6 +10,7 @@ const Section42 = () => {
             <h3>Thule Chariot Sport 2 G3 Double</h3>
         </div>
         <ResBar/>
+        <Items/>
     </div>
   )
 }
