@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Vozik from '../../../assets/1465576 1.png';
 import './mainpage-section3.css';
 
