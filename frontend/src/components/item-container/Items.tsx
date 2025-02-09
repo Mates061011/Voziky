@@ -19,8 +19,11 @@ const ItemContainer: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // Use the base URL from the environment variable
+    const apiUrl = import.meta.env.VITE_API_BASE_URL;
+
     // Fetch data from the API
-    fetch('http://localhost:5000/api/items')
+    fetch(`${apiUrl}/api/items`)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Failed to fetch items');
