@@ -6,6 +6,7 @@ import { ConfigProvider } from 'antd'; // Import ConfigProvider
 import { DateProvider } from './context/DateContext';
 import Footer from './components/footer/Footer';
 import PrivateRoute from './components/PrivateRoute';
+import AdminPanelItem from './pages/adminpanel/AdminPanelItem';
 
 // Lazy load the components for routes
 const Mainpage = lazy(() => import("./pages/mainpage/Mainpage"));
@@ -35,6 +36,7 @@ function App() {
                   <Route path='/loginAdmin' element={<Admin />} />
                   <Route element={<PrivateRoute redirectPath="/loginAdmin" />}>
                     <Route path="/adminPanel" element={<AdminPanel />} />
+                    <Route path="/adminPanelItem" element={<AdminPanelItem />} />
                   </Route>
                 </Routes>
               </Suspense>

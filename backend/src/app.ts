@@ -4,6 +4,7 @@ import rateLimit from 'express-rate-limit'; // Import express-rate-limit
 import appointmentRoute from './routes/appointmentRoute';
 import faqRoute from './routes/faqRoute';
 import adminRoute from './routes/adminRoute';
+import itemRoute from './routes/itemRoute';
 
 const app: Application = express();
 
@@ -44,6 +45,7 @@ app.use(express.json());
 app.use('/api/appointment', appointmentRoute);
 app.use('/api/faq', faqRoute);
 app.use('/api', adminRoute);
+app.use('/api/items', itemRoute);
 
 // Global Error Handler
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {

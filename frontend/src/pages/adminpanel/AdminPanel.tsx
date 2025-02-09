@@ -93,7 +93,8 @@ const AdminPanel: React.FC = () => {
 
   return (
     <div>
-      <h1>Appointments</h1>
+      <h1>Admin Panel</h1>
+      <h2>Potvrzuj objednávky</h2>
       <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
         {appointments.map((appointment) => (
           <div

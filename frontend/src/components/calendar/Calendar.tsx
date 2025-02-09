@@ -124,7 +124,7 @@ const Section4 = () => {
   
     // Check if the date is part of the selected range and not the last day
     if (dates[0] && dates[1] && (date.getTime() === dates[1].getTime())) {
-      return ""; // Do not apply the class to the last date
+      return "last-day"; // This will mark the last day of the range
     }
   
     // Apply a past-day class for past dates
@@ -134,30 +134,7 @@ const Section4 = () => {
   
     return ""; // No class for valid days
   };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    // Prevent focus on the last day if it's selected
-    if (dates[1] && e.key === "Tab") {
-      const lastSelectedDate = dates[1].toLocaleDateString();
-      const focusedElement = document.activeElement;
-      if (focusedElement && focusedElement.getAttribute("aria-label") === lastSelectedDate) {
-        e.preventDefault(); // Prevent keyboard navigation for the last selected day
-      }
-    }
-  };
-
-  useEffect(() => {
-    const handleTabIndexReset = () => {
-      if (dates[1]) {
-        const lastSelectedDay = document.querySelector(`[aria-label="${dates[1].toLocaleDateString()}"]`);
-        if (lastSelectedDay) {
-          (lastSelectedDay as HTMLElement).setAttribute("tabindex", "-1"); // Prevent tabbing on last day
-        }
-      }
-    };
-
-    handleTabIndexReset();
-  }, [dates]);
+  
 
   return (
     <div className="datePickerCont" ref={ref}>
@@ -177,7 +154,6 @@ const Section4 = () => {
         dayClassName={getDayClassName}
         locale="cs"
         openToDate={add(new Date(), { weeks: 1 })}
-        onKeyDown={handleKeyDown} // Intercept keyboard navigation
       />
 
       

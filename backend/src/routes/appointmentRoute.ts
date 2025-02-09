@@ -28,7 +28,7 @@ const formatDateInCzech = (date: string | Date): string => {
 
 // Create Appointment
 const createAppointment = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  const { startDate, endDate, user } = req.body;
+  const { startDate, endDate, user, items } = req.body;
 
   try {
     // Ensure that startDate and endDate are in ISO 8601 format
@@ -62,6 +62,7 @@ const createAppointment = async (req: Request, res: Response, next: NextFunction
       startDate: parsedStartDate,
       endDate: parsedEndDate,
       user,
+      items,
       confirmed: false,
       price,
     });

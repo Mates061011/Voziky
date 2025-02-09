@@ -1,0 +1,9 @@
+.item-card {
+    width: 300px;
+    border-radius: 30px;
+    background: #FFF;
+    box-shadow: 5px 4px 20px 0px rgba(0, 0, 0, 0.15);
+    img {
+        width: 80%;
+    }
+}

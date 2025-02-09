@@ -23,6 +23,7 @@ const appointmentSchema = new Schema<IAppointment>({
   startDate: { type: Date, required: true },
   endDate: { type: Date, required: true },
   user: { type: userSchema, required: true },
+  items: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Item' }], // Add reference to the Item model
   confirmed: { type: Boolean, default: false },
   price: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now },
