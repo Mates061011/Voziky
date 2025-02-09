@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 import Section1 from "./Mainpage_section1/Mainpage-section1";
 import Section2 from "./Mainpage_section2/Mainpage-section2";
 import Section3 from "./Mainpage_section3/Mainpage-section3";
-import Section4 from "./Mainpage_section4/Mainpage-section4";
 import Section5 from "./Mainpage_section5/Mainpage-section5";
 import Section6 from "./Mainpage_section6/Mainpage-section6";
 import Section7 from "./Mainpage_section7/Mainpage_section7";
 import { ScrollProvider } from "../../context/ScrollContext";
+import Section4 from "./Mainpage_section4/Mainpage-section4";
 
 export default function Mainpage() {
     const [password, setPassword] = useState("");

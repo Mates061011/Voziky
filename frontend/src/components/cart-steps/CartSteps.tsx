@@ -17,11 +17,15 @@ interface CartStepsProps {
 const CartSteps: React.FC<CartStepsProps> = ({ current, percent, error, onStepChange }) => {
   const items: Step[] = [
     {
-      title: 'Vyber datum',
+      title: 'Košík',
       description: ' ',
     },
     {
       title: 'Vyplň údaje',
+      description: ' ',
+    },
+    {
+      title: 'Rekapitulace',
       description: ' ',
     },
     {

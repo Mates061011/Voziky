@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './cart.css';
-import CartSteps from '../../components/CartSteps/CartSteps';
-import Section4 from '../mainpage/Mainpage_section4/Mainpage-section4';
+import CartSteps from '../../components/cart-steps/CartSteps';
+import Section4 from '../../components/calendar/Calendar';
 import { useDateContext } from "../../context/DateContext";
 import InputMask from 'react-input-mask';
 
