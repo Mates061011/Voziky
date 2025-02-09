@@ -86,7 +86,7 @@
 }
 @media screen and (min-width: 1600px) {
     .picture-part img {
-        transform: translate(-15vw, -120px);
+        transform: translate(-15vw, -100px);
     }
 }
 @media screen and (max-width: 1300px) {
@@ -205,6 +205,7 @@
     align-items: end;
     justify-content: start;
     img {
+        margin-top: 100px;
         z-index: 10;
         animation: vozikLoadAnim 1s;
         user-select: none;

@@ -20,6 +20,7 @@
   }
   
 .react-datepicker__current-month {
+    font-family: "Inter", sans-serif !important;
     font-size: 25px;
     color: #818181;
 }
@@ -121,6 +122,7 @@
 
 
 .react-datepicker__day, .react-datepicker__day-name {
+    font-family: "Inter", sans-serif !important;
     font-size: var(--font-size-calendar); 
     padding: 10px; 
     text-transform: uppercase;

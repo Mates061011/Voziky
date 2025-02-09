@@ -4,7 +4,7 @@ import { useScrollContext } from "../../../context/ScrollContext";
 import { Helmet } from 'react-helmet';
 
 // Import images to ensure correct bundling
-import Vozik from "../../../assets/Vozik4xCuted-min.webp";
+import Vozik from "../../../assets/Thule Chariot Sport 2 double (jogging kit) (2).png";
 import thuleLogo from "../../../assets/thule-logo.svg";
 
 export default function Section1() {
@@ -20,7 +20,7 @@ export default function Section1() {
         <link rel="preload" href={Vozik} as="image" />
       </Helmet>
       <div className="text-part">
-        <h1>Půjčte&nbsp;si&nbsp;dětský <br />přívěsný vozík THULE</h1>
+        <h1>Půjčte si dětský<br />vozík THULE Chariot<br />v Hradci Králové</h1>
         <p>
           Všestranný vozík a kočárek pro běh a procházky, který nabízí pohodlí a flexibilitu pro rodiny s aktivním životním stylem.
           Obsahuje balíčky Standard a Comfort.
