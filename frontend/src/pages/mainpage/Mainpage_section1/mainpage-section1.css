@@ -97,6 +97,7 @@
         grid-column-gap: 0px;
         grid-row-gap: 0px;
         height: 500px;
+        width: 75vw;
     }
     .grey-bg>div {
         height: 580px;  
@@ -108,8 +109,8 @@
         }
     }
     .picture-part img {
-        width: clamp(600px, 60vw, 720px);
-        transform: translate(-22vw, -80px);
+        width: clamp(500px, 50vw, 550px);
+        transform: translate(-10vw, -80px);
     }
     .text-part>p {
         display: none;
@@ -266,8 +267,11 @@
         width: 90%;
         
         .text-part {
-            h1 {
-                font-size: 35px;
+            width: 200%;
+            padding-top: 0;
+            img {
+                width: 80px;
+                margin-top: 20px;
             }
         }
         .picture-part {

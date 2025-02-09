@@ -95,6 +95,9 @@
         }
         .popis-a-kocarek {
             width: 90%;
+            p {
+                width: 100%;
+            }
             img {
                 width: 100%;
                 min-width: 300px;
@@ -102,4 +105,25 @@
             }
         }
     }
+}
+.section3 .popis {
+    max-height: 200px;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out;
+}
+
+.section3 .popis.expanded {
+    max-height: none;
+}
+
+.toggle-button {
+    display: block;
+    min-width: 0;
+    background-color: transparent;
+    color: black;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
 }

@@ -81,6 +81,9 @@ b {
   h3 {
       font-size: 30px !important;
   }
+  h1 {
+    font-size: 35px !important;
+  }
   .para {
       font-size: 15px;
   }
@@ -92,6 +95,9 @@ b {
     }
     h3 {
         font-size: 30px !important;
+    }
+    h1 {
+      font-size: 25px !important;
     }
     .para {
         font-size: 15px;
