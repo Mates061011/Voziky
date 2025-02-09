@@ -90,14 +90,14 @@
     .section3 {
         margin-top: 100px;
         .nadpis-section3 {
-            width: 80%;
+            width: 90%;
             h3 {
                 font-size: 30px;
                 font-weight: 800;
             }
         }
         .popis-a-kocarek {
-            width: 80%;
+            width: 90%;
             justify-content: center;
             .popis-cont {
                 width: 100%;
