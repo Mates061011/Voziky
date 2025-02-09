@@ -1,5 +1,4 @@
 import { useEffect, useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import { registerLocale } from "react-datepicker";
 import { cs } from "date-fns/locale";
@@ -19,7 +18,6 @@ const Section4 = () => {
   const [price, setPrice] = useState(0);
   const [errorMessage, setErrorMessage] = useState(""); // State to store error message
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchAppointments = async () => {
