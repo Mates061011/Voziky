@@ -1,7 +1,7 @@
-// components/ItemContainer.tsx
 import React, { useEffect, useState } from 'react';
 import Item from '../item/Item';
 import './items.css';
+
 interface ItemData {
   _id: string;
   name: string;
@@ -19,12 +19,21 @@ const ItemContainer: React.FC = () => {
 
   useEffect(() => {
     // Fetch data from the API
-    fetch('http://localhost:5000/api/items') // Adjust this URL based on your API
-      .then((response) => response.json())
+    fetch('http://localhost:5000/api/items')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch items');
+        }
+        return response.json();
+      })
       .then((data) => {
         setItems(data);
         setLoading(false);
       })
+      .catch((err) => {
+        setError(err.message);
+        setLoading(false);
+      });
   }, []);
 
   if (loading) {
@@ -32,7 +41,7 @@ const ItemContainer: React.FC = () => {
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return <div>Error: {error}</div>;
   }
 
   return (
