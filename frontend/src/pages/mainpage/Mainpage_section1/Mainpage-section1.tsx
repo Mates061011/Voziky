@@ -34,7 +34,7 @@ export default function Section1() {
         <div className="bar-part-bg">
           
           <button onClick={handleScroll} className="overit-dostupnost">
-            Ověřit dostupnost
+            Rezervovat
           </button>
         </div>
       </div>

@@ -7,7 +7,7 @@ const router = express.Router();
 
 // Route to create a new item (protected)
 router.post('/add', verifyToken, async (req: Request, res: Response): Promise<void> => {
-  const { name, desc, pricePerDay, pricePerDays, type, img} = req.body;
+  const { name, desc, pricePerDay, pricePerDays, type, img, kauce } = req.body;
 
   try {
     // Create a new item with the provided data
@@ -18,6 +18,7 @@ router.post('/add', verifyToken, async (req: Request, res: Response): Promise<vo
       pricePerDays,
       type,
       img,
+      kauce, // Added kauce field
     });
 
     // Save the new item to the database

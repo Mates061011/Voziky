@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Item from '../item/Item';
 import './items.css';
 
-interface ItemData {
+export interface ItemData {
   _id: string;
   name: string;
   desc: string;
@@ -10,6 +10,7 @@ interface ItemData {
   pricePerDays: number;
   type: string;
   img: string;
+  kauce: string; // Added kauce field
 }
 
 const ItemContainer: React.FC = () => {

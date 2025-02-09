@@ -21,17 +21,13 @@ const CartSteps: React.FC<CartStepsProps> = ({ current, percent, error, onStepCh
       description: ' ',
     },
     {
-      title: 'Vyplň údaje',
+      title: 'Osobní údaje',
       description: ' ',
     },
     {
       title: 'Rekapitulace',
       description: ' ',
-    },
-    {
-      title: 'Potvrď v emailu',
-      description: ' ',
-    },
+    }
   ];
 
   // Add error status to the second step if necessary

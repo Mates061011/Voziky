@@ -1,0 +1,11 @@
+
+.cart-total-price{
+    width: 100%;
+    display: flex;
+    justify-content: end;
+    height: 100px;
+    align-items: center;
+    h4 {
+        width: 150px;
+    }
+}

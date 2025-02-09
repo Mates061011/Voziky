@@ -41,7 +41,6 @@ const ResBar = () => {
     setActiveButton("start");
   };
 
-  const isButtonDisabled = !startDate || !endDate; // Check if either date is undefined
 
   return (
     <div className="bar-part2">
@@ -78,7 +77,6 @@ const ResBar = () => {
         <button
           className="overit-dostupnost2"
           onClick={handleSubmit}
-          style={{ backgroundColor: isButtonDisabled ? "#D9D9D9" : "" }} // Apply color when disabled
         >
           Rezervovat
         </button>

@@ -8,6 +8,7 @@ export interface IItem extends Document {
   pricePerDays: number;
   type: 'prislusenstvi' | 'kocarek';
   img: string;
+  kauce: string,
 }
 
 const itemSchema = new Schema<IItem>({
@@ -17,6 +18,7 @@ const itemSchema = new Schema<IItem>({
   pricePerDays: { type: Number, required: true },
   type: { type: String, enum: ['prislusenstvi', 'kocarek'], required: true },
   img: { type: String, required: true },
+  kauce: { type: String, required: true },
 });
 
 const Item = mongoose.model<IItem>('Item', itemSchema);

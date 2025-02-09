@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './cart.css';
 import CartSteps from '../../components/cart-steps/CartSteps';
-import Section4 from '../../components/calendar/Calendar';
 import { useDateContext } from "../../context/DateContext";
-import InputMask from 'react-input-mask';
+import CartItems from '../../components/cart-items/CartItems';
+import CartForm from '../../components/cart-form/CartForm';
+import { useUserContext } from "../../context/userContext"; // Import User context
 
 interface UserData {
   name: string;
@@ -14,19 +15,14 @@ interface UserData {
 
 const Cart: React.FC = () => {
   useEffect(() => {
-  window.scrollTo(0, 0); // Scroll to the top of the page
-}, []);
+    window.scrollTo(0, 0); // Scroll to the top of the page
+  }, []);
+
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
   const { dates, setDates } = useDateContext(); // Get dates from context
+  const { userData, setUserData } = useUserContext(); // Get user data from context
   console.log("Cart Dates from context:", dates);
-
-  const [userData, setUserData] = useState<UserData>({
-    name: '',
-    surname: '',
-    email: '',
-    phone: '',
-  });
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -37,7 +33,6 @@ const Cart: React.FC = () => {
   const [step2, setStep2] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  // Use dates directly from context instead of state
   const [currentStartDate, setCurrentStartDate] = useState<Date>(dates[0] || new Date());
   const [currentEndDate, setCurrentEndDate] = useState<Date>(dates[1] || new Date());
 
@@ -45,24 +40,6 @@ const Cart: React.FC = () => {
   const [endTime, setEndTime] = useState<string>(currentEndDate.toISOString().substring(11, 16));
 
   const handleStepChange = (currentStep: number) => {
-    // Prevent going to step 1 or step 2 if both startDate and endDate are not available
-    if (currentStep === 1 || currentStep === 2) {
-      if (!currentStartDate || !currentEndDate || isNaN(currentStartDate.getTime()) || isNaN(currentEndDate.getTime())) {
-        setError("Both start date and end date are required.");
-        return;
-      }
-    }
-
-    // Prevent going to step 1 if percent is not 100 (step 0 not complete)
-    if (currentStep === 1 && percent !== 100) {
-      return;
-    }
-
-    // Allow the user to proceed if the conditions are met
-    if (currentStep === 2 && submitted === false) {
-      return;
-    }
-
     setCurrentStep(currentStep);
     setStep1(false);
     setStep2(false);
@@ -75,19 +52,11 @@ const Cart: React.FC = () => {
     } else if (currentStep === 2) {
       setStep3(true);
     }
+
+    // Save the current step to localStorage
+    localStorage.setItem('currentStep', currentStep.toString());
   };
 
-  // Handle form changes
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setUserData((prevData) => {
-      const updatedData = { ...prevData, [name]: value };
-      setProgress(updatedData);
-      return updatedData;
-    });
-  };
-
-  // Calculate progress based on filled fields
   const setProgress = (data: UserData) => {
     const fieldsFilled = Object.values(data).filter((field) => field !== '').length;
     const totalFields = Object.keys(data).length;
@@ -95,16 +64,15 @@ const Cart: React.FC = () => {
     setPercent(progress);
   };
 
-  // Handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+  
     setLoading(true);
     setError(null);
-
+  
     // Clean up the phone number by removing spaces
     const cleanPhone = userData.phone.replace(/\s+/g, '');
-
+  
     try {
       const response = await fetch(`${baseUrl}/api/appointment`, {
         method: 'POST',
@@ -117,22 +85,26 @@ const Cart: React.FC = () => {
           user: { ...userData, phone: cleanPhone }, // Use cleaned phone number
         }),
       });
-
+  
       if (!response.ok) {
         throw new Error('Failed to submit the appointment');
       }
-
+  
       const data = await response.json();
       console.log('Appointment successfully created:', data);
-
-      setStep2(false);
-      setStep3(true);
-      setCurrentStep(2);
+  
+      // After successful submission, move to the next step
+      setStep2(false); // Hide step 2
+      setStep3(true);  // Show step 3
+      setCurrentStep(2);  // Update the current step to 2
+  
       setSubmitted(true);
-      setDates([undefined, undefined]);
+      setDates([undefined, undefined]); // Reset dates after submission
+  
+      handleStepChange(2); // This changes the step to 2
     } catch (error: unknown) {
       console.error('Error creating appointment:', error);
-
+  
       if (error instanceof Error) {
         setError(error.message); // Set the error message
       } else {
@@ -157,6 +129,14 @@ const Cart: React.FC = () => {
   }, [dates]);
 
   useEffect(() => {
+    const savedStep = localStorage.getItem('currentStep');
+    if (savedStep) {
+      const step = parseInt(savedStep, 10);
+      handleStepChange(step); // Set the saved step
+    }
+  }, []);
+
+  useEffect(() => {
     if (step1) {
       const [start, end] = dates;
       if (start && end) {
@@ -175,128 +155,65 @@ const Cart: React.FC = () => {
     }
   }, [step1, userData]);
 
-  // Email input mask logic
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    // Make sure '@' stays in place and users can type before and after it
     if (value.indexOf('@') === -1 || value.length < userData.email.length) {
-      // No @ found or backspace was pressed
       setUserData({ ...userData, email: value });
     } else {
-      // The user is typing after '@'
       const [localPart, domainPart] = value.split('@');
       setUserData({ ...userData, email: `${localPart}@${domainPart || ''}` });
     }
   };
 
+  const isFormComplete = () => {
+    // Check if all user data fields are filled
+    return userData.name && userData.surname && userData.email && userData.phone;
+  };
+
+  const handleNextClick = () => {
+    // Only move to the next step if the form is complete
+    if (isFormComplete()) {
+      handleStepChange(2); // Move to the next step
+    } else {
+      alert('Please fill in all the required fields.');
+    }
+  };
+
   return (
-      <div className="cartCont">
-        <CartSteps
-          current={currentStep}
-          percent={percent}
-          error={false}
-          onStepChange={handleStepChange}
-        />
-        <div className="cartWrap" style={{ width: step1 ? 'fit-content' : 'auto' }}>
-          {step1 && (
-            <>
-              <Section4 />
-              <button onClick={() => handleStepChange(1)}>Další</button>
-            </>
-          )}
-          {step2 && (
-            <div>
+    <div className="cartCont">
+      <CartSteps
+        current={currentStep}
+        percent={percent}
+        error={false}
+        onStepChange={handleStepChange}
+      />
+      <div className="cartWrap" style={{ width: step1 ? 'fit-content' : 'auto' }}>
+        {step1 && (
+          <div className='cart-step2'>
+            <div className="flexRow">
               <p>
-                Datum vyzvednutí: {currentStartDate.toLocaleDateString()}
-                <input
-                  type="time"
-                  value={startTime}
-                  onChange={(e) => setStartTime(e.target.value)}
-                  required
-                  className="time"
-                />
+                Termín: <strong>{`${currentStartDate.getDate()}. ${currentStartDate.getMonth() + 1}. - ${currentEndDate.getDate()}. ${currentEndDate.getMonth() + 1}.`}</strong>
               </p>
               <p>
-                Datum vrácení: {currentEndDate.toLocaleDateString()}
-                <input
-                  type="time"
-                  value={endTime}
-                  onChange={(e) => setEndTime(e.target.value)}
-                  required
-                  className="time"
-                />
+                Počet dní: <strong>{Math.ceil((currentEndDate.getTime() - currentStartDate.getTime()) / (1000 * 60 * 60 * 24) + 1)}</strong>
               </p>
-              <form onSubmit={handleSubmit}>
-                <div>
-                  <label>
-                    Jméno:
-                    <input
-                      type="text"
-                      name="name"
-                      value={userData.name}
-                      onChange={handleChange}
-                      required
-                    />
-                  </label>
-                </div>
-                <div>
-                  <label>
-                    Příjmení:
-                    <input
-                      type="text"
-                      name="surname"
-                      value={userData.surname}
-                      onChange={handleChange}
-                      required
-                    />
-                  </label>
-                </div>
-                <div>
-                  <label>
-                    Email:
-                    <input
-                      type="text"
-                      name="email"
-                      value={userData.email}
-                      onChange={handleEmailChange}
-                      required
-                    />
-                  </label>
-                </div>
-                <div>
-                  <label>
-                    Telefon:
-                    <InputMask
-                      mask="999 999 999"
-                      maskChar="_"
-                      name="phone"
-                      value={userData.phone}
-                      onChange={handleChange}
-                      required
-                    >
-                      {(inputProps: any) => (
-                        <input
-                          {...inputProps}
-                          type="tel"
-                        />
-                      )}
-                    </InputMask>
-                  </label>
-                </div>
-                <button type="submit" disabled={loading}>
-                  {loading ? 'Odesílání...' : 'Odeslat'}
-                </button>
-                {error && <div>{error}</div>}
-              </form>
             </div>
-          )}
-          {step3 && (
-            <div>
-              <h2>Potvrďte rezervaci v emailu!</h2>
-            </div>
-          )}
-        </div>
+            <CartItems />
+          </div>
+        )}
+        {step2 && (
+          <div>
+            <CartForm />
+            <button onClick={handleNextClick}>Další</button>
+          </div>
+        )}
+        {step3 && (
+          <div>
+            <h2>Potvrďte rezervaci v emailu!</h2>
+          </div>
+        )}
       </div>
+    </div>
   );
 };
 

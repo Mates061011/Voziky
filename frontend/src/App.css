@@ -15,5 +15,15 @@
     margin-top: 150px;
     margin-bottom: 0 !important;
 }
+.flexRow {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+.flexColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
 
 

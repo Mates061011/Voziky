@@ -5,4 +5,5 @@ export interface Item {
     pricePerDays: Number;
     type: 'prislusenstvi' | 'kocarek';
     img: string;
+    kauce: string;
 }
