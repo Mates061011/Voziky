@@ -5,7 +5,11 @@ import { useDateContext } from "../../context/DateContext";
 import CartItems from '../../components/cart-items/CartItems';
 import CartForm from '../../components/cart-form/CartForm';
 import { useUserContext } from "../../context/userContext"; // Import User context
-
+import Items from '../../components/item-container/Items';
+import editIcon from "../../assets/edit2.png";
+import { useNavigate } from 'react-router-dom';
+import { Checkbox } from 'antd';
+import { CheckboxChangeEvent } from 'antd/es/checkbox';
 interface UserData {
   name: string;
   surname: string;
@@ -31,17 +35,19 @@ const Cart: React.FC = () => {
   const [step1, setStep1] = useState(true); // Default step1 is true
   const [step2, setStep2] = useState(false);
   //const [submitted, setSubmitted] = useState(false);
-
+  const [checkboxChecked, setCheckboxChecked] = useState(false); 
   const currentStartDate = dates[0] || new Date();
   const currentEndDate = dates[1] || new Date();
-
-
+  const navigate = useNavigate();
+  const handleNavigate = () => {
+      navigate("/", { state: { scrollTo: "section4" } });
+  };
   const handleStepChange = (currentStep: number) => {
     setCurrentStep(currentStep);
     setStep1(false);
     setStep2(false);
     setStep3(false);
-
+  
     if (currentStep === 0) {
       setStep1(true);
     } else if (currentStep === 1) {
@@ -49,10 +55,17 @@ const Cart: React.FC = () => {
     } else if (currentStep === 2) {
       setStep3(true);
     }
-
+  
     // Save the current step to localStorage
     localStorage.setItem('currentStep', currentStep.toString());
+  
+    // Scroll to the top of the page after DOM updates
+    setTimeout(() => {
+      document.querySelector('.App')?.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 0);
   };
+  
+  
 
   const setProgress = (data: UserData) => {
     const fieldsFilled = Object.values(data).filter((field) => field !== '').length;
@@ -104,6 +117,14 @@ const Cart: React.FC = () => {
     }
   };
 
+  const handleNextClick2 = () => {
+      handleStepChange(1); // Move to the next step
+  };
+
+  const handleCheckboxChange = (e: CheckboxChangeEvent) => {
+    setCheckboxChecked(e.target.checked); // Update checkbox state
+  };
+
   return (
     <div className="cartCont">
       <CartSteps
@@ -114,22 +135,40 @@ const Cart: React.FC = () => {
       />
       <div className="cartWrap" style={{ width: step1 ? 'fit-content' : 'auto' }}>
         {step1 && (
-          <div className='cart-step2'>
+          <div className='cart-step1'>
             <div className="flexRow">
               <p>
                 Termín: <strong>{`${currentStartDate.getDate()}. ${currentStartDate.getMonth() + 1}. - ${currentEndDate.getDate()}. ${currentEndDate.getMonth() + 1}.`}</strong>
+                <button className='editIcon' onClick={handleNavigate}><img src={editIcon} alt=""/></button>
               </p>
+              
               <p>
                 Počet dní: <strong>{Math.ceil((currentEndDate.getTime() - currentStartDate.getTime()) / (1000 * 60 * 60 * 24) + 1)}</strong>
               </p>
             </div>
             <CartItems />
+            <div className="nadpis-cart">
+                <h4>VÍC MOŽNOSTÍ</h4>
+                <h3>Příslušenství</h3>
+            </div>
+            <Items/>
+            <button onClick={handleNextClick2}>Pokračovat</button>
           </div>
         )}
         {step2 && (
-          <div>
+          <div className='cart-step2'>
             <CartForm />
-            <button onClick={handleNextClick}>Další</button>
+            <div className="cart-step2-button">
+              <div className="flexRow">
+                <Checkbox 
+                  checked={checkboxChecked} 
+                  onChange={handleCheckboxChange}
+                  style={{ color: '#FF6832' }} 
+                />
+                <p>Pokračováním souhlasíte s pravidly zpracování <a href='#'>osobních údajů</a> a <a href='#'>obchodními podmínkami.</a></p>
+              </div>
+              <button onClick={handleNextClick}>Pokračovat</button>
+            </div>
           </div>
         )}
         {step3 && (

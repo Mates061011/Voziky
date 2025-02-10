@@ -60,7 +60,7 @@
                 color: #818181;
                 font-weight: 400;
                 height: fit-content;
-                padding-top: 5vw;
+                padding-top: 40px;
                 animation: fadeIn linear forwards;
                 animation-timeline: view();
                 animation-range-start: contain - 100%;
@@ -90,14 +90,14 @@
     .section3 {
         margin-top: 100px;
         .nadpis-section3 {
-            width: 90%;
+            width: 80%;
             h3 {
                 font-size: 30px;
                 font-weight: 800;
             }
         }
         .popis-a-kocarek {
-            width: 90%;
+            width: 80%;
             justify-content: center;
             .popis-cont {
                 width: 100%;

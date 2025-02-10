@@ -1,7 +1,7 @@
 import React from 'react';
 import './item.css';
-import { useCart } from '../../context/CartContext'; // Ensure correct path
-
+import { useCart } from '../../context/CartContext';
+import addIcon from '../../assets/addIcon.svg';
 interface ItemProps {
   _id: string;
   name: string;
@@ -14,25 +14,36 @@ interface ItemProps {
 }
 
 const Item: React.FC<ItemProps> = ({ _id, name, pricePerDay, pricePerDays, type, img, kauce }) => {
-  const { dispatch } = useCart();
-  const imagePath = `/items/${img}`; // Path to public/assets/
+  const { cart, dispatch } = useCart();
+  const imagePath = `/items/${img}`;
+
+  // Check if the item exists in the cart
+  const isInCart = cart.some((item) => item._id === _id);
 
   const handleAddToCart = () => {
-    dispatch({
-      type: 'ADD_TO_CART',
-      item: { _id, name, desc: '', pricePerDay, pricePerDays, type, img, kauce }, // Include kauce field
-    });
+    if (!isInCart) {
+      dispatch({
+        type: 'ADD_TO_CART',
+        item: { _id, name, desc: '', pricePerDay, pricePerDays, type, img, kauce },
+      });
+    }
   };
 
   return (
     <div className="item-card">
       <h2>{name}</h2>
       <img src={imagePath} alt={name} className="item-image" />
-      <p>Type: {type}</p>
-      <p>Price per day: {pricePerDay} CZK</p>
-      <p>Price for multiple days: {pricePerDays} CZK</p>
-      <p>Kauce: {kauce} CZK</p> {/* Display kauce field */}
-      <button onClick={handleAddToCart}>Add to Cart</button>
+      <div className="item-card-cont flexRow">
+        <p>Cena: <br /> <strong>{pricePerDays}&nbsp;Kč<br />/ den</strong></p>
+        <button
+          onClick={handleAddToCart}
+          disabled={isInCart}
+          style={{ backgroundColor: isInCart ? 'gray' : '' }}
+        >
+          <img src={addIcon} alt="" />
+          {isInCart ? 'V KOŠÍKU' : 'PŘIDAT K REZERVACI'}
+        </button>
+      </div>
     </div>
   );
 };

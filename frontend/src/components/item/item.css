@@ -1,9 +1,58 @@
 .item-card {
-    width: 300px;
+    width: 20%;
     border-radius: 30px;
     background: #FFF;
     box-shadow: 5px 4px 20px 0px rgba(0, 0, 0, 0.15);
+    padding: 30px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 280px;
+    max-width: 370px;
+    aspect-ratio: 3/2;
     img {
         width: 80%;
+    }
+    h2 {
+        font-size: 1.2rem;
+        font-weight: 600;
+    }
+    .item-card-cont{
+        width: 80%;
+        justify-content: space-between;
+        align-items: end;
+        p {
+            text-align: left;
+            color: #818181;
+            font-size: 13px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            strong {
+                font-size: 21px;
+                color: #818181;
+                font-weight: 600
+            }
+        }
+        button {
+            background-color: #2686E6;
+            text-align: left;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            min-width: 0;
+            width: 120px;
+            gap: 5px;
+            padding: 5px 10px;
+            font-size: 10px;
+            font-weight: 500;
+            border-radius: 4rem;
+            height: 50px;
+            img {
+                width: 20px;
+                height: 20px;
+            }
+        }
     }
 }

@@ -25,7 +25,7 @@ const TwoColumnForm: React.FC = () => {
   return (
     <form onSubmit={handleSubmit} className="form-container">
       <div className="form-column">
-        <label htmlFor="email">Email</label>
+        <label htmlFor="email">E-mail</label>
         <input
           type="email"
           id="email"
@@ -35,7 +35,7 @@ const TwoColumnForm: React.FC = () => {
           required
         />
 
-        <label htmlFor="name">First Name</label>
+        <label htmlFor="name">Jméno</label>
         <input
           type="text"
           id="name"
@@ -45,7 +45,7 @@ const TwoColumnForm: React.FC = () => {
           required
         />
 
-        <label htmlFor="address">Address</label>
+        <label htmlFor="address">Adresa</label>
         <input
           type="text"
           id="address"
@@ -57,7 +57,7 @@ const TwoColumnForm: React.FC = () => {
       </div>
 
       <div className="form-column">
-        <label htmlFor="phone">Phone</label>
+        <label htmlFor="phone">Telefon</label>
         <input
           type="tel"
           id="phone"
@@ -67,7 +67,7 @@ const TwoColumnForm: React.FC = () => {
           required
         />
 
-        <label htmlFor="surname">Last Name</label>
+        <label htmlFor="surname">Příjmení</label>
         <input
           type="text"
           id="surname"

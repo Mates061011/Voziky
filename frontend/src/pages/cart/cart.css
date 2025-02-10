@@ -16,9 +16,10 @@
         display: flex;
         flex-direction: column;
         gap: 20px;
-        background-color: #f1f1f1;
         padding: 30px;
         border-radius: 20px;
+        justify-content: center;
+        align-items: center;
         p {
             line-height: 1;
             input {
@@ -62,8 +63,64 @@
         transform: translate(0, -80px);
     }
 }
-.cart-step2 {
+.cart-step1 {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    div>p {
+        color: #818181;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        strong {
+            color: #818181;
+        }
+    }
+    div {
+        h4,h3 {
+            text-align: center;
+        }
+    }
+    button {
+        align-self: flex-end !important;
+    }
+    
+}
+.cart-step2 {
+    display: flex;
+    flex-direction: column;
+    width: 60vw;
+    gap: 40px;
+    .cart-step2-button{
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+        div {
+            width: 60%;
+            p {
+                width: 100%;
+                color:#8A8A96;
+                a {
+                    color:#8A8A96 !important;
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+}
+.editIcon{
+    background-color: transparent;
+    min-width: 0;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    img {
+        width: 20px;
+    }
 }

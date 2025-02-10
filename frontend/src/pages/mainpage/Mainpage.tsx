@@ -7,6 +7,7 @@ import Section6 from "./Mainpage_section6/Mainpage-section6";
 import Section7 from "./Mainpage_section7/Mainpage_section7";
 import { ScrollProvider } from "../../context/ScrollContext";
 import Section4 from "./Mainpage_section4/Mainpage-section4";
+import { useLocation } from "react-router-dom";
 
 export default function Mainpage() {
     const [password, setPassword] = useState("");
@@ -14,7 +15,25 @@ export default function Mainpage() {
 
     const correctPassword = import.meta.env.VITE_MAINPAGE_PASSWORD; // Loaded from .env
     const localStorageKey = "accessGranted";
+    const location = useLocation();
 
+    useEffect(() => {
+        if (location.state?.scrollTo) {
+            const scrollToElement = () => {
+                const element = document.getElementById(location.state.scrollTo);
+                if (element) {
+                    element.scrollIntoView({ behavior: "smooth" });
+                } else {
+                    // Retry after a short delay if the element is not found
+                    setTimeout(scrollToElement, 100);
+                }
+            };
+
+            scrollToElement(); // Start scrolling logic
+        }
+    }, [location.state]);
+    
+    
     useEffect(() => {
         const storedAccess = localStorage.getItem(localStorageKey);
         if (storedAccess === "true") {
@@ -69,7 +88,7 @@ export default function Mainpage() {
                 <Section1 />
                 <Section2 />
                 <Section3 />
-                <Section4 />
+                <div id="section4"  ><Section4/></div>
                 <Section5 />
                 <Section6 />
                 <Section7 />
