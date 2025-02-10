@@ -1,5 +1,40 @@
-.item-container{
+.item-container {
     display: flex;
-    flex-direction: row;
-    gap: 30px;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 1015px;
+}
+
+.items-wrapper {
+    display: flex;
+    gap: 20px; /* Adjust the gap between items */
+    overflow: hidden;
+    width: 100%; /* You can control the width here */
+    justify-content: flex-start;
+    padding: 20px;
+}
+
+.item {
+    width: 280px; /* Set each item width */
+    flex-shrink: 0; /* Prevent items from shrinking */
+}
+
+.carousel-button {
+    background-color: transparent;
+    border: none;
+    width: 50px;
+    font-size: 2rem;
+    cursor: pointer;
+    z-index: 1;
+    color: #333;
+    min-width: 0;
+}
+
+.left {
+    left: 10px;
+}
+
+.right {
+    right: 10px;
 }

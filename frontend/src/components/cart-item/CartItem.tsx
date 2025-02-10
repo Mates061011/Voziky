@@ -42,13 +42,14 @@ const CartItem: React.FC<CartItemProps> = ({ item, onRemove }) => {
         <p className="cart-item-price">
           {totalPrice}Kč
         </p>
+        <button
+          className="cart-item-remove"
+          onClick={() => onRemove(item._id)}
+        >
+          <img src={CloseImg} alt="" />
+        </button>
       </div>
-      <button
-        className="cart-item-remove"
-        onClick={() => onRemove(item._id)}
-      >
-        <img src={CloseImg} alt="" />
-      </button>
+      
     </li>
   );
 };

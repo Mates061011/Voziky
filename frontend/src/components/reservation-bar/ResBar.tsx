@@ -5,11 +5,13 @@ import calendarLogoRight from "../../assets/calendar-icon-right.svg";
 import Calendar from "../calendar/Calendar";
 import "./resbar.css";
 import { useNavigate } from "react-router-dom";
+import { useCart } from "../../context/CartContext"; // Import useCart
 
 const ResBar = () => {
   const [showSection4, setShowSection4] = useState(false);
   const [activeButton, setActiveButton] = useState<"start" | "end" | null>(null);
   const { dates, setDates } = useDateContext(); // Access dates and setDates function from context
+  const { dispatch } = useCart(); // Access dispatch from CartContext
   const navigate = useNavigate();
 
   const toggleSection4 = (button: "start" | "end") => {
@@ -19,6 +21,23 @@ const ResBar = () => {
 
   const handleSubmit = () => {
     if (dates[0] && dates[1]) {
+      // Define the item to be added to the cart
+      const itemToAdd = {
+        _id: "67a9c975f3da6099cdf0c42e",
+        name: "Thule Chariot Sport 2 G3 Double",
+        desc: "dvoumístný multifunkční vozík za kolo a kočárek pro kondiční běh v jed…",
+        pricePerDay: 250,
+        pricePerDays: 300,
+        type: "kocarek",
+        img: "Thule Chariot Sport 2 double 01.png",
+        kauce: "2000",
+        __v: 0
+      };
+
+      // Add item to cart
+      dispatch({ type: "ADD_TO_CART", item: itemToAdd });
+
+      // Navigate to the next page with dates
       navigate("/Objednat", { state: { startDate: dates[0], endDate: dates[1] } });
     } else {
       alert("Vyberte prosím platné datumy před pokračováním.");
@@ -40,7 +59,6 @@ const ResBar = () => {
     setShowSection4(true);
     setActiveButton("start");
   };
-
 
   return (
     <div className="bar-part2">
@@ -67,7 +85,7 @@ const ResBar = () => {
             <div
               className="blue-bar"
               style={{
-                transform: `translateX(${startDate && activeButton === "end" ? "162%" : "0"})`, 
+                transform: `translateX(${startDate && activeButton === "end" ? "162%" : "0"})`,
               }}
             />
           )}
@@ -76,7 +94,7 @@ const ResBar = () => {
         {/* Conditionally apply background color */}
         <button
           className="overit-dostupnost2"
-          onClick={handleSubmit}
+          onClick={handleSubmit} // Call handleSubmit when button is clicked
         >
           Rezervovat
         </button>

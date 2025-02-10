@@ -17,6 +17,8 @@ const ItemContainer: React.FC = () => {
   const [items, setItems] = useState<ItemData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const itemsPerPage = 3; // Number of items shown at once
 
   useEffect(() => {
     // Use the base URL from the environment variable
@@ -40,6 +42,18 @@ const ItemContainer: React.FC = () => {
       });
   }, []);
 
+  const handlePrevClick = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex <= 0 ? 0 : prevIndex - itemsPerPage
+    );
+  };
+
+  const handleNextClick = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex + itemsPerPage >= items.length ? prevIndex : prevIndex + itemsPerPage
+    );
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -50,9 +64,19 @@ const ItemContainer: React.FC = () => {
 
   return (
     <div className="item-container">
-      {items.map((item) => (
-        <Item key={item._id} {...item} />
-      ))}
+      <button className="carousel-button left" onClick={handlePrevClick} disabled={currentIndex <= 0}>
+        &#60;
+      </button>
+      <div className="items-wrapper">
+        {items.slice(currentIndex, currentIndex + itemsPerPage).map((item) => (
+          <div className="item" key={item._id}>
+            <Item {...item} />
+          </div>
+        ))}
+      </div>
+      <button className="carousel-button right" onClick={handleNextClick} disabled={currentIndex + itemsPerPage >= items.length}>
+        &#62;
+      </button>
     </div>
   );
 };

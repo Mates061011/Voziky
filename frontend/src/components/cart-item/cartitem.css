@@ -49,13 +49,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    align-self: center !important;
     img {
         width: 100%;
     }
 }
 .cart-item-info{
     border-bottom: 1px solid #D9D9D9;
-    width: 90%;
+    width: 100%;
     align-items: center;
     height: 100px;
 }
