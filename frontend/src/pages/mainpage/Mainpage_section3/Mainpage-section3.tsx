@@ -42,7 +42,7 @@ export default function Section3() {
                         </button>
                     )}
                 </div>
-                <img src={Vozik} alt="Thule Chariot Lite 1 Agave" loading="lazy" />
+                <img src="/items/Thule Chariot Sport 2 double 02.png" alt="Thule Chariot Lite 1 Agave" loading="lazy" />
             </div>
         </div>
     );

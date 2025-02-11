@@ -16,9 +16,6 @@ export default function Section1() {
 
   return (
     <div id="section1-mp">
-      <Helmet>
-        <link rel="preload" href={Vozik} as="image" />
-      </Helmet>
       <div className="text-part">
         <h1>Půjčte si dětský<br />vozík THULE Chariot<br />v Hradci Králové</h1>
         <p>
@@ -28,11 +25,10 @@ export default function Section1() {
         <img src={thuleLogo} alt="Thule logo" />
       </div>
       <div className="picture-part">
-        <img src={Vozik} alt="Vozik Thule" />
+        <img src="/items/Thule Chariot Sport 2 double 01.png" alt="Vozik Thule" />
       </div>
       <div className="bar-part">
         <div className="bar-part-bg">
-          
           <button onClick={handleScroll} className="overit-dostupnost">
             Rezervovat
           </button>
