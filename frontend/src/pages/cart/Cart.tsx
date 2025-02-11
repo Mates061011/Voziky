@@ -6,7 +6,7 @@ import CartItems from '../../components/cart/cart-items/CartItems';
 import CartForm from '../../components/cart/cart-form/CartForm';
 import { useUserContext } from "../../context/userContext"; // Import User context
 import Items from '../../components/item-container/Items';
-import editIcon from "../../assets/edit2.png";
+import editIcon from "../../assets/edit.svg";
 import { useNavigate } from 'react-router-dom';
 import { Checkbox } from 'antd';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
@@ -148,16 +148,16 @@ const Cart: React.FC = () => {
       />
       <div className="cartWrap" style={{ width: step1 ? 'fit-content' : 'auto' }}>
         {step1 && (
-          <div className='cart-step1'>
+          <div className='cart-step cart-step1'>
             <div className="cart-step1-wrapper">
               <div className="flexRow">
                 <p>
-                  Termín: <strong>{`${currentStartDate.getDate()}. ${currentStartDate.getMonth() + 1}. - ${currentEndDate.getDate()}. ${currentEndDate.getMonth() + 1}.`}</strong>
+                  Termín: &nbsp; <strong>{`${currentStartDate.getDate()}. ${currentStartDate.getMonth() + 1}. - ${currentEndDate.getDate()}. ${currentEndDate.getMonth() + 1}.`}</strong>
                   <button className='editIcon' onClick={handleNavigate}><img src={editIcon} alt=""/></button>
                 </p>
                 
                 <p>
-                  Počet dní: <strong>{Math.ceil((currentEndDate.getTime() - currentStartDate.getTime()) / (1000 * 60 * 60 * 24) + 1)}</strong>
+                  Počet dní: &nbsp;  <strong>{Math.ceil((currentEndDate.getTime() - currentStartDate.getTime()) / (1000 * 60 * 60 * 24) + 1)}</strong>
                 </p>
               </div>
               <CartItems showKauce={false} showCloseButton={true}/>
@@ -171,7 +171,7 @@ const Cart: React.FC = () => {
           </div>
         )}
         {step2 && (
-          <div className='cart-step2'>
+          <div className='cart-step cart-step2'>
             <CartForm />
             {missingFields.length > 0 && (
               <Alert
@@ -199,7 +199,7 @@ const Cart: React.FC = () => {
           </div>
         )}
         {step3 && (
-          <div className='cart-step3'>
+          <div className='cart-step cart-step3'>
             <CartInfo/>
             <div className="flexRow cart-termin">
                 <p>
