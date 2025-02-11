@@ -60,3 +60,59 @@
         }
     }
 }
+.item-card.special {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+    min-width: 0;
+    max-width: none;
+    width: 400px;
+    background-color: transparent;
+    box-shadow: none;
+    height: 200px;
+    h2 {
+        grid-area: 1 / 1 / 2 / 8; 
+        text-align: left;
+        align-self: flex-end;
+        font-size: 20px;
+        font-weight: 600;
+    }
+    img {
+        grid-area: 2 / 1 / 6 / 4;
+        align-self: flex-start;
+        width: 100%;
+    }
+    .item-card-cont {
+        grid-area: 2 / 4 / 6 / 8;
+        align-self: flex-start;
+        flex-direction: column;
+        height: 100%;
+        align-items: flex-start;
+        width: 100%;
+        .item-desc {
+            font-size: 16px;
+        }
+        p{
+            flex-direction: row;
+            font-size: 16px;
+            font-weight: 400;
+            margin: 0;
+            strong {
+                font-size: 16px;
+            }
+        }
+        button {
+            width: 100px;
+            height: 35px;
+            font-size: 8px;
+        }
+    }
+}
+.item-desc {
+    font-size: 1rem;
+    margin-bottom: 10px;
+    color: #555;
+}
+  

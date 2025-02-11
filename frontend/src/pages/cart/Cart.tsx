@@ -213,7 +213,7 @@ const Cart: React.FC = () => {
                   <h4>VÍC MOŽNOSTÍ</h4>
                   <h3>Příslušenství</h3>
                 </div>
-                <Items />
+                <Items type='standard'/>
               </div>
             )}
             {step2 && (

@@ -31,27 +31,43 @@ const CartItemsContainer: React.FC<CartItemsContainerProps> = ({ showKauce, show
 
   const calculateTotalPrice = () => {
     if (!dates[0] || !dates[1]) return 0;
-
+  
     const currentStartDate = dates[0];
     const currentEndDate = dates[1];
+    
+    // Calculate the number of days
     const numOfDays = Math.ceil(
       (currentEndDate.getTime() - currentStartDate.getTime()) / (1000 * 60 * 60 * 24) + 1
     );
-
+    
+    console.log('Number of Days:', numOfDays); // Log numOfDays for debugging
+    
     return cart.reduce((total, cartItemId) => {
       const itemDetails = getItemDetails(cartItemId);
       if (!itemDetails) {
         console.warn(`Item not found for ID: ${cartItemId}`);
         return total; // Skip this item
       }
-
-      const totalPrice =
-        numOfDays === 1
-          ? itemDetails.pricePerDay
-          : numOfDays * itemDetails.pricePerDays;
-      return total + totalPrice;
+  
+      // Log the item details to verify the price properties
+      console.log('Item Details:', itemDetails);
+  
+      // Correct calculation logic based on the number of days
+      let itemTotalPrice = 0;
+      if (numOfDays === 1) {
+        itemTotalPrice = itemDetails.pricePerDay;
+      } else if (numOfDays > 1) {
+        itemTotalPrice = numOfDays * itemDetails.pricePerDays;
+      }
+  
+      // Log the calculated item price
+      console.log('Calculated Price for Item:', itemTotalPrice);
+      
+      return total + itemTotalPrice;
     }, 0);
   };
+  
+  
 
   const calculateTotalKauce = () => {
     return cart.reduce((total, cartItemId) => {

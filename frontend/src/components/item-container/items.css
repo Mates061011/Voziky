@@ -38,3 +38,21 @@
 .right {
     right: 10px;
 }
+.item-container.special .items-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px; /* Adjust spacing as needed */
+}
+
+.item-container.special .grid-item {
+    padding: 16px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.item-container.special .grid-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+}
+  

@@ -6,48 +6,62 @@ import { useItemContext } from '../../context/ItemContext'; // To get the item d
 
 interface ItemProps {
   _id: string;
+  type?: 'standard' | 'special'; // Optional prop to specify the type
 }
 
-const Item: React.FC<ItemProps> = ({ _id }) => {
+const Item: React.FC<ItemProps> = ({ _id, type = 'standard' }) => {
   const { cart, dispatch } = useCart(); // Manage cart operations
   const { items } = useItemContext(); // Access items from ItemContext
-  
-  // Find the item using _id
+
   const item = items.find((item) => item._id === _id);
-  
-  // If the item doesn't exist in the context, return null or a loading message
+
   if (!item) {
     return <div>Item not found.</div>;
   }
 
-  const { name, pricePerDays, img} = item; // Destructure item details
-  const imagePath = `/items/${img}`; 
-  
-  // Check if the item exists in the cart (based on _id)
+  const { name, pricePerDays, img, desc } = item; // Access `desc` from item
+  const imagePath = `/items/${img}`;
+
   const isInCart = cart.some((cartItem) => cartItem === _id);
 
   const handleAddToCart = () => {
     if (!isInCart) {
-      // Add the item _id to the cart
       dispatch({
         type: 'ADD_TO_CART',
-        _id, // Passing only the _id
+        _id,
       });
     }
   };
 
+  // Truncate description to the first sentence
+  const truncatedDesc = desc ? desc.split('.')[0] + '.' : '';
+
   return (
-    <div className="item-card">
+    <div className={`item-card ${type}`}>
       <h2>{name}</h2>
       <img src={imagePath} alt={name} className="item-image" />
       <div className="item-card-cont flexRow">
+        {type === 'special' && truncatedDesc && (
+          <p className="item-desc">
+            {truncatedDesc}
+          </p>
+        )}
         <p>
-          Cena: <br /> <strong>{pricePerDays}&nbsp;Kč<br />/ den</strong>
+          Cena:&nbsp;{type === 'special' ? (
+            <strong>{pricePerDays}Kč / den</strong>
+          ) : (
+            <>
+              <br />
+              <strong>{pricePerDays}&nbsp;Kč<br />/ den</strong>
+            </>
+          )}
         </p>
+
         <button
           onClick={handleAddToCart}
           disabled={isInCart}
           style={{ backgroundColor: isInCart ? 'gray' : '' }}
+          className='item-button'
         >
           <img src={addIcon} alt="Add icon" />
           {isInCart ? 'V KOŠÍKU' : 'PŘIDAT K REZERVACI'}

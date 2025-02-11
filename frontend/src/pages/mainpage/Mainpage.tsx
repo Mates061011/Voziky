@@ -8,7 +8,7 @@ import Section7 from "./Mainpage_section7/Mainpage_section7";
 import { ScrollProvider } from "../../context/ScrollContext";
 import Section4 from "./Mainpage_section4/Mainpage-section4";
 import { useLocation } from "react-router-dom";
-
+import MainPage_section4b from './Mainpage_section4b/MainPage_section4b';
 export default function Mainpage() {
     const [password, setPassword] = useState("");
     const [accessGranted, setAccessGranted] = useState(false);
@@ -89,6 +89,7 @@ export default function Mainpage() {
                 <Section2 />
                 <Section3 />
                 <div id="section4"  ><Section4/></div>
+                <MainPage_section4b/>
                 <Section5 />
                 <Section6 />
                 <Section7 />

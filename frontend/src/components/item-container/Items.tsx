@@ -3,10 +3,14 @@ import { useItemContext } from '../../context/ItemContext'; // Import the contex
 import Item from '../item/Item';
 import './items.css';
 
-const ItemContainer: React.FC = () => {
+interface ItemsProps {
+  type?: 'standard' | 'special'; // Optional prop to specify the type
+}
+
+const ItemContainer: React.FC<ItemsProps> = ({ type = 'standard' }) => {
   const { items, loading, error } = useItemContext(); // Access items, loading, and error from context
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const itemsPerPage = 3; // Number of items shown at once
+  const itemsPerPage = type === 'special' ? 4 : 3; // Show 4 items for 'special'
 
   const handlePrevClick = () => {
     setCurrentIndex((prevIndex) =>
@@ -29,20 +33,42 @@ const ItemContainer: React.FC = () => {
   }
 
   return (
-    <div className="item-container">
-      <button className="carousel-button left" onClick={handlePrevClick} disabled={currentIndex <= 0}>
-        &#60;
-      </button>
-      <div className="items-wrapper">
-        {items.slice(currentIndex, currentIndex + itemsPerPage).map((item) => (
-          <div className="item" key={item._id}>
-            <Item _id={item._id} />
+    <div className={`item-container ${type}`}>
+      {type === 'special' ? (
+        // 2x2 Grid for 'special' type
+        <div className="items-grid">
+          {items.slice(currentIndex, currentIndex + itemsPerPage).map((item) => (
+            <div className="grid-item" key={item._id}>
+              <Item _id={item._id} type={type} />
+            </div>
+          ))}
+        </div>
+      ) : (
+        // Carousel for 'standard' type
+        <>
+          <button
+            className="carousel-button left"
+            onClick={handlePrevClick}
+            disabled={currentIndex <= 0}
+          >
+            &#60;
+          </button>
+          <div className="items-wrapper">
+            {items.slice(currentIndex, currentIndex + itemsPerPage).map((item) => (
+              <div className="item" key={item._id}>
+                <Item _id={item._id} type={type} />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <button className="carousel-button right" onClick={handleNextClick} disabled={currentIndex + itemsPerPage >= items.length}>
-        &#62;
-      </button>
+          <button
+            className="carousel-button right"
+            onClick={handleNextClick}
+            disabled={currentIndex + itemsPerPage >= items.length}
+          >
+            &#62;
+          </button>
+        </>
+      )}
     </div>
   );
 };
