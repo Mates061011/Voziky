@@ -50,12 +50,14 @@ const CartItem: React.FC<CartItemProps> = ({ item, onRemove, showKauce, showClos
           )}
         </div>
         <p className="cart-item-price">{totalPrice} Kč</p>
-        {/* Conditionally render the close button if showCloseButton is true */}
-        {showCloseButton && (
-          <button className="cart-item-remove" onClick={() => onRemove(item._id)}>
-            <img src={CloseImg} alt="Remove item" />
-          </button>
-        )}
+        {/* Conditionally render the close button with a class for opacity control */}
+        <button
+          className={`cart-item-remove ${showCloseButton ? '' : 'hidden'}`}
+          onClick={() => onRemove(item._id)}
+          disabled={!showCloseButton} // Disable the button if it's not visible
+        >
+          <img src={CloseImg} alt="Remove item" />
+        </button>
       </div>
     </li>
   );

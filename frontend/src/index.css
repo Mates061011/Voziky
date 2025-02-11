@@ -39,6 +39,7 @@ input, textarea {
   box-sizing: border-box;
   border-radius: 10px;
   height: 50px;
+  font-family: "Inter", sans-serif;
 }
 input:focus {
   outline: 1.5px solid #8A8A96;

@@ -66,4 +66,9 @@
 .cart-item-kauce{
     color:#8A8A96;
     font-size: 14px;
+    margin: 0 !important;
+}
+.cart-item-remove.hidden {
+    opacity: 0;
+    pointer-events: none; /* Makes the button non-clickable */
 }

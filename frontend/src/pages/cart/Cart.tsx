@@ -85,21 +85,28 @@ const Cart: React.FC = () => {
     return missing;
   };
 
-  const handleNextClick = () => {
+  const handleStepTransition = (direction: "next" | "previous") => {
+    let newStep = currentStep;
+  
+    // Move to the next step
+    if (direction === "next") {
+      newStep = Math.min(currentStep + 1, 2); // Ensure you don't exceed the last step
+    } else if (direction === "previous") {
+      newStep = Math.max(currentStep - 1, 0); // Ensure you don't go below the first step
+    }
+  
+    handleStepChange(newStep); // Update the current step
+  };
+  const handleNextClickForm = () => {
     const missing = isFormComplete();
     setMissingFields(missing); // Update the missing fields state
-
+  
     if (missing.length === 0) {
-      handleStepChange(2); // Move to the next step
+      handleStepTransition("next"); // Move to the next step if form is complete
     } else {
-      
+      // Handle missing fields error (optional)
     }
   };
-
-  const handleNextClick2 = () => {
-    handleStepChange(1); // Move to the next step
-  };
-
   const handleCheckboxChange = (e: CheckboxChangeEvent) => {
     setCheckboxChecked(e.target.checked); // Update checkbox state
   };
@@ -160,7 +167,7 @@ const Cart: React.FC = () => {
                 <h3>Příslušenství</h3>
             </div>
             <Items/>
-            <div className="step1-button-cont"><button onClick={handleNextClick2} className='cart-next-button'>Pokračovat</button></div>
+            <div className="step1-button-cont"><button onClick={() => handleStepTransition("next")} className='cart-next-button'>Pokračovat</button></div>
           </div>
         )}
         {step2 && (
@@ -184,7 +191,10 @@ const Cart: React.FC = () => {
                 />
                 <p>Pokračováním souhlasíte s pravidly zpracování <a href='#'>osobních údajů</a> a <a href='#'>obchodními podmínkami.</a></p>
               </div>
-              <button onClick={handleNextClick}>Pokračovat</button>
+              <div className="step-button-cont">
+                <button onClick={() => handleStepTransition("previous")} className='cart-previous-button'>Zpět</button>
+                <button onClick={handleNextClickForm} className='cart-next-button'>Pokračovat</button>
+              </div>
             </div>
           </div>
         )}
@@ -202,9 +212,10 @@ const Cart: React.FC = () => {
                 </p>
             </div>
             <CartItems  showKauce={true} showCloseButton={false}/>
-            <p>Podmínkou pro zapůjčení rezervovaného zboží je složení vratné kauce 7000 Kč (v hotovosti při převzetí) a předložení dvou dokladů totožnosti (např. občanský průkaz + cestovní pas/řidičský průkaz.)</p>
-            <div className="step2-button-cont">
-              <button onClick={handleNextClick2} className='cart-next-button'>Závazně rezervovat</button>
+            <p>Podmínkou pro zapůjčení rezervovaného zboží je složení vratné kauce (v hotovosti při převzetí) a předložení dvou dokladů totožnosti (např. občanský průkaz + cestovní pas/řidičský průkaz.)</p>
+            <div className="step3-button-cont step1-button-cont">
+              <button onClick={() => handleStepTransition("previous")} className='cart-previous-button'>Zpět</button>
+              <button onClick={() => handleStepTransition("next")} className='cart-next-button'>Závazně rezervovat</button>
             </div>
           </div>
         )}
