@@ -106,7 +106,7 @@
 .cart-step2 {
     display: flex;
     flex-direction: column;
-    width: 60vw;
+    width: 55vw;
     gap: 40px;
     .cart-step2-button{
         display: flex;
@@ -139,4 +139,28 @@
     img {
         width: 20px;
     }
+}
+
+.cart-step3 {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 55vw;
+    .cart-termin>p {
+        color: #818181;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        strong {
+            color: #818181;
+        }
+    }
+    P {
+        color: #818181;
+        margin-top: 40px;
+    }
+}
+.step2-button-cont{
+    
 }

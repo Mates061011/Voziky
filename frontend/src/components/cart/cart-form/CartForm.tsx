@@ -44,16 +44,6 @@ const TwoColumnForm: React.FC = () => {
           onChange={handleChange}
           required
         />
-
-        <label htmlFor="address">Adresa</label>
-        <input
-          type="text"
-          id="address"
-          name="address"
-          value={userData.address}
-          onChange={handleChange}
-          required
-        />
       </div>
 
       <div className="form-column">

@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { Checkbox } from 'antd';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { Alert } from 'antd'; // Import Alert component
+import CartInfo from '../../components/cart/cart-info/CartInfo';
 
 interface UserData {
   name: string;
@@ -152,7 +153,7 @@ const Cart: React.FC = () => {
                   Počet dní: <strong>{Math.ceil((currentEndDate.getTime() - currentStartDate.getTime()) / (1000 * 60 * 60 * 24) + 1)}</strong>
                 </p>
               </div>
-              <CartItems showKauce={false}/>
+              <CartItems showKauce={false} showCloseButton={true}/>
             </div>
             <div className="nadpis-cart">
                 <h4>VÍC MOŽNOSTÍ</h4>
@@ -188,8 +189,23 @@ const Cart: React.FC = () => {
           </div>
         )}
         {step3 && (
-          <div>
-            <CartItems  showKauce={true}/>
+          <div className='cart-step3'>
+            <CartInfo/>
+            <div className="flexRow cart-termin">
+                <p>
+                  Termín: <strong>{`${currentStartDate.getDate()}. ${currentStartDate.getMonth() + 1}. - ${currentEndDate.getDate()}. ${currentEndDate.getMonth() + 1}.`}</strong>
+                  <button className='editIcon' onClick={handleNavigate}><img src={editIcon} alt=""/></button>
+                </p>
+                
+                <p>
+                  Počet dní: <strong>{Math.ceil((currentEndDate.getTime() - currentStartDate.getTime()) / (1000 * 60 * 60 * 24) + 1)}</strong>
+                </p>
+            </div>
+            <CartItems  showKauce={true} showCloseButton={false}/>
+            <p>Podmínkou pro zapůjčení rezervovaného zboží je složení vratné kauce 7000 Kč (v hotovosti při převzetí) a předložení dvou dokladů totožnosti (např. občanský průkaz + cestovní pas/řidičský průkaz.)</p>
+            <div className="step2-button-cont">
+              <button onClick={handleNextClick2} className='cart-next-button'>Závazně rezervovat</button>
+            </div>
           </div>
         )}
       </div>

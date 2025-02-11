@@ -17,9 +17,10 @@ interface CartItemProps {
   };
   onRemove: (id: string) => void;
   showKauce: boolean; // New prop to control whether to show kauce
+  showCloseButton: boolean; // New prop to control whether to show the close button
 }
 
-const CartItem: React.FC<CartItemProps> = ({ item, onRemove, showKauce }) => {
+const CartItem: React.FC<CartItemProps> = ({ item, onRemove, showKauce, showCloseButton }) => {
   const { dates } = useDateContext(); // Get the start and end date from context
 
   if (!dates[0] || !dates[1]) return null; // In case dates are undefined
@@ -49,9 +50,12 @@ const CartItem: React.FC<CartItemProps> = ({ item, onRemove, showKauce }) => {
           )}
         </div>
         <p className="cart-item-price">{totalPrice} Kč</p>
-        <button className="cart-item-remove" onClick={() => onRemove(item._id)}>
-          <img src={CloseImg} alt="" />
-        </button>
+        {/* Conditionally render the close button if showCloseButton is true */}
+        {showCloseButton && (
+          <button className="cart-item-remove" onClick={() => onRemove(item._id)}>
+            <img src={CloseImg} alt="Remove item" />
+          </button>
+        )}
       </div>
     </li>
   );

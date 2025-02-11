@@ -1,11 +1,10 @@
 // userContext.tsx
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
-// Define the User type here
+// Define the User type without address
 export interface User {
   email: string;
   name: string;
-  address: string;
   phone: string;
   surname: string;
 }
@@ -25,13 +24,18 @@ interface UserProviderProps {
 }
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
-  const [userData, setUserData] = useState<User>({
-    email: '',
-    name: '',
-    address: '',
-    phone: '',
-    surname: '',
+  const [userData, setUserData] = useState<User>(() => {
+    // Get the user data from localStorage (if available) or set default
+    const storedUserData = localStorage.getItem('userData');
+    return storedUserData ? JSON.parse(storedUserData) : { email: '', name: '', phone: '', surname: '' };
   });
+
+  // Effect to update localStorage when userData changes
+  useEffect(() => {
+    if (userData) {
+      localStorage.setItem('userData', JSON.stringify(userData));
+    }
+  }, [userData]);
 
   return (
     <UserContext.Provider value={{ userData, setUserData }}>

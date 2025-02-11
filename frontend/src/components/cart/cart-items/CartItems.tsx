@@ -7,14 +7,14 @@ import "./cartitems.css";
 
 interface CartItemsContainerProps {
   showKauce: boolean; // Boolean prop to control if kauce should be shown
+  showCloseButton: boolean; // New prop to control whether the close button should be displayed
 }
 
-const CartItemsContainer: React.FC<CartItemsContainerProps> = ({ showKauce }) => {
+const CartItemsContainer: React.FC<CartItemsContainerProps> = ({ showKauce, showCloseButton }) => {
   const { cart, dispatch } = useCart();
   const { dates } = useDateContext();
   const { items, loading, error } = useItemContext();
   console.log(cart);
-
 
   const handleRemoveItem = (id: string) => {
     dispatch({ type: "REMOVE_FROM_CART", _id: id });
@@ -22,7 +22,7 @@ const CartItemsContainer: React.FC<CartItemsContainerProps> = ({ showKauce }) =>
 
   const getItemDetails = (id: string) => {
     const item = items.find((item) => item._id === id);
-    console.log(item)
+    console.log(item);
     if (!item) {
       console.warn(`Item with ID ${id} not found in items array.`);
     }
@@ -50,6 +50,17 @@ const CartItemsContainer: React.FC<CartItemsContainerProps> = ({ showKauce }) =>
           ? itemDetails.pricePerDay
           : numOfDays * itemDetails.pricePerDays;
       return total + totalPrice;
+    }, 0);
+  };
+
+  const calculateTotalKauce = () => {
+    return cart.reduce((total, cartItemId) => {
+      const itemDetails = getItemDetails(cartItemId);
+      if (!itemDetails) {
+        console.warn(`Item not found for ID: ${cartItemId}`);
+        return total; // Skip this item
+      }
+      return total + parseFloat(itemDetails.kauce || "0");
     }, 0);
   };
 
@@ -85,12 +96,16 @@ const CartItemsContainer: React.FC<CartItemsContainerProps> = ({ showKauce }) =>
               }}
               onRemove={handleRemoveItem}
               showKauce={showKauce}
+              showCloseButton={showCloseButton} // Pass showCloseButton to CartItem
             />
           );
         })}
       </ul>
       <div className="cart-total-price">
-        <h4>Total Price: {calculateTotalPrice()} Kč</h4>
+        <h4>{calculateTotalPrice()} Kč</h4>
+        {showKauce && (
+          <p>Vratná kauce {calculateTotalKauce()} Kč</p>
+        )}
       </div>
     </div>
   );

@@ -13,8 +13,10 @@
         width: fit-content;
         text-align: left !important;
         margin-right: 55px;
+        margin-top: 0;
     }
     p {
         color: #8A8A96;
+        font-size: 14px;
     }
 }

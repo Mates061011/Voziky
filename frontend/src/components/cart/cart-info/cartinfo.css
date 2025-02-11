@@ -1,0 +1,30 @@
+.cart-info {
+    div {
+        color: #818181;
+        font-weight: 600;
+        div>strong {
+            font-weight: 400;
+            margin-right: 5px;
+        }
+    }
+}
+.cart-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.table-row {
+    display: flex;
+    align-items: flex-start; /* Align content to the left */
+    padding: 5px 0;
+}
+
+.table-cell1 {
+    display: inline-block;
+    padding: 0 10px;
+    padding-left: 0;
+    width: 60px;
+}
+  
+  
