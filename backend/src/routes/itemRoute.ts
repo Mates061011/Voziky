@@ -1,6 +1,6 @@
 // routes/itemRoutes.ts
 import express, { Request, Response } from 'express';
-import Item from '../models/itemModel';
+import {Item} from '../models/itemModel';
 import verifyToken from './../middleware/authMiddleware';
 
 const router = express.Router();

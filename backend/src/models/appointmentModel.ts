@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document } from 'mongoose';
 import { Appointment as AppointmentType } from '../types/appointment.type';
 import { User as UserType } from '../types/user.type';
+import { Item } from './itemModel'; // Import the Item model
 
 export interface IAppointment extends AppointmentType, Document {}
 
@@ -18,16 +19,19 @@ const userSchema = new Schema<UserType>({
   phone: { type: Number, required: true },
 });
 
-const appointmentSchema = new Schema<IAppointment>({
-  vs: { type: Number, unique: true }, // Add the optional vs field
-  startDate: { type: Date, required: true },
-  endDate: { type: Date, required: true },
-  user: { type: userSchema, required: true },
-  items: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Item' }], // Add reference to the Item model
-  confirmed: { type: Boolean, default: false },
-  price: { type: Number, default: 0 },
-  createdAt: { type: Date, default: Date.now },
-}, { versionKey: false });
+const appointmentSchema = new Schema<IAppointment>(
+  {
+    vs: { type: Number, unique: true }, // Add the optional vs field
+    startDate: { type: Date, required: true },
+    endDate: { type: Date, required: true },
+    user: { type: userSchema, required: true },
+    items: [{ type: mongoose.Types.ObjectId, ref: 'Item', required: true }], 
+    confirmed: { type: Boolean, default: false },
+    price: { type: Number, default: 0 },
+    createdAt: { type: Date, default: Date.now },
+  },
+  { versionKey: false }
+);
 
 // Add TTL index based on `endDate` field, expire 14 days after `endDate`
 appointmentSchema.index({ endDate: 1 }, { expireAfterSeconds: 1209600 }); // 14 days in seconds
@@ -48,6 +52,19 @@ appointmentSchema.pre('save', async function (next) {
   } while (true);
 
   this.vs = uniqueNumber; // Assign the generated number
+  next();
+});
+
+// Pre-save hook to validate item IDs
+appointmentSchema.pre('save', async function (next) {
+  const itemIds = this.items as mongoose.Types.ObjectId[];
+
+  // Validate that all item IDs exist in the Item collection
+  const count = await Item.countDocuments({ _id: { $in: itemIds } });
+  if (count !== itemIds.length) {
+    return next(new Error('Some items in the appointment do not exist.'));
+  }
+
   next();
 });
 

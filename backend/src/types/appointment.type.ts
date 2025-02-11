@@ -1,13 +1,14 @@
 import { User } from "./user.type";
-import { Item } from "./item.type"
+import mongoose from "mongoose";
+
 export interface Appointment {
-    vs: Number;
+    vs: number;
     startDate: Date;
     endDate: Date;
     user: User;
-    items: Item[];
+    items: mongoose.Types.ObjectId[];
     confirmed: boolean;
     price: number;
-    createdAt?: Date; 
+    createdAt?: Date;
     updatedAt?: Date;
 }

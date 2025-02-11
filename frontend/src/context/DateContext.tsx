@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 interface DateContextProps {
   dates: [Date | undefined, Date | undefined];
   setDates: React.Dispatch<React.SetStateAction<[Date | undefined, Date | undefined]>>;
+  clearDates: () => void; // Add the clear function here
 }
 
 const DateContext = createContext<DateContextProps | undefined>(undefined);
@@ -40,8 +41,14 @@ export const DateProvider: React.FC<{ children: React.ReactNode }> = ({ children
     dates[1] ? adjustToLocalTimezone(dates[1]) : undefined,
   ];
 
+  // Clear the dates and remove from localStorage
+  const clearDates = () => {
+    setDates([undefined, undefined]);
+    localStorage.removeItem("dates"); // Clear the dates from localStorage
+  };
+
   return (
-    <DateContext.Provider value={{ dates: adjustedDates, setDates }}>
+    <DateContext.Provider value={{ dates: adjustedDates, setDates, clearDates }}>
       {children}
     </DateContext.Provider>
   );

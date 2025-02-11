@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useItemContext } from "../../context/ItemContext"; // Import your context
 
 interface User {
   name: string;
@@ -18,6 +19,8 @@ interface Appointment {
   confirmed: boolean;
   price: number;
   createdAt: string;
+  vs: number;
+  items: string[]; // Array of item IDs
 }
 
 const AdminPanel: React.FC = () => {
@@ -29,6 +32,7 @@ const AdminPanel: React.FC = () => {
     return null;
   }
 
+  const { items } = useItemContext(); // Use ItemContext
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -91,62 +95,73 @@ const AdminPanel: React.FC = () => {
     return formatter.format(utcDate);
   };
 
+  // Function to get item names from the items array based on the item IDs
+  const getItemNames = (itemIds: string[]): string[] => {
+    return itemIds.map((itemId) => {
+      const item = items.find((item) => item._id === itemId);
+      return item ? item.name : "Unknown Item";
+    });
+  };
+
   return (
     <div>
       <h1>Admin Panel</h1>
       <h2>Potvrzuj objednávky</h2>
       <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
-        {appointments.map((appointment) => (
-          <div
-            key={appointment._id}
-            style={{ border: "1px solid black", margin: "10px", padding: "10px", width: 'fit-content' }}
-          >
-            <p>
-              <strong>ID:</strong> {appointment._id}
-            </p>
-            <p>
-              <strong>Start Date:</strong>{" "}
-              {formatDateInUTC(appointment.startDate)}
-            </p>
-            <p>
-              <strong>End Date:</strong>{" "}
-              {formatDateInUTC(appointment.endDate)}
-            </p>
-            <p>
-              <strong>User:</strong> {appointment.user.name} {appointment.user.surname}
-            </p>
-            <p>
-              <strong>Email:</strong> {appointment.user.email}
-            </p>
-            <p>
-              <strong>Phone:</strong> {appointment.user.phone}
-            </p>
-            <p>
-              <strong>Price:</strong> {appointment.price} Kč
-            </p>
-            <p>
-              <strong>Confirmed:</strong> {appointment.confirmed ? "Yes" : "No"}
-            </p>
-            <p>
-              <strong>Created At:</strong>{" "}
-              {formatDateInUTC(appointment.createdAt)}
-            </p>
-            {!appointment.confirmed && (
-              <button
-                onClick={() => confirmAppointment(appointment._id)}
-                style={{
-                  padding: "10px 20px",
-                  backgroundColor: "green",
-                  color: "white",
-                  border: "none",
-                  cursor: "pointer",
-                }}
-              >
-                Confirm
-              </button>
-            )}
-          </div>
-        ))}
+        {appointments.map((appointment) => {
+          const itemNames = getItemNames(appointment.items);
+          return (
+            <div
+              key={appointment._id}
+              style={{ border: "1px solid black", margin: "10px", padding: "10px", width: 'fit-content' }}
+            >
+              <p>
+                <strong>ID:</strong> {appointment._id}
+              </p>
+              <p>
+                <strong>Start Date:</strong> {formatDateInUTC(appointment.startDate)}
+              </p>
+              <p>
+                <strong>End Date:</strong> {formatDateInUTC(appointment.endDate)}
+              </p>
+              <p>
+                <strong>User:</strong> {appointment.user.name} {appointment.user.surname}
+              </p>
+              <p>
+                <strong>Email:</strong> {appointment.user.email}
+              </p>
+              <p>
+                <strong>Phone:</strong> {appointment.user.phone}
+              </p>
+              <p>
+                <strong>Price:</strong> {appointment.price} Kč
+              </p>
+              <p>
+                <strong>Confirmed:</strong> {appointment.confirmed ? "Yes" : "No"}
+              </p>
+              <p>
+                <strong>Created At:</strong> {formatDateInUTC(appointment.createdAt)}
+              </p>
+              <p>
+                <strong>Items:</strong> {itemNames.join(", ")} {/* Show item names */}
+              </p>
+              {!appointment.confirmed && (
+                <button
+                  onClick={() => confirmAppointment(appointment._id)}
+                  style={{
+                    padding: "10px 20px",
+                    backgroundColor: "green",
+                    color: "white",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  Confirm
+                </button>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

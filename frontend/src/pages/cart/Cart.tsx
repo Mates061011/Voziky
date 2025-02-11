@@ -12,6 +12,7 @@ import { Checkbox } from 'antd';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { Alert } from 'antd'; // Import Alert component
 import CartInfo from '../../components/cart/cart-info/CartInfo';
+import CartCheckout from '../../components/cart/cart-checkout/CartCheckout';
 
 interface UserData {
   name: string;
@@ -39,17 +40,28 @@ const Cart: React.FC = () => {
   const currentStartDate = dates[0] || new Date();
   const currentEndDate = dates[1] || new Date();
   const navigate = useNavigate();
+  const [showCartContent, setShowCartContent] = useState(true);
 
   const handleNavigate = () => {
     navigate("/", { state: { scrollTo: "section4" } });
   };
 
   const handleStepChange = (currentStep: number) => {
+    // Check for missing data when transitioning to step3 (step 2)
+    if (currentStep === 2) {
+  
+      // If dates or user data are missing, prevent transition to step 3
+      if (!isStep3Clickable()) {
+        return; // Prevent transition to step 3
+      }      
+    }
+  
+    // If no issues, proceed to change the current step
     setCurrentStep(currentStep);
     setStep1(false);
     setStep2(false);
     setStep3(false);
-
+  
     if (currentStep === 0) {
       setStep1(true);
     } else if (currentStep === 1) {
@@ -57,16 +69,16 @@ const Cart: React.FC = () => {
     } else if (currentStep === 2) {
       setStep3(true);
     }
-
+  
     // Save the current step to localStorage
     localStorage.setItem('currentStep', currentStep.toString());
-
+  
     // Scroll to the top of the page after DOM updates
     setTimeout(() => {
       document.querySelector('.App')?.scrollTo({ top: 0, behavior: 'smooth' });
     }, 0);
   };
-
+  
   const setProgress = (data: UserData) => {
     const fieldsFilled = Object.values(data).filter((field) => field !== '').length;
     const totalFields = Object.keys(data).length;
@@ -84,9 +96,35 @@ const Cart: React.FC = () => {
     if (!checkboxChecked) missing.push('Souhlas s podmínkami');
     return missing;
   };
+  const isUserDataComplete = () => {
+    return userData.name && userData.surname && userData.email && userData.phone;
+  };
 
+  const isDatesComplete = () => {
+    return dates[0] && dates[1]; // Check if both start and end dates are set
+  };
+
+  // Disable the "next" button in step 2 if required data is missing
+  const isStep3Clickable = () => {
+    return isUserDataComplete() && isDatesComplete();
+  };
   const handleStepTransition = (direction: "next" | "previous") => {
     let newStep = currentStep;
+    console.log(newStep)
+    // Check for missing fields before moving to step 3
+    if (direction === "next") {
+      if(currentStep === 0) {
+        newStep = Math.min(currentStep + 1, 2);
+        handleStepChange(newStep);
+        return;
+      }
+  
+      if (!isStep3Clickable()) {
+        // If dates or user data are missing, prevent moving to step 3
+        alert('Please fill in all required fields before proceeding to step 3.');
+        return; // Exit early without changing step
+      }
+    }
   
     // Move to the next step
     if (direction === "next") {
@@ -97,6 +135,7 @@ const Cart: React.FC = () => {
   
     handleStepChange(newStep); // Update the current step
   };
+  
   const handleNextClickForm = () => {
     const missing = isFormComplete();
     setMissingFields(missing); // Update the missing fields state
@@ -137,91 +176,106 @@ const Cart: React.FC = () => {
       setProgress(userData);
     }
   }, [step1, userData]);
-
+  const handleOrderSuccess = () => {
+    console.log('Order was successfully placed!');
+    setShowCartContent(false); // Hide the cart content and show success message
+  };
+  const handleBackToHome = () => {
+    navigate('/'); // Navigate to the homepage when button is clicked
+  };
   return (
     <div className="cartCont">
-      <CartSteps
-        current={currentStep}
-        percent={percent}
-        error={false}
-        onStepChange={handleStepChange}
-      />
-      <div className="cartWrap" style={{ width: step1 ? 'fit-content' : 'auto' }}>
-        {step1 && (
-          <div className='cart-step cart-step1'>
-            <div className="cart-step1-wrapper">
-              <div className="flexRow">
-                <p>
-                  Termín: &nbsp; <strong>{`${currentStartDate.getDate()}. ${currentStartDate.getMonth() + 1}. - ${currentEndDate.getDate()}. ${currentEndDate.getMonth() + 1}.`}</strong>
-                  <button className='editIcon' onClick={handleNavigate}><img src={editIcon} alt=""/></button>
-                </p>
-                
-                <p>
-                  Počet dní: &nbsp;  <strong>{Math.ceil((currentEndDate.getTime() - currentStartDate.getTime()) / (1000 * 60 * 60 * 24) + 1)}</strong>
-                </p>
+      {showCartContent ? (
+        <>
+          <CartSteps
+            current={currentStep}
+            percent={percent}
+            error={false}
+            onStepChange={handleStepChange}
+          />
+          <div className="cartWrap" style={{ width: step1 ? 'fit-content' : 'auto' }}>
+            {step1 && (
+              <div className="cart-step cart-step1">
+                <div className="cart-step1-wrapper">
+                  <div className="flexRow">
+                    <p>
+                      Termín: &nbsp; <strong>{`${currentStartDate.getDate()}. ${currentStartDate.getMonth() + 1}. - ${currentEndDate.getDate()}. ${currentEndDate.getMonth() + 1}.`}</strong>
+                      <button className="editIcon" onClick={handleNavigate}><img src={editIcon} alt="" /></button>
+                    </p>
+                    <p>
+                      Počet dní: &nbsp; <strong>{Math.ceil((currentEndDate.getTime() - currentStartDate.getTime()) / (1000 * 60 * 60 * 24) + 1)}</strong>
+                    </p>
+                  </div>
+                  <CartItems showKauce={false} showCloseButton={true} />
+                </div>
+                <div className="nadpis-cart">
+                  <h4>VÍC MOŽNOSTÍ</h4>
+                  <h3>Příslušenství</h3>
+                </div>
+                <Items />
+                <div className="step1-button-cont"><button onClick={() => handleStepTransition("next")} className="cart-next-button">Pokračovat</button></div>
               </div>
-              <CartItems showKauce={false} showCloseButton={true}/>
-            </div>
-            <div className="nadpis-cart">
-                <h4>VÍC MOŽNOSTÍ</h4>
-                <h3>Příslušenství</h3>
-            </div>
-            <Items/>
-            <div className="step1-button-cont"><button onClick={() => handleStepTransition("next")} className='cart-next-button'>Pokračovat</button></div>
-          </div>
-        )}
-        {step2 && (
-          <div className='cart-step cart-step2'>
-            <CartForm />
-            {missingFields.length > 0 && (
-              <Alert
-                message="Chybně zadané nebo chybející údaje"
-                description={<ul>{missingFields.map((field, index) => <li key={index}>{field === 'checkbox' ? 'Checkbox agreement' : `${field}`}</li>)}</ul>}
-                type="error"
-                showIcon
-                closable
-              />
             )}
-            <div className="cart-step2-button">
-              <div className="flexRow">
-                <Checkbox 
-                  checked={checkboxChecked} 
-                  onChange={handleCheckboxChange}
-                  style={{ color: '#FF6832' }} 
-                />
-                <p>Pokračováním souhlasíte s pravidly zpracování <a href='#'>osobních údajů</a> a <a href='#'>obchodními podmínkami.</a></p>
+            {step2 && (
+              <div className="cart-step cart-step2">
+                <CartForm />
+                {missingFields.length > 0 && (
+                  <Alert
+                    message="Chybně zadané nebo chybející údaje"
+                    description={<ul>{missingFields.map((field, index) => <li key={index}>{field === 'checkbox' ? 'Checkbox agreement' : `${field}`}</li>)}</ul>}
+                    type="error"
+                    showIcon
+                    closable
+                  />
+                )}
+                <div className="cart-step2-button">
+                  <div className="flexRow">
+                    <Checkbox 
+                      checked={checkboxChecked} 
+                      onChange={handleCheckboxChange}
+                      style={{ color: '#FF6832' }} 
+                    />
+                    <p>Pokračováním souhlasíte s pravidly zpracování <a href="#">osobních údajů</a> a <a href="#">obchodními podmínkami.</a></p>
+                  </div>
+                  <div className="step-button-cont">
+                    <button onClick={() => handleStepTransition("previous")} className="cart-previous-button">Zpět</button>
+                    <button onClick={handleNextClickForm} className="cart-next-button">Pokračovat</button>
+                  </div>
+                </div>
               </div>
-              <div className="step-button-cont">
-                <button onClick={() => handleStepTransition("previous")} className='cart-previous-button'>Zpět</button>
-                <button onClick={handleNextClickForm} className='cart-next-button'>Pokračovat</button>
+            )}
+            {step3 && (
+              <div className="cart-step cart-step3">
+                <CartInfo />
+                <div className="flexRow cart-termin">
+                  <p>
+                    Termín: <strong>{`${currentStartDate.getDate()}. ${currentStartDate.getMonth() + 1}. - ${currentEndDate.getDate()}. ${currentEndDate.getMonth() + 1}.`}</strong>
+                    <button className="editIcon" onClick={handleNavigate}><img src={editIcon} alt="" /></button>
+                  </p>
+                  <p>
+                    Počet dní: <strong>{Math.ceil((currentEndDate.getTime() - currentStartDate.getTime()) / (1000 * 60 * 60 * 24) + 1)}</strong>
+                  </p>
+                </div>
+                <CartItems showKauce={true} showCloseButton={false} />
+                <p>Podmínkou pro zapůjčení rezervovaného zboží je složení vratné kauce (v hotovosti při převzetí) a předložení dvou dokladů totožnosti (např. občanský průkaz + cestovní pas/řidičský průkaz.)</p>
+                <div className="step3-button-cont step1-button-cont">
+                  <button onClick={() => handleStepTransition("previous")} className="cart-previous-button">Zpět</button>
+                  <CartCheckout onOrderSuccess={handleOrderSuccess} />
+                </div>
               </div>
-            </div>
+            )}
           </div>
-        )}
-        {step3 && (
-          <div className='cart-step cart-step3'>
-            <CartInfo/>
-            <div className="flexRow cart-termin">
-                <p>
-                  Termín: <strong>{`${currentStartDate.getDate()}. ${currentStartDate.getMonth() + 1}. - ${currentEndDate.getDate()}. ${currentEndDate.getMonth() + 1}.`}</strong>
-                  <button className='editIcon' onClick={handleNavigate}><img src={editIcon} alt=""/></button>
-                </p>
-                
-                <p>
-                  Počet dní: <strong>{Math.ceil((currentEndDate.getTime() - currentStartDate.getTime()) / (1000 * 60 * 60 * 24) + 1)}</strong>
-                </p>
-            </div>
-            <CartItems  showKauce={true} showCloseButton={false}/>
-            <p>Podmínkou pro zapůjčení rezervovaného zboží je složení vratné kauce (v hotovosti při převzetí) a předložení dvou dokladů totožnosti (např. občanský průkaz + cestovní pas/řidičský průkaz.)</p>
-            <div className="step3-button-cont step1-button-cont">
-              <button onClick={() => handleStepTransition("previous")} className='cart-previous-button'>Zpět</button>
-              <button onClick={() => handleStepTransition("next")} className='cart-next-button'>Závazně rezervovat</button>
-            </div>
-          </div>
-        )}
-      </div>
+        </>
+      ) : (
+        <div className="order-success">
+          <h2>Objednávka byla úspěšně dokončena!</h2>
+          <p>Děkujeme za vaši objednávku. Brzy se s vámi spojíme.</p>
+          <button onClick={handleBackToHome}>Zpět na hlavní stránku</button>
+        </div>
+      )}
     </div>
   );
+
 };
 
 export default Cart;

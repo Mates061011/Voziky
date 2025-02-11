@@ -16,7 +16,7 @@ type ItemContextType = {
   items: ItemData[] | [];
   loading: boolean;
   error: string | null;
-  fetchItems: () => void; // Declare fetchItems as part of the context type
+  fetchItems: () => void;
 };
 
 const ItemContext = createContext<ItemContextType | undefined>(undefined);
@@ -47,8 +47,13 @@ export const ItemProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }
   };
 
   useEffect(() => {
-    fetchItems(); // Fetch items when the component mounts
-  }, []); // Empty array means it will only run once on component mount
+    fetchItems();
+  }, []);
+
+  // Log all context data whenever it changes
+  useEffect(() => {
+    console.log('Item Context Data:', { items, loading, error });
+  }, [items, loading, error]); // This effect runs whenever the state changes
 
   return (
     <ItemContext.Provider value={{ items, loading, error, fetchItems }}>

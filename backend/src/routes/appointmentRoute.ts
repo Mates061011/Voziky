@@ -7,6 +7,7 @@ const router = express.Router();
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import { Item } from '../models/itemModel'; 
 
 // Extend dayjs with the plugins
 dayjs.extend(utc);
@@ -47,6 +48,22 @@ const createAppointment = async (req: Request, res: Response, next: NextFunction
       return;
     }
 
+    // Validate items exist in the database
+    const invalidItems = [];
+    for (const itemId of items) {
+      const item = await Item.findById(itemId); // Assuming "Item" is the model for items in the database
+      if (!item) {
+        invalidItems.push(itemId);
+      }
+    }
+
+    if (invalidItems.length > 0) {
+      res.status(400).json({
+        message: `Následující položky neexistují v databázi: ${invalidItems.join(', ')}`,
+      });
+      return;
+    }
+
     const start = dayjs(parsedStartDate);
     const end = dayjs(parsedEndDate);
     const selectedDaysCount = end.diff(start, 'day') + 1;
@@ -58,7 +75,7 @@ const createAppointment = async (req: Request, res: Response, next: NextFunction
       price = selectedDaysCount * 250;
     }
 
-    const appointment: IAppointment = new Appointment({
+    const appointment = new Appointment({
       startDate: parsedStartDate,
       endDate: parsedEndDate,
       user,
@@ -69,11 +86,12 @@ const createAppointment = async (req: Request, res: Response, next: NextFunction
 
     const savedAppointment = await appointment.save();
     const paymentData = `SPD*1.0*ACC:CZ0806000000000242829671*AM:${savedAppointment.price.toFixed(2)}*CC:CZK*X-VS:${savedAppointment.vs}*MSG:${savedAppointment.user.name} ${savedAppointment.user.surname}`;
+
     const userDetails = {
       startDate: appointment.startDate,
       endDate: appointment.endDate,
-      price: appointment.price
-    }
+      price: appointment.price,
+    };
 
     // HTML content for the email
     const htmlContent = `
@@ -130,6 +148,8 @@ const createAppointment = async (req: Request, res: Response, next: NextFunction
     next(error);
   }
 };
+
+
 
 const confirmAppointment = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {

@@ -1,4 +1,3 @@
-// userContext.tsx
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 // Define the User type without address
@@ -13,6 +12,7 @@ export interface User {
 interface UserContextType {
   userData: User;
   setUserData: React.Dispatch<React.SetStateAction<User>>;
+  clearUserData: () => void; // Add the clear function here
 }
 
 // Create the context
@@ -37,8 +37,14 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     }
   }, [userData]);
 
+  // Clear userData and remove it from localStorage
+  const clearUserData = () => {
+    setUserData({ email: '', name: '', phone: '', surname: '' });
+    localStorage.removeItem('userData'); // Remove from localStorage
+  };
+
   return (
-    <UserContext.Provider value={{ userData, setUserData }}>
+    <UserContext.Provider value={{ userData, setUserData, clearUserData }}>
       {children}
     </UserContext.Provider>
   );
