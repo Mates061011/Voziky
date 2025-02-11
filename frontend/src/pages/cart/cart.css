@@ -99,6 +99,7 @@
     display: flex;
     flex-direction: row;
     justify-content: end;
+    margin-top: 40px;
     .cart-next-button {
         justify-self: end !important;
         align-self: end !important;
@@ -179,6 +180,7 @@
 }
 .step3-button-cont{
     width: 100%;
+    margin-top: 40px;
 }
 .cart-step {
     max-width: 800px;

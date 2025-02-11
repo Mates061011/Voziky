@@ -208,12 +208,12 @@ const Cart: React.FC = () => {
                   </div>
                   <CartItems showKauce={false} showCloseButton={true} />
                 </div>
+                <div className="step1-button-cont"><button onClick={() => handleStepTransition("next")} className="cart-next-button">Pokračovat</button></div>
                 <div className="nadpis-cart">
                   <h4>VÍC MOŽNOSTÍ</h4>
                   <h3>Příslušenství</h3>
                 </div>
                 <Items />
-                <div className="step1-button-cont"><button onClick={() => handleStepTransition("next")} className="cart-next-button">Pokračovat</button></div>
               </div>
             )}
             {step2 && (
@@ -249,11 +249,11 @@ const Cart: React.FC = () => {
                 <CartInfo />
                 <div className="flexRow cart-termin">
                   <p>
-                    Termín: <strong>{`${currentStartDate.getDate()}. ${currentStartDate.getMonth() + 1}. - ${currentEndDate.getDate()}. ${currentEndDate.getMonth() + 1}.`}</strong>
+                    Termín: &nbsp; <strong>{`${currentStartDate.getDate()}. ${currentStartDate.getMonth() + 1}. - ${currentEndDate.getDate()}. ${currentEndDate.getMonth() + 1}.`}</strong>
                     <button className="editIcon" onClick={handleNavigate}><img src={editIcon} alt="" /></button>
                   </p>
                   <p>
-                    Počet dní: <strong>{Math.ceil((currentEndDate.getTime() - currentStartDate.getTime()) / (1000 * 60 * 60 * 24) + 1)}</strong>
+                    Počet dní: &nbsp; <strong>{Math.ceil((currentEndDate.getTime() - currentStartDate.getTime()) / (1000 * 60 * 60 * 24) + 1)}</strong>
                   </p>
                 </div>
                 <CartItems showKauce={true} showCloseButton={false} />
