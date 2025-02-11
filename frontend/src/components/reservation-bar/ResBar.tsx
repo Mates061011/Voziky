@@ -21,28 +21,20 @@ const ResBar = () => {
 
   const handleSubmit = () => {
     if (dates[0] && dates[1]) {
-      // Define the item to be added to the cart
-      const itemToAdd = {
-        _id: "67a9c975f3da6099cdf0c42e",
-        name: "Thule Chariot Sport 2 G3 Double",
-        desc: "dvoumístný multifunkční vozík za kolo a kočárek pro kondiční běh v jed…",
-        pricePerDay: 250,
-        pricePerDays: 300,
-        type: "kocarek",
-        img: "Thule Chariot Sport 2 double 01.png",
-        kauce: "2000",
-        __v: 0
-      };
-
-      // Add item to cart
-      dispatch({ type: "ADD_TO_CART", item: itemToAdd });
-
+      // Only send the _id (no need to wrap it in an object)
+      const itemId = "67a9c975f3da6099cdf0c42e"; // The item's _id you want to add to the cart
+  
+      // Add the item to the cart by dispatching the _id
+      dispatch({ type: "ADD_TO_CART", _id: itemId });
+  
       // Navigate to the next page with dates
       navigate("/Objednat", { state: { startDate: dates[0], endDate: dates[1] } });
     } else {
       alert("Vyberte prosím platné datumy před pokračováním.");
     }
   };
+  
+  
 
   const [startDate, endDate] = dates;
 

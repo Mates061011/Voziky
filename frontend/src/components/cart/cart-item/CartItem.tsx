@@ -1,20 +1,25 @@
 import React from 'react';
 import './cartitem.css';
-import { useDateContext } from '../../context/DateContext'; // Import DateContext to get the date range
-import CloseImg from '../../assets/close.svg';
+import { useDateContext } from '../../../context/DateContext'; // Import DateContext to get the date range
+import CloseImg from '../../../assets/close.svg';
+
 interface CartItemProps {
   item: {
     _id: string;
     name: string;
     desc: string;
     pricePerDay: number;
-    pricePerDays: number; // Additional field for price per multiple days
+    pricePerDays: number;
+    type: string;
     img: string;
+    kauce: string;
+    __v: number;
   };
   onRemove: (id: string) => void;
+  showKauce: boolean; // New prop to control whether to show kauce
 }
 
-const CartItem: React.FC<CartItemProps> = ({ item, onRemove }) => {
+const CartItem: React.FC<CartItemProps> = ({ item, onRemove, showKauce }) => {
   const { dates } = useDateContext(); // Get the start and end date from context
 
   if (!dates[0] || !dates[1]) return null; // In case dates are undefined
@@ -38,18 +43,16 @@ const CartItem: React.FC<CartItemProps> = ({ item, onRemove }) => {
         <img src={`/items/${item.img}`} alt={item.name} className="cart-item-image" />
         <div className="cart-item-details">
           <h5 className="cart-item-name">{item.name}</h5>
+          {/* Conditionally render kauce if showKauce is true */}
+          {showKauce && item.kauce && (
+            <p className="cart-item-kauce">Vratná kauce {item.kauce} Kč (v hotovosti při převzetí)</p>
+          )}
         </div>
-        <p className="cart-item-price">
-          {totalPrice}Kč
-        </p>
-        <button
-          className="cart-item-remove"
-          onClick={() => onRemove(item._id)}
-        >
+        <p className="cart-item-price">{totalPrice} Kč</p>
+        <button className="cart-item-remove" onClick={() => onRemove(item._id)}>
           <img src={CloseImg} alt="" />
         </button>
       </div>
-      
     </li>
   );
 };

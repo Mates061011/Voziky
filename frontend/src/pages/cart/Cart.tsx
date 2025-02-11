@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './cart.css';
-import CartSteps from '../../components/cart-steps/CartSteps';
+import CartSteps from '../../components/cart/cart-steps/CartSteps';
 import { useDateContext } from "../../context/DateContext";
-import CartItems from '../../components/cart-items/CartItems';
-import CartForm from '../../components/cart-form/CartForm';
+import CartItems from '../../components/cart/cart-items/CartItems';
+import CartForm from '../../components/cart/cart-form/CartForm';
 import { useUserContext } from "../../context/userContext"; // Import User context
 import Items from '../../components/item-container/Items';
 import editIcon from "../../assets/edit2.png";
@@ -152,7 +152,7 @@ const Cart: React.FC = () => {
                   Počet dní: <strong>{Math.ceil((currentEndDate.getTime() - currentStartDate.getTime()) / (1000 * 60 * 60 * 24) + 1)}</strong>
                 </p>
               </div>
-              <CartItems />
+              <CartItems showKauce={false}/>
             </div>
             <div className="nadpis-cart">
                 <h4>VÍC MOŽNOSTÍ</h4>
@@ -189,7 +189,7 @@ const Cart: React.FC = () => {
         )}
         {step3 && (
           <div>
-            <h2>Potvrďte rezervaci v emailu!</h2>
+            <CartItems  showKauce={true}/>
           </div>
         )}
       </div>

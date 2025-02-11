@@ -19,6 +19,9 @@
 .cart-item-details {
     flex-grow: 1;
     padding-left: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
 .cart-item-name {
@@ -59,4 +62,8 @@
     width: 100%;
     align-items: center;
     height: 100px;
+}
+.cart-item-kauce{
+    color:#8A8A96;
+    font-size: 14px;
 }

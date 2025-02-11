@@ -1,14 +1,13 @@
-import React, { createContext, useContext, useReducer, useEffect, ReactNode } from 'react'; 
-import { ItemData } from '../components/item-container/Items'; // Ensure the correct path
+import React, { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
 
-interface CartItem extends ItemData {}
+// Define the state as an array of item _id's
+type CartState = string[]; // This will store only item _id's
 
-type CartState = CartItem[];
-
+// Define the possible actions for the cart
 type CartAction =
-  | { type: 'ADD_TO_CART'; item: ItemData }
-  | { type: 'REMOVE_FROM_CART'; id: string }
-  | { type: 'CLEAR_CART' };
+  | { type: 'ADD_TO_CART'; _id: string } // Add by _id
+  | { type: 'REMOVE_FROM_CART'; _id: string } // Remove by _id
+  | { type: 'CLEAR_CART' }; // Clear the cart
 
 const CartContext = createContext<{
   cart: CartState;
@@ -26,13 +25,12 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
   switch (action.type) {
     case 'ADD_TO_CART':
       // Prevent adding duplicate items to the cart
-      const existingItem = state.find((item) => item._id === action.item._id);
-      if (existingItem) {
+      if (state.includes(action._id)) {
         return state; // Item already exists, no change
       }
-      return [...state, action.item]; // Add item to the cart if it doesn't exist
+      return [...state, action._id]; // Add _id to the cart if it doesn't exist
     case 'REMOVE_FROM_CART':
-      return state.filter((item) => item._id !== action.id); // Remove item by id
+      return state.filter((id) => id !== action._id); // Remove _id from the cart
     case 'CLEAR_CART':
       return []; // Clear the cart
     default:

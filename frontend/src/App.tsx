@@ -6,6 +6,7 @@ import { ConfigProvider } from 'antd'; // Import ConfigProvider
 import { DateProvider } from './context/DateContext';
 import { CartProvider } from './context/CartContext';
 import { UserProvider } from './context/userContext';
+import { ItemProvider } from './context/ItemContext';
 import Footer from './components/footer/Footer';
 import PrivateRoute from './components/PrivateRoute';
 import AdminPanelItem from './pages/adminpanel/AdminPanelItem';
@@ -20,6 +21,7 @@ function App() {
   return (
     <div className="App">
       <DateProvider>
+      <ItemProvider>
       <UserProvider>
         <CartProvider>
           <HashRouter>
@@ -50,6 +52,7 @@ function App() {
           </HashRouter>
         </CartProvider>
         </UserProvider>
+        </ItemProvider>
       </DateProvider>
     </div>
   );
