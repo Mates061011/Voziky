@@ -1,10 +1,6 @@
 
 import "./mainpage-section1.css";
 import { useScrollContext } from "../../../context/ScrollContext";
-import { Helmet } from 'react-helmet';
-
-// Import images to ensure correct bundling
-import Vozik from "../../../assets/Thule Chariot Sport 2 double (jogging kit) (2).png";
 import thuleLogo from "../../../assets/thule-logo.svg";
 
 export default function Section1() {
