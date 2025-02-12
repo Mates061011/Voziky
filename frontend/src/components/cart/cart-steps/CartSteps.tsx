@@ -46,6 +46,7 @@ const CartSteps: React.FC<CartStepsProps> = ({ current, percent, error, onStepCh
         labelPlacement="vertical"
         items={stepsWithStatus}
         onChange={onStepChange}
+        responsive={false}
       />
     </> 
   );
