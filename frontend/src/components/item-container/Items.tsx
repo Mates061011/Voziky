@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useItemContext } from '../../context/ItemContext'; // Import the context
 import Item from '../item/Item';
 import './items.css';
 import nextButton from '../../assets/next.svg';
 import previousButton from '../../assets/previous-svgrepo-com.svg';
+
 interface ItemsProps {
   type?: 'standard' | 'special'; // Optional prop to specify the type
 }
@@ -11,20 +12,36 @@ interface ItemsProps {
 const ItemContainer: React.FC<ItemsProps> = ({ type = 'standard' }) => {
   const { items, loading, error } = useItemContext(); // Access items, loading, and error from context
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const itemsPerPage = type === 'special' ? 4 : 3; // Show 4 items for 'special'
+  const [itemsPerPage, setItemsPerPage] = useState<number>(3); // Default value for 'standard'
+
+  useEffect(() => {
+    const updateItemsPerPage = () => {
+      const width = window.innerWidth;
+      if (width < 800) {
+        setItemsPerPage(1);
+      } else if (width < 1200) {
+        setItemsPerPage(2);
+      } else {
+        setItemsPerPage(type === 'special' ? 4 : 3);
+      }
+    };
+
+    updateItemsPerPage(); // Set initial value
+    window.addEventListener('resize', updateItemsPerPage); // Listen for resize events
+
+    return () => window.removeEventListener('resize', updateItemsPerPage); // Cleanup
+  }, [type]);
 
   // Filter out items with type 'kocarek'
   const filteredItems = items.filter((item) => item.type !== 'kocarek');
 
   const handlePrevClick = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex <= 0 ? 0 : prevIndex - itemsPerPage
-    );
+    setCurrentIndex((prevIndex) => Math.max(prevIndex - 1, 0)); // Prevent negative index
   };
 
   const handleNextClick = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex + itemsPerPage >= filteredItems.length ? prevIndex : prevIndex + itemsPerPage
+      Math.min(prevIndex + 1, filteredItems.length - itemsPerPage)
     );
   };
 
@@ -57,17 +74,24 @@ const ItemContainer: React.FC<ItemsProps> = ({ type = 'standard' }) => {
           >
             <img src={previousButton} alt="" />
           </button>
-          <div className="items-wrapper">
-            {filteredItems.slice(currentIndex, currentIndex + itemsPerPage).map((item) => (
-              <div className="item" key={item._id}>
-                <Item _id={item._id} type={type} />
-              </div>
-            ))}
+          <div className="carousel-container">
+            <div
+              className="items-wrapper"
+              style={{
+                transform: `translateX(-${currentIndex * 320}px)`,
+              }}
+            >
+              {filteredItems.map((item) => (
+                <div className="item" key={item._id}>
+                  <Item _id={item._id} type={type} />
+                </div>
+              ))}
+            </div>
           </div>
           <button
             className="carousel-button right"
             onClick={handleNextClick}
-            disabled={currentIndex + itemsPerPage >= filteredItems.length}
+            disabled={currentIndex >= filteredItems.length - itemsPerPage}
           >
             <img src={nextButton} alt="" />
           </button>

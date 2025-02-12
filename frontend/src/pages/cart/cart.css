@@ -255,5 +255,36 @@
     .cart-step3{
         font-size: 10px;
     }
+    .item-container{
+        width: 320px;
+        .carousel-button {
+            position: absolute;
+            background-color: #768078;
+            height: 30px;
+            width: 30px;
+            border-radius: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            img {
+                height: 40%;
+            }
+        }
+        .carousel-button.right{
+            right: 5px;
+            img {
+                translate: 0.5px 0;
+            }
+        }
+        .carousel-button.left{
+            left: 5px;
+            img {
+                translate: -0.5px 0;
+            }
+        }
+    }
+    .nadpis-cart{
+        translate: 0 25px;
+    }
     
 }
