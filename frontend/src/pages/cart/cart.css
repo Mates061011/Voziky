@@ -238,4 +238,22 @@
             }
         }
     }
+    .cart-step3>div>ul>li>div>button {
+        display: none;
+    }
+    .cart-item-kauce {
+        font-size: 10px !important;
+    }
+    .cart-item-name{
+        font-size: 12px !important;
+    }
+    .cart-total-price{
+        h4,p {
+            margin-right: 18px !important;
+        }
+    }
+    .cart-step3{
+        font-size: 10px;
+    }
+    
 }
