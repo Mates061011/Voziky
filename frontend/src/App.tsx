@@ -18,6 +18,7 @@ const Admin = lazy(() => import('./pages/admin/Admin'));
 const AdminPanel = lazy(() => import('./pages/adminpanel/AdminPanel'));
 
 function App() {
+  
   return (
     <div className="App">
       <DateProvider>
