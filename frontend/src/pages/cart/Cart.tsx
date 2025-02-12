@@ -287,10 +287,10 @@ const Cart: React.FC = () => {
                 <CartInfo />
                 <div className="flexRow cart-termin">
                   <p>
-                    Termín: &nbsp; <strong>{`${currentStartDate.getDate()}. ${currentStartDate.getMonth() + 1}. - ${currentEndDate.getDate()}. ${currentEndDate.getMonth() + 1}.`}</strong>
+                    Termín: <strong>{`${currentStartDate.getDate()}. ${currentStartDate.getMonth() + 1}. - ${currentEndDate.getDate()}. ${currentEndDate.getMonth() + 1}.`}</strong>
                   </p>
                   <p>
-                    Počet dní: &nbsp; <strong>{Math.ceil((currentEndDate.getTime() - currentStartDate.getTime()) / (1000 * 60 * 60 * 24) + 1)}</strong>
+                    Počet dní: <strong>{Math.ceil((currentEndDate.getTime() - currentStartDate.getTime()) / (1000 * 60 * 60 * 24) + 1)}</strong>
                   </p>
                 </div>
                 <CartItems showKauce={true} showCloseButton={false} />

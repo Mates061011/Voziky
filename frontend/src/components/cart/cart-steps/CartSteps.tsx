@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Steps } from 'antd';
 
 interface Step {
@@ -15,6 +15,8 @@ interface CartStepsProps {
 }
 
 const CartSteps: React.FC<CartStepsProps> = ({ current, percent, error, onStepChange }) => {
+  const [screenSize, setScreenSize] = useState<'small' | 'default'>('default');
+
   const items: Step[] = [
     {
       title: 'Košík',
@@ -38,17 +40,35 @@ const CartSteps: React.FC<CartStepsProps> = ({ current, percent, error, onStepCh
     return item;
   });
 
+  // Update screen size state when the window resizes
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 600) {
+        setScreenSize('small');
+      } else {
+        setScreenSize('default');
+      }
+    };
+
+    handleResize(); // Check the initial screen size
+    window.addEventListener('resize', handleResize); // Listen for resize events
+
+    // Cleanup event listener
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   return (
-    <>
-      <Steps
-        current={current}
-        percent={percent}
-        labelPlacement="vertical"
-        items={stepsWithStatus}
-        onChange={onStepChange}
-        responsive={false}
-      />
-    </> 
+    <Steps
+      current={current}
+      percent={percent}
+      labelPlacement="vertical"
+      items={stepsWithStatus}
+      onChange={onStepChange}
+      responsive={false}
+      size={screenSize}
+    />
   );
 };
 

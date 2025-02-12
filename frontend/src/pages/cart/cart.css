@@ -51,9 +51,12 @@
         height: 580px;
     }
     .ant-steps {
-        width: 90% !important;
+        width: 100% !important;
         margin: 0 5% ;
         min-width: 0 !important;
+        .ant-steps-item{
+            padding-inline-start: 0 !important;
+        }
     }
     .cartWrap>.datePickerCont {
         transform:scale(0.85) translate(0,-40px);
@@ -156,6 +159,7 @@
         flex-direction: row;
         justify-content: center;
         align-items: center;
+        gap: 10px;
         strong {
             color: #818181;
         }
@@ -294,10 +298,23 @@
         translate: 0 25px;
     }
     .popup-calendar{
-        width: 330px;
+        width: 280px;
+        height: 330px;
         .datePickerCont{
-            transform: scale(0.9);
-            translate: 0 -20px;
+            transform: scale(0.8);
+            translate: 0 -45px;
+        }
+    }
+    .cart-step1-wrapper>div{
+        p{
+            align-items: center !important;
+            vertical-align: middle;
+            font-size: 10px;
+        }
+    }
+    .editIcon{
+        img {
+            width: 10px;
         }
     }
 }
