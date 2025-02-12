@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './cart.css';
 import CartSteps from '../../components/cart/cart-steps/CartSteps';
 import { useDateContext } from "../../context/DateContext";
@@ -13,6 +13,7 @@ import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { Alert } from 'antd'; // Import Alert component
 import CartInfo from '../../components/cart/cart-info/CartInfo';
 import CartCheckout from '../../components/cart/cart-checkout/CartCheckout';
+import Calendar from '../../components/calendar/Calendar';
 
 interface UserData {
   name: string;
@@ -41,7 +42,9 @@ const Cart: React.FC = () => {
   const currentEndDate = dates[1] || new Date();
   const navigate = useNavigate();
   const [showCartContent, setShowCartContent] = useState(true);
-
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const popupRef = useRef<HTMLDivElement | null>(null);
+  
   const handleNavigate = () => {
     navigate("/", { state: { scrollTo: "section4" } });
   };
@@ -183,6 +186,28 @@ const Cart: React.FC = () => {
   const handleBackToHome = () => {
     navigate('/'); // Navigate to the homepage when button is clicked
   };
+  
+  const handleNavigate2 = () => {
+    setIsDialogOpen((prev) => !prev); // Toggle dialog visibility
+  };
+  // Close the popup if clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
+        setIsDialogOpen(false);
+      }
+    };
+
+    if (isDialogOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isDialogOpen]);
   return (
     <div className="cartCont">
       {showCartContent ? (
@@ -200,7 +225,12 @@ const Cart: React.FC = () => {
                   <div className="flexRow">
                     <p>
                       Termín: &nbsp; <strong>{`${currentStartDate.getDate()}. ${currentStartDate.getMonth() + 1}. - ${currentEndDate.getDate()}. ${currentEndDate.getMonth() + 1}.`}</strong>
-                      <button className="editIcon" onClick={handleNavigate}><img src={editIcon} alt="" /></button>
+                      <button className="editIcon" onClick={handleNavigate2}><img src={editIcon} alt="" /></button>
+                      {isDialogOpen && (
+                        <div ref={popupRef} className="popup-calendar">
+                          <Calendar showPopisky={false} />
+                        </div>
+                      )}
                     </p>
                     <p>
                       Počet dní: &nbsp; <strong>{Math.ceil((currentEndDate.getTime() - currentStartDate.getTime()) / (1000 * 60 * 60 * 24) + 1)}</strong>
@@ -208,7 +238,10 @@ const Cart: React.FC = () => {
                   </div>
                   <CartItems showKauce={false} showCloseButton={true} />
                 </div>
-                <div className="step1-button-cont"><button onClick={() => handleStepTransition("next")} className="cart-next-button">Pokračovat</button></div>
+                <div className="step1-button-cont">
+                  <button onClick={handleNavigate} className='cart-previous-button'>Zpět</button>
+                  <button onClick={() => handleStepTransition("next")} className="cart-next-button">Pokračovat</button>
+                </div>
                 <div className="nadpis-cart">
                   <h4>VÍC MOŽNOSTÍ</h4>
                   <h3>Příslušenství</h3>
@@ -250,7 +283,6 @@ const Cart: React.FC = () => {
                 <div className="flexRow cart-termin">
                   <p>
                     Termín: &nbsp; <strong>{`${currentStartDate.getDate()}. ${currentStartDate.getMonth() + 1}. - ${currentEndDate.getDate()}. ${currentEndDate.getMonth() + 1}.`}</strong>
-                    <button className="editIcon" onClick={handleNavigate}><img src={editIcon} alt="" /></button>
                   </p>
                   <p>
                     Počet dní: &nbsp; <strong>{Math.ceil((currentEndDate.getTime() - currentStartDate.getTime()) / (1000 * 60 * 60 * 24) + 1)}</strong>

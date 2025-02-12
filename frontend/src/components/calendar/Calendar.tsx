@@ -1,3 +1,4 @@
+import React from "react";
 import { useEffect, useState, useCallback } from "react";
 import DatePicker from "react-datepicker";
 import { registerLocale } from "react-datepicker";
@@ -10,7 +11,11 @@ import { useDateContext } from '../../context/DateContext';
 
 registerLocale("cs", cs);
 
-const Section4 = () => {
+interface Section4Props {
+  showPopisky: boolean; // Prop to control the visibility of popiskyCont
+}
+
+const Section4: React.FC<Section4Props> = ({ showPopisky }) => {
   const ref = useScrollContext();
   const { dates, setDates } = useDateContext(); // Use dates and setDates from context
   const [lockedDates, setLockedDates] = useState<Date[]>([]);
@@ -100,7 +105,7 @@ const Section4 = () => {
     const [start, end] = update;
 
     if (start && end && isRangeValid(start, end)) {
-      setDates([start ?? undefined, end ?? undefined]);  // Update the context with the selected range
+      setDates([start ?? undefined, end ?? undefined]); // Update the context with the selected range
       const daysCount = calculateDaysCount(start, end);
       setSelectedDaysCount(daysCount);
     } else if (!end) {
@@ -116,34 +121,32 @@ const Section4 = () => {
   const getDayClassName = (date: Date) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-  
+
     // Check if the date is in the locked dates
     if (isLockedDay(date)) {
       return "locked-day"; // Mark locked dates with a specific class
     }
-  
+
     // Check if the date is part of the selected range and not the last day
-    if (dates[0] && dates[1] && (date.getTime() === dates[1].getTime())) {
+    if (dates[0] && dates[1] && date.getTime() === dates[1].getTime()) {
       return "last-day"; // This will mark the last day of the range
     }
-  
+
     // Apply a past-day class for past dates
     if (date < today) {
       return "past-day"; // Apply a past-day class for past dates
     }
-  
+
     return ""; // No class for valid days
   };
-  
 
   return (
     <div className="datePickerCont" ref={ref}>
       <DatePicker
-        key={dates[0]?.toString() || 'default-key'}  // Use a dynamic key based on the dates
         selected={dates[0] || null}
         onChange={handleDateChange}
-        startDate={dates[0]} 
-        endDate={dates[1]} 
+        startDate={dates[0]}
+        endDate={dates[1]}
         selectsRange
         inline
         dateFormat="MMMM d, yyyy"
@@ -156,31 +159,32 @@ const Section4 = () => {
         openToDate={add(new Date(), { weeks: 1 })}
       />
 
-      
-      {/* Your other content */}
+
       {errorMessage && <div className="error-message">{errorMessage}</div>}
-      <div className="popiskyCont">
-        <div className="popisky">
-          <div className="popisek1">
-            <div></div>
-            <p>Obsazený termín</p>
+      {showPopisky && ( // Conditionally render popiskyCont
+        <div className="popiskyCont">
+          <div className="popisky">
+            <div className="popisek1">
+              <div></div>
+              <p>Obsazený termín</p>
+            </div>
+            <div className="popisek2">
+              <div></div>
+              <p>Vybraný termín</p>
+            </div>
           </div>
-          <div className="popisek2">
-            <div></div>
-            <p>Vybraný termín</p>
+          <div className="pujceni-info">
+            <p>Cena za vypůjčení za 1 den: 300 Kč</p>
+          </div>
+          <div className="pujceni-info">
+            <p>Cena za vypůjčení za 2 a více dní: 250 Kč</p>
+          </div>
+          <div className="pujceni-counter">
+            <p>Cena vypůjčení za zvolený termín: &nbsp;</p>
+            <h5>{price}Kč</h5>
           </div>
         </div>
-        <div className="pujceni-info">
-          <p>Cena za vypůjčení za 1 den: 300 Kč</p>
-        </div>
-        <div className="pujceni-info">
-          <p>Cena za vypůjčení za 2 a více dní: 250 Kč</p>
-        </div>
-        <div className="pujceni-counter">
-          <p>Cena vypůjčení za zvolený termín: &nbsp;</p>
-          <h5>{price}Kč</h5>
-        </div>
-      </div>
+      )}
     </div>
   );
 };

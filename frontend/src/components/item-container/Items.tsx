@@ -12,6 +12,9 @@ const ItemContainer: React.FC<ItemsProps> = ({ type = 'standard' }) => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const itemsPerPage = type === 'special' ? 4 : 3; // Show 4 items for 'special'
 
+  // Filter out items with type 'kocarek'
+  const filteredItems = items.filter((item) => item.type !== 'kocarek');
+
   const handlePrevClick = () => {
     setCurrentIndex((prevIndex) =>
       prevIndex <= 0 ? 0 : prevIndex - itemsPerPage
@@ -20,7 +23,7 @@ const ItemContainer: React.FC<ItemsProps> = ({ type = 'standard' }) => {
 
   const handleNextClick = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex + itemsPerPage >= items.length ? prevIndex : prevIndex + itemsPerPage
+      prevIndex + itemsPerPage >= filteredItems.length ? prevIndex : prevIndex + itemsPerPage
     );
   };
 
@@ -37,7 +40,7 @@ const ItemContainer: React.FC<ItemsProps> = ({ type = 'standard' }) => {
       {type === 'special' ? (
         // 2x2 Grid for 'special' type
         <div className="items-grid">
-          {items.slice(currentIndex, currentIndex + itemsPerPage).map((item) => (
+          {filteredItems.slice(currentIndex, currentIndex + itemsPerPage).map((item) => (
             <div className="grid-item" key={item._id}>
               <Item _id={item._id} type={type} />
             </div>
@@ -54,7 +57,7 @@ const ItemContainer: React.FC<ItemsProps> = ({ type = 'standard' }) => {
             &#60;
           </button>
           <div className="items-wrapper">
-            {items.slice(currentIndex, currentIndex + itemsPerPage).map((item) => (
+            {filteredItems.slice(currentIndex, currentIndex + itemsPerPage).map((item) => (
               <div className="item" key={item._id}>
                 <Item _id={item._id} type={type} />
               </div>
@@ -63,7 +66,7 @@ const ItemContainer: React.FC<ItemsProps> = ({ type = 'standard' }) => {
           <button
             className="carousel-button right"
             onClick={handleNextClick}
-            disabled={currentIndex + itemsPerPage >= items.length}
+            disabled={currentIndex + itemsPerPage >= filteredItems.length}
           >
             &#62;
           </button>

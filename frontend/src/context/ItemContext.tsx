@@ -32,7 +32,7 @@ export const ItemProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }
     fetch(`${apiUrl}/api/items`)
       .then((response) => {
         if (!response.ok) {
-          throw new Error('Failed to fetch items');
+          throw new Error('Chyba v načítání položek.');
         }
         return response.json();
       })

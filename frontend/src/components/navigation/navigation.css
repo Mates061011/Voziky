@@ -12,6 +12,21 @@
     align-items: center;
     width: 70%;
     margin: 0 15%;
+    button {
+        padding: 0;
+        min-width: 0;
+        height: auto;
+        width: auto;
+        background-color: transparent;
+        img {
+            width: 31px;
+        }
+    }
+}
+.nav-button-icon{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
 }
 .logo-cont {
     width: fit-content;
@@ -37,6 +52,8 @@
         color: black;
         user-select: none;
         transition: 500ms;
+        display: flex;
+        align-items: center;
     }
 
 }

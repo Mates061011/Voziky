@@ -6,12 +6,12 @@
     flex-direction: row;
     justify-content: space-between;
     height: 65vh;
-    gap: 40px;
+    gap: 20px;
     overflow: hidden;
 }
 
 .galleryPic {
-    width: 30%;
+    width: 33%;
     height: 65vh;
     background-position: center;
     background-repeat: no-repeat;

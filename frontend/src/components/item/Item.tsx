@@ -2,6 +2,7 @@ import React from 'react';
 import './item.css';
 import { useCart } from '../../context/CartContext'; // For cart management
 import addIcon from '../../assets/addIcon.svg';
+import deleteIcon from '../../assets/deleteIcon.svg'; // Corrected icon
 import { useItemContext } from '../../context/ItemContext'; // To get the item details based on _id
 
 interface ItemProps {
@@ -24,8 +25,13 @@ const Item: React.FC<ItemProps> = ({ _id, type = 'standard' }) => {
 
   const isInCart = cart.some((cartItem) => cartItem === _id);
 
-  const handleAddToCart = () => {
-    if (!isInCart) {
+  const handleCartAction = () => {
+    if (isInCart) {
+      dispatch({
+        type: 'REMOVE_FROM_CART',
+        _id,
+      });
+    } else {
       dispatch({
         type: 'ADD_TO_CART',
         _id,
@@ -58,13 +64,12 @@ const Item: React.FC<ItemProps> = ({ _id, type = 'standard' }) => {
         </p>
 
         <button
-          onClick={handleAddToCart}
-          disabled={isInCart}
+          onClick={handleCartAction}
+          className="item-button"
           style={{ backgroundColor: isInCart ? 'gray' : '' }}
-          className='item-button'
         >
-          <img src={addIcon} alt="Add icon" />
-          {isInCart ? 'V KOŠÍKU' : 'PŘIDAT K REZERVACI'}
+          <img src={isInCart ? deleteIcon : addIcon} alt={isInCart ? "Delete icon" : "Add icon"} />
+          {isInCart ? 'ODEBRAT' : 'PŘIDAT K REZERVACI'}
         </button>
       </div>
     </div>

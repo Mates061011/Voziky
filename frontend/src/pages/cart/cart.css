@@ -80,6 +80,8 @@
             flex-direction: row;
             justify-content: center;
             align-items: center;
+            position: relative; /* The popup will align relative to this */
+            width: fit-content;
             strong {
                 color: #818181;
             }
@@ -190,4 +192,17 @@
     flex-direction: column;
     align-items: center;
     gap: 20px;
+}
+.popup-calendar{
+    background-color: white;
+    box-shadow: 5px 5px 30px 0px #00000026;
+    border-radius: 30px;
+    position: absolute;
+    top: 50px;
+    left: 0;
+    padding: 20px;
+    z-index: 100;
+    .datePickerCont{
+        margin-top: 0;
+    }
 }

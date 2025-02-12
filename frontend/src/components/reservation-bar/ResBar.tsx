@@ -92,7 +92,7 @@ const ResBar = () => {
         </button>
       </div>
       <div className={`section4-container ${showSection4 ? "visible" : ""}`}>
-        <Calendar />
+        <Calendar showPopisky={true} />
       </div>
     </div>
   );
