@@ -42,7 +42,7 @@ const Cart: React.FC = () => {
   const [showCartContent, setShowCartContent] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const popupRef = useRef<HTMLDivElement | null>(null);
-  
+  const [isCooldownActive, setIsCooldownActive] = useState(false);
   const handleNavigate = () => {
     navigate("/", { state: { scrollTo: "section4" } });
   };
@@ -186,9 +186,16 @@ const Cart: React.FC = () => {
   };
   
   const handleNavigate2 = () => {
+    if (isCooldownActive) return; // Prevent opening if cooldown is active
     setIsDialogOpen((prev) => !prev); // Toggle dialog visibility
+
+    if (!isDialogOpen) {
+      setIsCooldownActive(true); // Activate cooldown when opening
+      setTimeout(() => {
+        setIsCooldownActive(false); // Reset cooldown after 3 seconds
+      }, 1500); // Set cooldown time (e.g., 3 seconds)
+    }
   };
-  // Close the popup if clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (popupRef.current && !popupRef.current.contains(event.target as Node)) {

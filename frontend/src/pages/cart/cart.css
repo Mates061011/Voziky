@@ -201,7 +201,7 @@
     top: 50px;
     left: 0;
     padding: 20px;
-    z-index: 100;
+    z-index: 1200;
     .datePickerCont{
         margin-top: 0;
     }
@@ -223,6 +223,7 @@
     }
     .step1-button-cont{
         width: 100%;
+        margin-top: 20px;
     }
     .cart-previous-button{
         min-width: 120px;
@@ -290,5 +291,11 @@
     .nadpis-cart{
         translate: 0 25px;
     }
-    
+    .popup-calendar{
+        width: 330px;
+        .datePickerCont{
+            transform: scale(0.9);
+            translate: 0 -20px;
+        }
+    }
 }
