@@ -65,9 +65,9 @@ export default function Navigation() {
         
         <div className="nav-button-icon">
           <button onClick={handleCartClick} className="cart-button">
+            {cart.length > 0 ? (
               <Badge
                 count={cart.length} // Show the number of items in the cart
-                showZero
                 offset={[-5, 25]}
                 size="small"
                 color="#FF6832"
@@ -75,6 +75,9 @@ export default function Navigation() {
               >
                 <img src={Cart} alt="Cart Icon" />
               </Badge>
+            ) : (
+              <img src={Cart} alt="Cart Icon" />
+            )}
           </button>
           {/* Hamburger Icon */}
           <IconButton

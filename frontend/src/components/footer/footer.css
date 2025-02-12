@@ -74,10 +74,23 @@ a {
     text-decoration: none;
 }
 
-@media (max-width: 600px) {
+@media screen and (max-width: 600px) {
     .footerBg {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
+        padding: 20px;
+    }
+    .footerCont {
+        margin-top: 20px;
+        p {
+            font-size: 10px !important;
+            text-align: left;
+        }
+        div {
+            a,p {
+                font-size: 13px !important;
+            }
+        }
+    }
+    .footerCont:nth-of-type(2) p:nth-of-type(2) {
+        text-align: end;
     }
 }

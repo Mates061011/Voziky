@@ -164,10 +164,6 @@ const Section4: React.FC<Section4Props> = ({ showPopisky }) => {
       {showPopisky && ( // Conditionally render popiskyCont
         <div className="popiskyCont">
           <div className="popisky">
-            <div className="popisek1">
-              <div></div>
-              <p>Obsazený termín</p>
-            </div>
             <div className="popisek2">
               <div></div>
               <p>Vybraný termín</p>

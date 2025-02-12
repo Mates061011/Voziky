@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useItemContext } from '../../context/ItemContext'; // Import the context
 import Item from '../item/Item';
 import './items.css';
-
+import nextButton from '../../assets/next.svg';
+import previousButton from '../../assets/previous-svgrepo-com.svg';
 interface ItemsProps {
   type?: 'standard' | 'special'; // Optional prop to specify the type
 }
@@ -54,7 +55,7 @@ const ItemContainer: React.FC<ItemsProps> = ({ type = 'standard' }) => {
             onClick={handlePrevClick}
             disabled={currentIndex <= 0}
           >
-            &#60;
+            <img src={previousButton} alt="" />
           </button>
           <div className="items-wrapper">
             {filteredItems.slice(currentIndex, currentIndex + itemsPerPage).map((item) => (
@@ -68,7 +69,7 @@ const ItemContainer: React.FC<ItemsProps> = ({ type = 'standard' }) => {
             onClick={handleNextClick}
             disabled={currentIndex + itemsPerPage >= filteredItems.length}
           >
-            &#62;
+            <img src={nextButton} alt="" />
           </button>
         </>
       )}

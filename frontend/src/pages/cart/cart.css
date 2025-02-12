@@ -206,3 +206,36 @@
         margin-top: 0;
     }
 }
+@media screen and (max-width: 600px){
+    .cartWrap {
+        margin: 0;
+        padding: 0 !important;
+        transform: none;
+        height: auto;
+        padding-left: 4px;
+        .cart-step {
+            width: 100%;
+        }
+    }
+    .step1-button-cont{
+        width: 100%;
+    }
+    .cart-previous-button{
+        min-width: 120px;
+    }
+    .form-container{
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0 !important;
+    }
+    .cart-step2-button{
+        flex-direction: column !important;
+        gap: 40px;
+        div {
+            width: 100% !important;
+            p{
+                font-size: 12px;
+            }
+        }
+    }
+}

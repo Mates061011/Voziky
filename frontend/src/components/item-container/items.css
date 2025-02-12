@@ -29,6 +29,9 @@
     z-index: 1;
     color: #333;
     min-width: 0;
+    img {
+        width: 20px;
+    }
 }
 
 .left {
@@ -56,3 +59,14 @@
     margin-top: 16px;
 }
   
+
+
+@media screen and (max-width: 600px)  {
+    .item-container.special .items-grid {
+        display: flex;
+        flex-direction: column;
+    }
+    .items-grid{
+        width: 90vw;
+    }
+}

@@ -109,3 +109,35 @@
     opacity: 1;
     max-height: 500px; /* Adjust based on your Section4 height */
 }
+@media screen and (max-width: 600px) {
+    .bar-part-bg2{
+        flex-direction: column;
+        width: 90%;
+        height: fit-content;
+        .button-container{
+            flex-direction: row;
+            margin: 5%;
+            margin-bottom: 0;
+            width: 90%;
+            button {
+                width: 215px;
+                margin: 0;
+                
+            }
+        }
+        .overit-dostupnost2{
+            width: 90%;
+            margin: 5%;
+            height: 50px;
+        }
+    }
+    .section4-container{
+        .datePickerCont{
+            margin-top: 20px;
+            transform: scale(0.9);
+        }
+    }
+    .section4-container.visible {
+        max-height: none;
+    }
+}

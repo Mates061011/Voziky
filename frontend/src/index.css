@@ -61,11 +61,7 @@ input::placeholder, textarea::placeholder {
   font-size: larger;
   font-family: "Inter", sans-serif;
 }
-@media (max-width: 479px) {
-  button {
-    width: auto;
-  }
-}
+
 
 h4 {
   font-weight: 700 !important;
@@ -114,5 +110,11 @@ b {
     }
     .para {
         font-size: 15px !important;
+    }
+    button {
+      font-size: 10px !important;
+      width: fit-content;
+      padding: 15px 30px;
+      min-width: 0;
     }
 }

@@ -20,3 +20,24 @@
         font-size: 14px;
     }
 }
+@media screen and (max-width: 600px){
+    .cart-items-list{
+        width: 100%;
+        min-width: 0;
+        .cart-item-info{
+            height: 80px;
+            .cart-item-details{
+                h5{
+                    font-size: 10px;
+                }
+            }
+            .cart-item-price{
+                font-size: 12px;
+                min-width: 60px;
+            }
+        }
+    }
+    .cart-total-price{
+        height: 50px;
+    }
+}
