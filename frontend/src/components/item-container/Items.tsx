@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useItemContext } from '../../context/ItemContext'; // Import the context
 import Item from '../item/Item';
 import './items.css';
-import nextButton from '../../assets/next.svg';
-import previousButton from '../../assets/previous-svgrepo-com.svg';
 
 interface ItemsProps {
   type?: 'standard' | 'special'; // Optional prop to specify the type
@@ -72,7 +70,14 @@ const ItemContainer: React.FC<ItemsProps> = ({ type = 'standard' }) => {
             onClick={handlePrevClick}
             disabled={currentIndex <= 0}
           >
-            <img src={previousButton} alt="" />
+            <svg fill="#000000" height="800px" width="800px" version="1.1" id="XMLID_54_" xmlns="http://www.w3.org/2000/svg" 
+              viewBox="0 0 24 24">
+            <g id="previous">
+              <g>
+                <polygon points="17.2,23.7 5.4,12 17.2,0.3 18.5,1.7 8.4,12 18.5,22.3 		"/>
+              </g>
+            </g>
+            </svg>
           </button>
           <div className="carousel-container">
             <div
@@ -93,7 +98,14 @@ const ItemContainer: React.FC<ItemsProps> = ({ type = 'standard' }) => {
             onClick={handleNextClick}
             disabled={currentIndex >= filteredItems.length - itemsPerPage}
           >
-            <img src={nextButton} alt="" />
+            <svg fill="#000000" height="800px" width="800px" version="1.1" id="XMLID_287_" xmlns="http://www.w3.org/2000/svg"  
+              viewBox="0 0 24 24">
+            <g id="next">
+              <g>
+                <polygon points="6.8,23.7 5.4,22.3 15.7,12 5.4,1.7 6.8,0.3 18.5,12 		"/>
+              </g>
+            </g>
+            </svg>
           </button>
         </>
       )}

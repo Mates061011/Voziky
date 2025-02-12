@@ -264,27 +264,29 @@
         width: 320px;
         .carousel-button {
             position: absolute;
-            background-color: #768078;
+            background-color: gray;
             height: 30px;
             width: 30px;
             border-radius: 2rem;
             display: flex;
             justify-content: center;
             align-items: center;
-            img {
+            svg {
                 height: 40%;
             }
         }
         .carousel-button.right{
             right: 0;
-            img {
+            svg {
                 translate: 0.5px 0;
+                fill: white;
             }
         }
         .carousel-button.left{
             left: 0;
-            img {
+            svg {
                 translate: -0.5px 0;
+                fill: white;
             }
         }
     }
