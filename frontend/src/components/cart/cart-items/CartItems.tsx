@@ -14,7 +14,6 @@ const CartItemsContainer: React.FC<CartItemsContainerProps> = ({ showKauce, show
   const { cart, dispatch } = useCart();
   const { dates } = useDateContext();
   const { items, loading, error } = useItemContext();
-  console.log(cart);
 
   const handleRemoveItem = (id: string) => {
     dispatch({ type: "REMOVE_FROM_CART", _id: id });
@@ -22,7 +21,6 @@ const CartItemsContainer: React.FC<CartItemsContainerProps> = ({ showKauce, show
 
   const getItemDetails = (id: string) => {
     const item = items.find((item) => item._id === id);
-    console.log(item);
     if (!item) {
       console.warn(`Item with ID ${id} not found in items array.`);
     }
@@ -39,18 +37,13 @@ const CartItemsContainer: React.FC<CartItemsContainerProps> = ({ showKauce, show
     const numOfDays = Math.ceil(
       (currentEndDate.getTime() - currentStartDate.getTime()) / (1000 * 60 * 60 * 24) + 1
     );
-    
-    console.log('Number of Days:', numOfDays); // Log numOfDays for debugging
-    
+
     return cart.reduce((total, cartItemId) => {
       const itemDetails = getItemDetails(cartItemId);
       if (!itemDetails) {
         console.warn(`Item not found for ID: ${cartItemId}`);
         return total; // Skip this item
       }
-  
-      // Log the item details to verify the price properties
-      console.log('Item Details:', itemDetails);
   
       // Correct calculation logic based on the number of days
       let itemTotalPrice = 0;
@@ -59,9 +52,6 @@ const CartItemsContainer: React.FC<CartItemsContainerProps> = ({ showKauce, show
       } else if (numOfDays > 1) {
         itemTotalPrice = numOfDays * itemDetails.pricePerDays;
       }
-  
-      // Log the calculated item price
-      console.log('Calculated Price for Item:', itemTotalPrice);
       
       return total + itemTotalPrice;
     }, 0);

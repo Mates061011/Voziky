@@ -50,11 +50,6 @@ export const ItemProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }
     fetchItems();
   }, []);
 
-  // Log all context data whenever it changes
-  useEffect(() => {
-    console.log('Item Context Data:', { items, loading, error });
-  }, [items, loading, error]); // This effect runs whenever the state changes
-
   return (
     <ItemContext.Provider value={{ items, loading, error, fetchItems }}>
       {children}

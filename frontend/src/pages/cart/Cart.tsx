@@ -29,8 +29,6 @@ const Cart: React.FC = () => {
 
   const { dates } = useDateContext(); // Get dates from context
   const { userData } = useUserContext(); // Get user data from context
-  console.log("Cart Dates from context:", dates);
-
   const [step3, setStep3] = useState(false);
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [percent, setPercent] = useState(0);
