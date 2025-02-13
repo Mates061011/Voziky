@@ -19,7 +19,7 @@ interface UserData {
   name: string;
   surname: string;
   email: string;
-  phone: string;
+  phone: Number;
 }
 
 const Cart: React.FC = () => {
@@ -43,6 +43,7 @@ const Cart: React.FC = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const popupRef = useRef<HTMLDivElement | null>(null);
   const [isCooldownActive, setIsCooldownActive] = useState(false);
+  const [apiMessage, setApiMessage] = useState('');
   const handleNavigate = () => {
     navigate("/", { state: { scrollTo: "section4" } });
   };
@@ -177,12 +178,19 @@ const Cart: React.FC = () => {
       setProgress(userData);
     }
   }, [step1, userData]);
-  const handleOrderSuccess = () => {
-    console.log('Order was successfully placed!');
-    setShowCartContent(false); // Hide the cart content and show success message
+  const handleOrderSuccess = (message: string) => {
+    if (message) {
+      // Remove everything before and including the first colon
+      const errorMessage = message.replace(/^[^:]+:\s*/, '').trim();
+      setApiMessage(errorMessage);
+    } else {
+      setShowCartContent(false);
+    }
   };
+  
+  
   const handleBackToHome = () => {
-    navigate('/'); // Navigate to the homepage when button is clicked
+    navigate('/');
   };
   
   const handleNavigate2 = () => {
@@ -295,6 +303,13 @@ const Cart: React.FC = () => {
                 </div>
                 <CartItems showKauce={true} showCloseButton={false} />
                 <p>Podmínkou pro zapůjčení rezervovaného zboží je složení vratné kauce (v hotovosti při převzetí) a předložení dvou dokladů totožnosti (např. občanský průkaz + cestovní pas/řidičský průkaz.)</p>
+                {apiMessage.length > 0 && (
+                  <Alert
+                    message={apiMessage}
+                    type="error"
+                    showIcon
+                  />
+                )}
                 <div className="step3-button-cont step1-button-cont">
                   <button onClick={() => handleStepTransition("previous")} className="cart-previous-button">Zpět</button>
                   <CartCheckout onOrderSuccess={handleOrderSuccess} />

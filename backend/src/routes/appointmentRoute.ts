@@ -40,7 +40,20 @@ const createAppointment = async (req: Request, res: Response, next: NextFunction
       startDate: { $lt: parsedEndDate },
       endDate: { $gt: parsedStartDate },
     });
+    // Parse the ISO string back to Day.js object for comparison
+    const startDateObj = dayjs(parsedStartDate);
 
+    if (!startDateObj.isValid()) {
+      res.status(400).json({ message: 'Neplatný formát datumu začátku.' });
+      return;
+    }
+
+    if (startDateObj.isBefore(dayjs())) {
+      res.status(400).json({
+        message: 'Nemůžete vytvořit rezervaci s datem v minulosti.',
+      });
+      return;
+    }
     if (overlappingAppointments.length > 0) {
       res.status(400).json({
         message: 'V tomto čase už bohužel má vozík vypůjčený někdo jiný.',
@@ -59,7 +72,7 @@ const createAppointment = async (req: Request, res: Response, next: NextFunction
 
     if (invalidItems.length > 0) {
       res.status(400).json({
-        message: `Následující položky neexistují v databázi: ${invalidItems.join(', ')}`,
+        message: `Následující položky neexistují v databázi ${invalidItems.join(', ')}`,
       });
       return;
     }
@@ -157,7 +170,7 @@ const confirmAppointment = async (req: Request, res: Response, next: NextFunctio
     const appointment = await Appointment.findById(id);
 
     if (!appointment) {
-      res.status(404).json({ message: 'Not found' });
+      res.status(404).json({ message: 'Rezervace nebyla nalezena' });
       return;
     }
 
@@ -165,7 +178,7 @@ const confirmAppointment = async (req: Request, res: Response, next: NextFunctio
     await appointment.save();
 
     // Send a simple confirmation message
-    res.status(200).send('Potvrzeno');
+    res.status(200).send('Rezervace potvrzena');
 
     // Generate Google Calendar event link
     const googleCalendarUrl = generateGoogleCalendarUrl(appointment);

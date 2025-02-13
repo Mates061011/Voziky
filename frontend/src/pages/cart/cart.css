@@ -317,4 +317,7 @@
             width: 10px;
         }
     }
+    .cart-item-price{
+        margin: 0;
+    }
 }

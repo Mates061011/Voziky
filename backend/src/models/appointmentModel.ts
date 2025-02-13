@@ -13,7 +13,7 @@ const userSchema = new Schema<UserType>({
     required: true,
     validate: {
       validator: (value: string) => /^\S+@\S+\.\S+$/.test(value),
-      message: 'Invalid email format',
+      message: 'Špatně zadaný email',
     },
   },
   phone: { type: Number, required: true },
@@ -62,7 +62,7 @@ appointmentSchema.pre('save', async function (next) {
   // Validate that all item IDs exist in the Item collection
   const count = await Item.countDocuments({ _id: { $in: itemIds } });
   if (count !== itemIds.length) {
-    return next(new Error('Some items in the appointment do not exist.'));
+    return next(new Error('Některé produkty z objednávky neexistují'));
   }
 
   next();

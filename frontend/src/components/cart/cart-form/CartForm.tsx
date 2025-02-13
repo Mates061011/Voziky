@@ -1,7 +1,7 @@
 import React from 'react';
 import { useUserContext } from '../../../context/userContext'; // No need for User import anymore
 import './cartform.css';
-
+import czechImg from '../../../assets/czech.svg';
 const TwoColumnForm: React.FC = () => {
   const { userData, setUserData } = useUserContext();
 
@@ -48,14 +48,18 @@ const TwoColumnForm: React.FC = () => {
 
       <div className="form-column">
         <label htmlFor="phone">Telefon</label>
-        <input
-          type="tel"
-          id="phone"
-          name="phone"
-          value={userData.phone}
-          onChange={handleChange}
-          required
-        />
+        <div className="phone-input-container">
+          <img src={czechImg} alt="Czech flag" />
+          <p>+420</p>
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            value={userData.phone}
+            onChange={handleChange}
+            required
+          />
+        </div>
 
         <label htmlFor="surname">Příjmení</label>
         <input

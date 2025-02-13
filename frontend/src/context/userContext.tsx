@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 export interface User {
   email: string;
   name: string;
-  phone: string;
+  phone: number;
   surname: string;
 }
 
@@ -39,7 +39,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
   // Clear userData and remove it from localStorage
   const clearUserData = () => {
-    setUserData({ email: '', name: '', phone: '', surname: '' });
+    setUserData({ email: '', name: '', phone: 0, surname: '' });
     localStorage.removeItem('userData'); // Remove from localStorage
   };
 

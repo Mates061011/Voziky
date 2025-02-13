@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { useUserContext } from '../../../context/userContext';  // Import UserContext
+import { useUserContext } from '../../../context/userContext'; // Import UserContext
 import { useCart } from '../../../context/CartContext'; // Import CartContext
-import { useDateContext } from '../../../context/DateContext';  // Import DateContext
+import { useDateContext } from '../../../context/DateContext'; // Import DateContext
 
 interface CheckoutPageProps {
-  onOrderSuccess: () => void; // The callback function to signal success
+  onOrderSuccess: (message: string) => void; // The callback function to signal success with a message
 }
 
 const CheckoutPage: React.FC<CheckoutPageProps> = ({ onOrderSuccess }) => {
@@ -19,6 +19,13 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({ onOrderSuccess }) => {
     const startDate = dates[0]; // Use the start date from context
     const endDate = dates[1]; // Use the end date from context
 
+    // Ensure the phone number is a number and validate
+    const phone = Number(userData.phone);
+    if (isNaN(phone)) {
+      alert('Invalid phone number. Please check and try again.');
+      return;
+    }
+
     const orderData = {
       startDate: startDate.toISOString(), // Convert to ISO string
       endDate: endDate.toISOString(), // Convert to ISO string
@@ -26,7 +33,7 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({ onOrderSuccess }) => {
         name: userData.name,
         surname: userData.surname,
         email: userData.email,
-        phone: userData.phone,
+        phone, // Send the phone as a number
       },
       items: cart, // The items array (only the item _id's)
     };
@@ -45,8 +52,9 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({ onOrderSuccess }) => {
         body: JSON.stringify(orderData),
       });
 
+      const responseData = await response.json(); // Parse the response JSON
+
       if (response.ok) {
-        
         // Clear contexts
         clearUserData();
         clearCart();
@@ -58,14 +66,15 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({ onOrderSuccess }) => {
         localStorage.removeItem('dates');
         localStorage.removeItem('userData');
 
-        // Notify the parent component that the order was placed successfully
-        onOrderSuccess(); // Call the callback function passed from the parent
+        // Notify the parent component with the success message
+        onOrderSuccess(responseData.message || 'Order placed successfully!');
       } else {
-        alert('Failed to place the order');
+        // Handle the error message from the API
+        onOrderSuccess(responseData.message || 'Failed to place the order');
       }
     } catch (error) {
       console.error('Error placing order:', error);
-      alert('An error occurred while placing the order');
+      onOrderSuccess('An error occurred while placing the order');
     } finally {
       setLoading(false);
     }
