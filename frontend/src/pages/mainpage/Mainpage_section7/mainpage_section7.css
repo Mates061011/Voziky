@@ -1,46 +1,107 @@
-
-.ant-row {
-    justify-content: center;
-}
-.gridWrap {
-    display: flex;
-    flex-direction: column;
-    align-items: end;
-    h3, h4 {
-        text-align: left;
-    }
-    h3 {
-        margin-bottom: 25px;
-    }
-    p {
-        text-align: left;
-    }
-}
-.gridWrap > * {
-    width: 85%;
-    padding: 0px 30px;
-}
-.imgWrap>img {
+.section7 {
     width: 100%;
-}
-@media (max-width: 900px) {
-    .imgWrap {
-        width: 100% !important;
-        max-width: 85% !important; 
-    }
-    .NaVetviPic{
-        width: 50% !important;
-    }
-}
-
-.gridWrap>div {
-    p {
-        color: #818181;
-        font-weight: 700;
-        b {
-            font-weight: 400;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 150px;
+    .section7Wrap {
+        width: 60%;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        .section7-header{
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            .section7-nadpis{
+                display: flex;
+                flex-direction: column;
+                align-items: start;
+            }
+            .NaVetviPic{
+                width: 150px;
+            }
+        }
+        .contentWrap{
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            .gridWrap {
+                width: 65%;
+                .para {
+                    width: 80%;
+                }
+                .details{
+                    width: 80%;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    p {
+                        color: #818181;
+                        font-weight: 700;
+                        b {
+                            font-weight: 400;
+                        }
+                        a {
+                            color: #818181;
+                        }
+                    }
+                }
+            }
+            .imgWrap2{
+                width: 35%;
+            }
         }
     }
+}
+@media (max-width: 1200px) {
+    .section7Wrap{
+        width: 80% !important;
+    }
+}
+@media (max-width: 900px) {
+    .section7Wrap{
+        width: 90% !important;
+    }
+    .details{
+        width: 100% !important;
+        p {
+            font-size: 14px;
+            text-align: left;
+        }
+    }
+    .section7-nadpis{
+        h4 {
+            text-align: left;
+        }
+    }
+    .para {
+        width: 90% !important;
+        display: -webkit-box;
+        -webkit-line-clamp: 13; /* Number of lines before truncation */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.5em; /* Adjust based on your font size */
+        max-height: 19.5em; /* 3 lines × 1.5em line-height */
+        position: relative;
+    }
+        
+    .paraExpanded {
+        -webkit-line-clamp: unset;
+        max-height: unset;
+    }
+    
+    .readMoreText {
+        color: #007BFF;
+        cursor: pointer;
+        text-decoration: underline;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        background-color: white;
+    }
+    
 }
 .paraExpanded {
     display: block;
@@ -59,7 +120,6 @@
 /* Default state: Text will be truncated on smaller screens */
 .para {
     display: block;
-    max-height: 193px; /* Adjust this value based on how much you want to show initially */
     overflow: hidden;
     font-weight: 400;
 }
@@ -93,44 +153,26 @@
         display: none; /* Hide the button */
     }
 }
-@media (max-width: 600px) {
-    .imgWrap {
-        width: 100% !important;
-        max-width: 100% !important; 
-    }
-    .gridWrap {
-        align-items: center;
-    }
-    .imgWrap>img {
-        width: 85%;
-        padding: 0px 16px;
-    }
-    .imgWrap2 {
-        height: 30rem  !important;
-        width: 90% !important;
-    }
-}
 .imgWrap2 {
     background-image: url('../../../assets/NaVetviPic.webp');
-    width: 100%;
-    height: 27rem;
-    background-size: cover; 
+    background-size: cover;                                                                             
     background-position: center;
 }
 
   
 @media (max-width:600px){
     .para {
+        width: 90% !important;
         display: -webkit-box;
         -webkit-line-clamp: 5; /* Number of lines before truncation */
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
         line-height: 1.5em; /* Adjust based on your font size */
-        max-height: 7,5em; /* 3 lines × 1.5em line-height */
+        max-height: 7.5em; /* 3 lines × 1.5em line-height */
         position: relative;
     }
-    
+        
     .paraExpanded {
         -webkit-line-clamp: unset;
         max-height: unset;
@@ -144,5 +186,17 @@
         bottom: 0;
         right: 0;
         background-color: white;
+    }
+    .contentWrap {
+        flex-direction: column !important;
+        .gridWrap{
+            width: 100% !important;
+            .para {
+                width: 100% !important;
+            }
+        }
+        .imgWrap2{
+            width: 100% !important;
+        }
     }
 }

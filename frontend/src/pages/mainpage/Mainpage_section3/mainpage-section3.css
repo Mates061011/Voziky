@@ -40,20 +40,23 @@
         overflow: hidden;
         flex-wrap: wrap;
         justify-content: space-between;
+        gap: 80px;
         img {
             width: 50%;
-            min-width: 350px;
             height: 50%;
+            min-width: 350px;
+            max-width: 500px;
             position: relative;
             animation: fadeIn linear forwards;
             animation-timeline: view();
             animation-range-start: contain - 100%;
             animation-range-end: 300px;
             opacity: 0;
-            transform: scale(1.4) translate(-40px, 0);
+            transform: translate(0, -30px);
         }
         .popis-cont {
             width: 40%;
+            flex: 1;
             align-items: flex-start;
             span {
                 margin-top: 40px;
@@ -108,7 +111,7 @@
             img {
                 min-width: 300px;
                 opacity: 1;
-                transform: scale(1.20) translate(-10px, 25px);
+                transform: none;
             }
         }
     }
