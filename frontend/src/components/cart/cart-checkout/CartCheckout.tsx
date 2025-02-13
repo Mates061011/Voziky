@@ -67,7 +67,7 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({ onOrderSuccess }) => {
         localStorage.removeItem('userData');
 
         // Notify the parent component with the success message
-        onOrderSuccess(responseData.message || 'Order placed successfully!');
+        onOrderSuccess('');
       } else {
         // Handle the error message from the API
         onOrderSuccess(responseData.message || 'Failed to place the order');

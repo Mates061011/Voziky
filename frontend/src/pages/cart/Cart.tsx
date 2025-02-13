@@ -19,7 +19,7 @@ interface UserData {
   name: string;
   surname: string;
   email: string;
-  phone: Number;
+  phone: number;
 }
 
 const Cart: React.FC = () => {
@@ -183,7 +183,7 @@ const Cart: React.FC = () => {
       // Remove everything before and including the first colon
       const errorMessage = message.replace(/^[^:]+:\s*/, '').trim();
       setApiMessage(errorMessage);
-    } else {
+    } else if (message = "Order placed successfully!") {
       setShowCartContent(false);
     }
   };
@@ -321,7 +321,7 @@ const Cart: React.FC = () => {
       ) : (
         <div className="order-success">
           <h2>Objednávka byla úspěšně dokončena!</h2>
-          <p>Děkujeme za vaši objednávku. Brzy se s vámi spojíme.</p>
+          <p>Děkujeme za vaši objednávku. Zkontrolujte si emailovou schránku.</p>
           <button onClick={handleBackToHome}>Zpět na hlavní stránku</button>
         </div>
       )}
