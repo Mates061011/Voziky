@@ -13,6 +13,7 @@
 }
 .questions{
     width: 50%;
+
 }
 @media (max-width: 479px) {
     .qaaCont {
@@ -29,6 +30,9 @@
     }
     .questions{
         width: 100%;
+        .qaaCont{
+            width: 100%;
+        }
     }
     .nadpis-section6{
         width: 100%;
