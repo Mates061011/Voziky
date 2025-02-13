@@ -7,7 +7,7 @@ type ItemData = {
   pricePerDay: number;
   pricePerDays: number;
   type: string;
-  img: string;
+  img: string[]; // Updated to be an array of strings
   kauce: string;
   __v: number;
 };

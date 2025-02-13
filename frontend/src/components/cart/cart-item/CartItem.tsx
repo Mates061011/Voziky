@@ -11,7 +11,7 @@ interface CartItemProps {
     pricePerDay: number;
     pricePerDays: number;
     type: string;
-    img: string;
+    img: string[];
     kauce: string;
     __v: number;
   };
@@ -31,7 +31,7 @@ const CartItem: React.FC<CartItemProps> = ({ item, onRemove, showKauce, showClos
   const numOfDays = Math.ceil(
     (currentEndDate.getTime() - currentStartDate.getTime()) / (1000 * 60 * 60 * 24) + 1
   );
-
+  const imagePath = item.img.length > 0 ? `/items/${item.img[0]}` : ''; 
   // Calculate the price based on the number of days and the price per day or per multiple days
   const totalPrice =
     numOfDays === 1
@@ -41,7 +41,7 @@ const CartItem: React.FC<CartItemProps> = ({ item, onRemove, showKauce, showClos
   return (
     <li key={item._id} className="cart-item">
       <div className="cart-item-info flexRow">
-        <img src={`/items/${item.img}`} alt={item.name} className="cart-item-image" />
+        <img src={imagePath} alt={item.name} className="cart-item-image" />
         <div className="cart-item-details">
           <h5 className="cart-item-name">{item.name}</h5>
           {/* Conditionally render kauce if showKauce is true */}

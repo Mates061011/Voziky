@@ -22,8 +22,8 @@ const ResBar = () => {
   const handleSubmit = () => {
     if (dates[0] && dates[1]) {
       // Only send the _id (no need to wrap it in an object)
-      const itemId = "67a9c975f3da6099cdf0c42e"; // The item's _id you want to add to the cart
-      const itemId2 = "67a8f8a10fdb81cd42d72db5";
+      const itemId = "67ae24a58ffccec087d79308"; // The item's _id you want to add to the cart
+      const itemId2 = "67ae2e7740e23a98c1fa948e";
       // Add the item to the cart by dispatching the _id
       dispatch({ type: "ADD_TO_CART", _id: itemId });
       dispatch({ type: "ADD_TO_CART", _id: itemId2 });

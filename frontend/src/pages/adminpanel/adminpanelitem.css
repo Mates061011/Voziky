@@ -1,0 +1,87 @@
+.ant-select-selection-item{
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+.imgInput {
+    height: 60px;
+}
+.ant-select-selector{
+    background-color: #D9D9D9 !important;
+}
+.formAdminItem{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    div {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    button {
+        z-index: 0 !important;
+    }
+}
+.AdminPanelItem{
+    display: flex;
+    flex-direction: column;
+    .AdminPanelItemSubCont{
+        display: flex;
+        justify-content: center;
+        .item-container{
+            width: 500px;
+            height: fit-content;
+            .carousel-container {
+                overflow: hidden; /* Ensure only visible items are displayed */
+                width: 320px;
+            }
+            .item {
+                height: 350px;
+                .item-card{
+                    width: 230px;
+                    height: 250px;
+                    min-width: 0;
+                    min-height: 0;
+                    .item-card-cont {
+                        button {
+                            font-size: 9px !important;
+                            padding: 5px 12px;
+                            height: 45px;
+                        }
+                        p{
+                            strong {
+                                font-size: 15px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+.addedImages{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px 0;
+    div {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+        text-align: left;
+        button {
+            z-index: 0;
+            background-color: #FF6832;
+            width: 30px;
+            height: 30px;
+            min-width: 0;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+}

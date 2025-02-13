@@ -21,8 +21,8 @@ const Item: React.FC<ItemProps> = ({ _id, type = 'standard' }) => {
     return <div>Item not found.</div>;
   }
 
-  const { name, pricePerDays, img, desc } = item; // Access `desc` from item
-  const imagePath = `/items/${img}`;
+  const { name, pricePerDays, img, desc } = item; // Access `desc` and `img` array from item
+  const imagePath = img.length > 0 ? `items/${img[0]}` : ''; // Only use the first image in the array
 
   const isInCart = cart.some((cartItem) => cartItem === _id);
 
@@ -46,7 +46,7 @@ const Item: React.FC<ItemProps> = ({ _id, type = 'standard' }) => {
   return (
     <div className={`item-card ${type}`}>
       <Link to={`/Produkty/${item._id}`}><h2>{name}</h2></Link>
-      <img src={imagePath} alt={name} className="item-image" />
+      {imagePath && <img src={imagePath} alt={name} className="item-image" />} {/* Show first image */}
       <div className="item-card-cont flexRow">
         {type === 'special' && truncatedDesc && (
           <p className="item-desc">

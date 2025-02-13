@@ -4,6 +4,7 @@ export interface Item {
     pricePerDay: Number;
     pricePerDays: Number;
     type: 'prislusenstvi' | 'kocarek';
-    img: string;
+    img: string[];
     kauce: string;
+    hidden: boolean;
 }

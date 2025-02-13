@@ -1,0 +1,137 @@
+.item-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 1100px;
+}
+
+.items-wrapper {
+    display: flex;
+    overflow: hidden;
+    width: 100%; /* You can control the width here */
+    justify-content: flex-start;
+    transition: transform 0.3s ease-in-out;
+}
+
+.item {
+    width: 320px;
+    height: 400px; /* Set each item width */
+    flex-shrink: 0; /* Prevent items from shrinking */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carousel-button {
+    background-color: transparent;
+    border: none;
+    width: 50px;
+    height: 50px;
+    font-size: 2rem;
+    cursor: pointer;
+    z-index: 1;
+    color: #333;
+    min-width: 0;
+    padding: 0;
+    svg {
+        width: 15px;
+        height: 50px;
+    }
+}
+
+.left {
+    left: 10px;
+}
+
+.right {
+    right: 10px;
+}
+.item-container.special .items-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px; /* Adjust spacing as needed */
+}
+
+.item-container.special .grid-item {
+    padding: 16px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.item-container.special .grid-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+}
+.carousel-container {
+    overflow: hidden; /* Ensure only visible items are displayed */
+    width: 960px;
+}
+
+.items-wrapper {
+    display: flex;
+    transition: transform 0.5s ease-in-out; /* Smooth sliding */
+    will-change: transform; /* Optimize for animation */
+    width: 100%;
+    overflow: visible;
+}
+
+
+.carousel-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.carousel-button img {
+    width: 24px;
+    height: 24px;
+}
+
+
+
+@media screen and (max-width: 600px)  {
+    .item-container.special .items-grid {
+        display: flex;
+        flex-direction: column;
+    }
+    .items-grid{
+        width: 90vw;
+    }
+    
+}
+@media screen and (max-width: 1200px) {
+    .carousel-container {
+        overflow: hidden; /* Ensure only visible items are displayed */
+        width: 640px;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .carousel-container {
+        overflow: hidden; /* Ensure only visible items are displayed */
+        width: 320px;
+    }
+    .item {
+        height: 350px;
+        .item-card{
+            width: 230px;
+            height: 250px;
+            min-width: 0;
+            min-height: 0;
+            .item-card-cont {
+                button {
+                    font-size: 9px !important;
+                    padding: 5px 12px;
+                    height: 45px;
+                }
+                p{
+                    strong {
+                        font-size: 15px;
+                    }
+                }
+            }
+        }
+    }
+}

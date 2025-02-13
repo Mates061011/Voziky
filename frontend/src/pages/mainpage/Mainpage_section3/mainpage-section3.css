@@ -108,7 +108,7 @@
                     font-size: 15px !important;
                 }
             }
-            img {
+            .ant-carousel  {
                 min-width: 300px;
                 opacity: 1;
                 transform: none;
@@ -116,6 +116,14 @@
         }
     }
 }
+.carousel-image {
+    max-width: 200px; /* Ensure the image is responsive */
+    height: auto; /* Maintain aspect ratio */
+    object-fit: cover; /* Make sure the image fills the space while maintaining its aspect ratio */
+    max-height: 400px; /* Set a maximum height for the image */
+    margin: 0 auto; /* Center the image */
+}
+
 .readMoreText{
     padding-left: 5px;
 }
@@ -166,6 +174,7 @@
 @media (max-width:600px){
     .popis {
         display: -webkit-box;
+        line-clamp: 4;
         -webkit-line-clamp: 4; /* Limit the number of lines before truncation */
         -webkit-box-orient: vertical;
         overflow: hidden;
@@ -176,6 +185,7 @@
     }
     
     .popis.expanded {
+        line-clamp: unset;
         -webkit-line-clamp: unset;
         max-height: unset;
     }
@@ -193,4 +203,32 @@
         right: 0;
         z-index: 100;
     }
+}
+.carousel-image {
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+    max-height: 400px;
+    margin: 0 auto;
+    display: block;
+}
+
+.dots-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    margin: 0 5px;
+    background-color: #ddd;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.dot.active {
+    background-color: #1890ff; /* Active dot color */
 }
