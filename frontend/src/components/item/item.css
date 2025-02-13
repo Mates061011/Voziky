@@ -72,12 +72,14 @@
     background-color: transparent;
     box-shadow: none;
     height: 200px;
-    h2 {
-        grid-area: 1 / 1 / 2 / 8; 
-        text-align: left;
+    a {
         align-self: flex-end;
-        font-size: 20px;
-        font-weight: 600;
+        grid-area: 1 / 1 / 2 / 8; 
+        h2 { 
+            text-align: left;
+            font-size: 20px;
+            font-weight: 600;
+        }
     }
     img {
         grid-area: 2 / 1 / 6 / 4;

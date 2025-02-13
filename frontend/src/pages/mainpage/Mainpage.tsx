@@ -9,6 +9,7 @@ import { ScrollProvider } from "../../context/ScrollContext";
 import Section4 from "./Mainpage_section4/Mainpage-section4";
 import { useLocation } from "react-router-dom";
 import MainPage_section4b from './Mainpage_section4b/MainPage_section4b';
+
 export default function Mainpage() {
     const [password, setPassword] = useState("");
     const [accessGranted, setAccessGranted] = useState(false);
@@ -16,6 +17,13 @@ export default function Mainpage() {
     const correctPassword = import.meta.env.VITE_MAINPAGE_PASSWORD; // Loaded from .env
     const localStorageKey = "accessGranted";
     const location = useLocation();
+
+    useEffect(() => {
+        const storedAccess = localStorage.getItem(localStorageKey);
+        if (storedAccess === "true") {
+            setAccessGranted(true);
+        }
+    }, []);
 
     useEffect(() => {
         if (location.state?.scrollTo) {
@@ -32,16 +40,8 @@ export default function Mainpage() {
             scrollToElement(); // Start scrolling logic
         }
     }, [location.state]);
-    
-    
-    useEffect(() => {
-        const storedAccess = localStorage.getItem(localStorageKey);
-        if (storedAccess === "true") {
-            setAccessGranted(true);
-        }
-    }, []);
 
-    const handlePasswordSubmit = (e:any) => {
+    const handlePasswordSubmit = (e: any) => {
         e.preventDefault();
         if (password === correctPassword) {
             setAccessGranted(true);
@@ -88,13 +88,14 @@ export default function Mainpage() {
                 <Section1 />
                 <Section2 />
                 <Section3 />
-                <div id="section4"  ><Section4/></div>
-                <MainPage_section4b/>
+                <div id="section4">
+                    <Section4 />
+                </div>
+                <MainPage_section4b />
                 <Section5 />
                 <Section6 />
                 <Section7 />
             </main>
-            
         </ScrollProvider>
     );
 }

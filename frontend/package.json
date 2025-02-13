@@ -15,7 +15,7 @@
     "@mui/icons-material": "^6.1.9",
     "@mui/material": "^6.1.9",
     "@types/swiper": "^6.0.0",
-    "antd": "^5.22.5",
+    "antd": "^5.24.0",
     "axios": "^1.7.9",
     "date-fns": "^4.1.0",
     "react": "^18.3.1",

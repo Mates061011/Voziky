@@ -10,6 +10,8 @@ import { ItemProvider } from './context/ItemContext';
 import Footer from './components/footer/Footer';
 import PrivateRoute from './components/PrivateRoute';
 import AdminPanelItem from './pages/adminpanel/AdminPanelItem';
+import ItemDetails from './components/ItemDetails/ItemDetails';
+
 
 // Lazy load the components for routes
 const Mainpage = lazy(() => import("./pages/mainpage/Mainpage"));
@@ -41,6 +43,7 @@ function App() {
                     <Route path="/" element={<Mainpage />} />
                     <Route path="/Objednat" element={<Cart />} />
                     <Route path='/loginAdmin' element={<Admin />} />
+                    <Route path="/Produkty/:id" element={<ItemDetails />} />
                     <Route element={<PrivateRoute redirectPath="/loginAdmin" />}>
                       <Route path="/adminPanel" element={<AdminPanel />} />
                       <Route path="/adminPanelItem" element={<AdminPanelItem />} />

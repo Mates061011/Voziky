@@ -14,9 +14,14 @@
 @keyframes barLoadAnim {
     0% {
         width: 0%;
+        opacity: 0;
+    }
+    20% {
+        opacity: 0;
     }
     100% {
         width: 100%;
+        opacity: 1;
     }
 }
 @keyframes barLoadAnim2 {
@@ -141,7 +146,8 @@
     height: 100%;
     align-items: end;
     justify-content: start;
-    animation: barLoadAnim 1.5s;
+    animation: barLoadAnim 1.5s forwards;
+    opacity: 0;
     .bar-part-bg {
         background-color: white;
         border-radius: 15px;
@@ -221,7 +227,7 @@
         animation: vozikLoadAnim 1s;
         user-select: none;
         -webkit-user-drag: none;
-
+        z-index: 1;
     }
 }
 .text-part{

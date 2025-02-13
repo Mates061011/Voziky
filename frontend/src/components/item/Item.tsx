@@ -4,6 +4,7 @@ import { useCart } from '../../context/CartContext'; // For cart management
 import addIcon from '../../assets/addIcon.svg';
 import deleteIcon from '../../assets/deleteIcon.svg'; // Corrected icon
 import { useItemContext } from '../../context/ItemContext'; // To get the item details based on _id
+import { Link } from 'react-router-dom';
 
 interface ItemProps {
   _id: string;
@@ -44,7 +45,7 @@ const Item: React.FC<ItemProps> = ({ _id, type = 'standard' }) => {
 
   return (
     <div className={`item-card ${type}`}>
-      <h2>{name}</h2>
+      <Link to={`/Produkty/${item._id}`}><h2>{name}</h2></Link>
       <img src={imagePath} alt={name} className="item-image" />
       <div className="item-card-cont flexRow">
         {type === 'special' && truncatedDesc && (
