@@ -22,10 +22,10 @@ const Section7 = () => {
             <span className={`para ${isExpanded ? 'paraExpanded' : ''}`}>
               Park Na větvi tvoří unikátní soustava tří síťových hřišť zavěšených v korunách stromů propojených s 3D bludištěm, které je složeno ze síťových překážkových drah rozprostřených ve třech patrech nad sebou. Síťové bludiště v korunách stromů obsahuje mnoho zábavných prvků, které otestují vaše motorické dovednosti. Jednotlivé herní plochy jsou propojeny visutými lávkami. Celá atrakce vrcholí sjezdem unikátním tobogánem z výšky necelých 10 m. Pohybová atrakce je natolik bezpečná, že na rozdíl od klasických lanových center nevyžaduje žádné osobní lanové jištění. <br />
               Součástí areálu je plně vybavený stánek s občerstvením, ve kterém se mohou občerstvit malí dobrodruzi i čekající doprovod. Nabízí se zde regionální speciality od místních dodavatelů a o víkendech se před stánkem grilují sezónní dobroty.
-            </span>
-            {/* Move the clickable text outside the paragraph */}
-            <span className="readMoreText" onClick={toggleText}>
-              {isExpanded ? 'Zobrazit méně' : 'Zobrazit více'}
+
+              <span className="readMoreText" onClick={toggleText}>
+                {isExpanded ? 'Zobrazit méně' : 'Zobrazit více'}
+              </span>
             </span>
             <div style={{ marginTop: '40px' }}>
               <p><b>vzdálenost od půjčovny:</b> 2km</p>

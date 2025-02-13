@@ -91,28 +91,33 @@
     .section3 {
         margin-top: 100px;
         .nadpis-section3 {
-            width: 80%;
+            width: 90%;
             h3 {
                 font-size: 30px;
                 font-weight: 800;
             }
         }
         .popis-a-kocarek {
-            width: 80%;
+            width: 90%;
             justify-content: center;
             .popis-cont {
                 width: 100%;
+                position: relative;
                 p {
                     width: 100%;
+                    padding-top: 20px;
                 }
             }
             img {
                 min-width: 300px;
                 opacity: 1;
-                transform: scale(1.20) translate(-10px, 0);
+                transform: scale(1.20) translate(-10px, 25px);
             }
         }
     }
+}
+.readMoreText{
+    padding-left: 5px;
 }
 @media screen and (max-width: 600px) {
     .nadpis-section3,
@@ -156,4 +161,33 @@
     .toggle-button {
         display: block;
     }
+}
+.popis {
+    display: -webkit-box;
+    -webkit-line-clamp: 4; /* Limit the number of lines before truncation */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.5em; /* Adjust line-height */
+    max-height: 6em; /* Based on 3 lines with 1.5em line-height */
+    position: relative; /* Ensure the parent has relative positioning */
+}
+
+.popis.expanded {
+    -webkit-line-clamp: unset;
+    max-height: unset;
+}
+
+.toggle-button-container {
+    position: absolute; /* Ensure it's within the bounds of the text */
+    cursor: pointer;
+    text-align: center;
+    padding-top: 5px; /* Optional: Adjust the space between text and button */
+    color: #007BFF;
+    text-decoration: underline;
+    font-size: 1rem;
+    top: 7em;
+    background-color: white;
+    right: 0;
+    z-index: 100;
 }

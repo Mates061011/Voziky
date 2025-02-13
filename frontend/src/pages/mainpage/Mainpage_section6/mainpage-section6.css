@@ -6,8 +6,31 @@
     flex-direction: column;
     align-items: end;
 }
+.faq-main-cont{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.questions{
+    width: 50%;
+}
 @media (max-width: 479px) {
     .qaaCont {
         align-items: center;
+    }
+    .faq-main-cont {
+        gap: 20px;
+        .flexRow {
+            flex-direction: column;
+            .qaa-form{
+                width: 100%;
+            }
+        }
+    }
+    .questions{
+        width: 100%;
+    }
+    .nadpis-section6{
+        width: 100%;
     }
 }
