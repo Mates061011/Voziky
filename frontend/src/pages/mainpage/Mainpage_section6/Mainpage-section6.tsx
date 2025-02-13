@@ -1,5 +1,3 @@
-import { Container, Typography } from '@mui/material';
-import { Row, Col } from 'antd'; // Import Row and Col from Ant Design
 import "./mainpage-section6.css";
 import Faq from '../../../components/faq/Faq';
 import ContactForm from '../../../components/faq/Faq-form';
