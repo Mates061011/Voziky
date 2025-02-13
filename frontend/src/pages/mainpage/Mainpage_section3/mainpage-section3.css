@@ -11,6 +11,7 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    gap: 20px;
     .nadpis-section3 {
         width: 60vw;
         display: flex;
@@ -53,20 +54,17 @@
         }
         .popis-cont {
             width: 40%;
-            p {
-                text-overflow: ellipsis;
-                width: 100%;
-                text-align: left;
-                font-size: 20px;
-                color: #818181;
-                font-weight: 400;
-                height: fit-content;
-                padding-top: 40px;
-                animation: fadeIn linear forwards;
-                animation-timeline: view();
-                animation-range-start: contain - 100%;
-                animation-range-end: 300px;
-                opacity: 0;
+            align-items: flex-start;
+            span {
+                margin-top: 40px;
+                font-size: 20px !important;
+            }
+            .pujceni-info{
+                width: auto;
+                p {
+                    font-size: 18px;
+                    font-weight: 700;
+                }
             }
         }
         .dontkeep {
@@ -103,9 +101,8 @@
             .popis-cont {
                 width: 100%;
                 position: relative;
-                p {
-                    width: 100%;
-                    padding-top: 20px;
+                span {
+                    font-size: 15px !important;
                 }
             }
             img {
@@ -162,32 +159,35 @@
         display: block;
     }
 }
-.popis {
-    display: -webkit-box;
-    -webkit-line-clamp: 4; /* Limit the number of lines before truncation */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    line-height: 1.5em; /* Adjust line-height */
-    max-height: 6em; /* Based on 3 lines with 1.5em line-height */
-    position: relative; /* Ensure the parent has relative positioning */
-}
 
-.popis.expanded {
-    -webkit-line-clamp: unset;
-    max-height: unset;
-}
-
-.toggle-button-container {
-    position: absolute; /* Ensure it's within the bounds of the text */
-    cursor: pointer;
-    text-align: center;
-    padding-top: 5px; /* Optional: Adjust the space between text and button */
-    color: #007BFF;
-    text-decoration: underline;
-    font-size: 1rem;
-    top: 7em;
-    background-color: white;
-    right: 0;
-    z-index: 100;
+@media (max-width:600px){
+    .popis {
+        display: -webkit-box;
+        -webkit-line-clamp: 4; /* Limit the number of lines before truncation */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.5em; /* Adjust line-height */
+        max-height: 6em; /* Based on 3 lines with 1.5em line-height */
+        position: relative; /* Ensure the parent has relative positioning */
+    }
+    
+    .popis.expanded {
+        -webkit-line-clamp: unset;
+        max-height: unset;
+    }
+    
+    .toggle-button-container {
+        position: absolute; /* Ensure it's within the bounds of the text */
+        cursor: pointer;
+        text-align: center;
+        padding-top: 5px; /* Optional: Adjust the space between text and button */
+        color: #007BFF;
+        text-decoration: underline;
+        font-size: 1rem;
+        top: 7em;
+        background-color: white;
+        right: 0;
+        z-index: 100;
+    }
 }

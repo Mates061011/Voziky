@@ -128,7 +128,7 @@
 }
 @media screen and (min-width: 1300px) {
     .picture-part img {
-        width: 850px;
+        width: clamp(800px, 50vw, 900px);
         transform: translate(-17vw, 30px);
     }
     .bar-part-bg  {
@@ -218,7 +218,6 @@
     justify-content: start;
     img {
         margin-top: 100px;
-        z-index: 10;
         animation: vozikLoadAnim 1s;
         user-select: none;
         -webkit-user-drag: none;

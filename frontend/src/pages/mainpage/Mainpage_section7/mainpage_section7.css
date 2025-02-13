@@ -33,7 +33,15 @@
     }
 }
 
-  
+.gridWrap>div {
+    p {
+        color: #818181;
+        font-weight: 700;
+        b {
+            font-weight: 400;
+        }
+    }
+}
 .paraExpanded {
     display: block;
     -webkit-line-clamp: unset;
@@ -53,6 +61,7 @@
     display: block;
     max-height: 193px; /* Adjust this value based on how much you want to show initially */
     overflow: hidden;
+    font-weight: 400;
 }
 
 /* On smaller screens (<= 900px), show the button and allow toggling */
@@ -108,29 +117,32 @@
     background-size: cover; 
     background-position: center;
 }
-.para {
-    display: -webkit-box;
-    -webkit-line-clamp: 4; /* Number of lines before truncation */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    line-height: 1.5em; /* Adjust based on your font size */
-    max-height: 6em; /* 3 lines × 1.5em line-height */
-    position: relative;
-}
 
-.paraExpanded {
-    -webkit-line-clamp: unset;
-    max-height: unset;
-}
-
-.readMoreText {
-    color: #007BFF;
-    cursor: pointer;
-    text-decoration: underline;
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    background-color: white;
-}
   
+@media (max-width:600px){
+    .para {
+        display: -webkit-box;
+        -webkit-line-clamp: 5; /* Number of lines before truncation */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.5em; /* Adjust based on your font size */
+        max-height: 7,5em; /* 3 lines × 1.5em line-height */
+        position: relative;
+    }
+    
+    .paraExpanded {
+        -webkit-line-clamp: unset;
+        max-height: unset;
+    }
+    
+    .readMoreText {
+        color: #007BFF;
+        cursor: pointer;
+        text-decoration: underline;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        background-color: white;
+    }
+}
