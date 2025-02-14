@@ -94,8 +94,21 @@ const navigate = useNavigate();
 
   useEffect(() => {
     const fetchItems = async () => {
+      const token = localStorage.getItem('token'); // Retrieve the token from local storage
+  
       try {
-        const response = await fetch('http://localhost:5000/api/items');
+        const response = await fetch('http://localhost:5000/api/items/optionalAuth', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        });
+  
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+  
         const data = await response.json();
         setItems(data);
       } catch (error) {
@@ -104,9 +117,10 @@ const navigate = useNavigate();
         setLoading2(false);
       }
     };
-
+  
     fetchItems();
   }, []);
+  
 
   if (loading2) {
     return <div>Loading...</div>;

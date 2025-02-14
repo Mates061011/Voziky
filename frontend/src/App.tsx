@@ -9,7 +9,6 @@ import { UserProvider } from './context/userContext';
 import { ItemProvider } from './context/ItemContext';
 import Footer from './components/footer/Footer';
 import PrivateRoute from './components/PrivateRoute';
-import AdminPanelItem from './pages/adminpanel/AdminPanelItem';
 import ItemDetails from './components/ItemDetails/ItemDetails';
 
 
@@ -18,6 +17,7 @@ const Mainpage = lazy(() => import("./pages/mainpage/Mainpage"));
 const Cart = lazy(() => import('./pages/cart/Cart'));
 const Admin = lazy(() => import('./pages/admin/Admin'));
 const AdminPanel = lazy(() => import('./pages/adminpanel/AdminPanel'));
+const AdminPanelItem = lazy(() => import('./pages/adminpanel/AdminPanelItem'));
 
 function App() {
   
