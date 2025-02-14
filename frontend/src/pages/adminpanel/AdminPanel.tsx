@@ -132,15 +132,17 @@ const AdminPanel: React.FC = () => {
                 }}
                 title={
                   <Space>
-                    <Tag color={appointment.confirmed ? "green" : "red"}>
-                      {appointment.confirmed ? "Potvrzeno" : "Nepotvrzeno"}
-                    </Tag>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                       <span>{`Začátek: ${formatDateInUTC(appointment.startDate)}`}</span>
                       <span>{`Konec: ${formatDateInUTC(appointment.endDate)}`}</span>
                     </div>
+                    <Tag color={appointment.confirmed ? "green" : "red"}>
+                      {appointment.confirmed ? "Potvrzeno" : "Nepotvrzeno"}
+                    </Tag>
                   </Space>
                 }
+                bodyStyle={{ textAlign: "left" }}
+                headStyle={{ textAlign: "left" }} 
                 actions={[
                   !appointment.confirmed && (
                     <Button
@@ -152,23 +154,22 @@ const AdminPanel: React.FC = () => {
                   ),
                 ]}
               >
-                <Paragraph>
-                  <strong>Uživatel:</strong> {appointment.user.name}{" "}
-                  {appointment.user.surname}
+                <Paragraph style={{ textAlign: "left" }}>
+                  <strong>Uživatel:</strong> {appointment.user.name} {appointment.user.surname}
                 </Paragraph>
-                <Paragraph>
+                <Paragraph style={{ textAlign: "left" }}>
                   <strong>Email:</strong> {appointment.user.email}
                 </Paragraph>
-                <Paragraph>
+                <Paragraph style={{ textAlign: "left" }}>
                   <strong>Telefon:</strong> {appointment.user.phone}
                 </Paragraph>
-                <Paragraph>
+                <Paragraph style={{ textAlign: "left" }}>
                   <strong>Cena:</strong> {appointment.price} Kč
                 </Paragraph>
-                <Paragraph>
+                <Paragraph style={{ textAlign: "left" }}>
                   <strong>Produkty:</strong> {itemNames.join(", ")}
                 </Paragraph>
-                <Paragraph>
+                <Paragraph style={{ textAlign: "left" }}>
                   <strong>Vytvořeno:</strong> {formatDateInUTC(appointment.createdAt)}
                 </Paragraph>
               </Card>
