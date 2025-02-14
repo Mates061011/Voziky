@@ -10,9 +10,9 @@ const app: Application = express();
 
 // Rate limiting setup
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,  // 15 minutes window
-  max: 100,                  // Limit each IP to 100 requests per windowMs
-  message: 'Too many requests from this IP, please try again later.',  // Message sent when rate limit is exceeded
+  windowMs: 30 * 60 * 1000,  // 30 minutes window
+  max: 200,                  // Limit each IP to 100 requests per 30 minutes
+  message: 'Too many requests from this IP, please try again later.',
 });
 
 // Apply rate limiting globally to all routes

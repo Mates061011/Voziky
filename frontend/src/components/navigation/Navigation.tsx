@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Drawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
@@ -10,16 +10,19 @@ import ListItemText from "@mui/material/ListItemText";
 import Divider from "@mui/material/Divider";
 import Logo from "./SiteLogo.svg";
 import "./navigation.css";
-import { Breadcrumb } from 'antd';
-import { Badge } from 'antd';
-import Cart from '../../assets/cart.svg';
-import { useCart } from '../../context/CartContext'; // Import the useCart hook
+import { Breadcrumb } from "antd";
+import { Badge } from "antd";
+import Cart from "../../assets/cart.svg";
+import { useCart } from "../../context/CartContext"; // Import the useCart hook
 
 export default function Navigation() {
   const location = useLocation();
   const navigate = useNavigate();
   const pathSnippets = location.pathname.split("/").filter((i) => i);
-  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    !!localStorage.getItem("token")
+  );
 
   const { cart } = useCart(); // Access the cart state from the context
 
@@ -28,16 +31,36 @@ export default function Navigation() {
   };
 
   const handleCartClick = () => {
-    localStorage.setItem('currentStep', '0'); // Update localStorage
-    navigate('/Objednat'); // Redirect to /Objednat
+    localStorage.setItem("currentStep", "0"); // Update localStorage
+    navigate("/Objednat"); // Redirect to /Objednat
   };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token"); // Remove the token
+    setIsAuthenticated(false); // Update authentication state
+    navigate("/"); // Redirect to home page
+  };
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setIsAuthenticated(!!localStorage.getItem("token"));
+    };
+
+    // Listen for storage changes
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      // Clean up the event listener
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
 
   const breadcrumbItems = [
     <Breadcrumb.Item key="/">
       <Link to="/">Domů</Link>
     </Breadcrumb.Item>,
     ...pathSnippets.map((_, index) => {
-      const url = `/${pathSnippets.slice(0, index + 1).join('/')}`;
+      const url = `/${pathSnippets.slice(0, index + 1).join("/")}`;
       return (
         <Breadcrumb.Item key={url}>
           <Link to={url}>{pathSnippets[index]}</Link>
@@ -57,12 +80,33 @@ export default function Navigation() {
 
         {/* Desktop Nav Links */}
         <div className="nav-links-cont">
-          <Link className="nav-link" to="/">O NÁS</Link>
-          <Link className="nav-link" to="/FAQ">FAQ</Link>
-          <Link className="nav-link" to="/Nabidka">NABÍDKA</Link>
+          {!isAuthenticated ? (
+            <>
+              <Link className="nav-link" to="/">
+                O NÁS
+              </Link>
+              <Link className="nav-link" to="/FAQ">
+                FAQ
+              </Link>
+              <Link className="nav-link" to="/Nabidka">
+                NABÍDKA
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link className="nav-link" to="/adminPanel">
+                REZERVACE
+              </Link>
+              <Link className="nav-link" to="/adminPanelItem">
+                PRISLUSENSTVI
+              </Link>
+              <button className="nav-link logout-button" onClick={handleLogout}>
+                ODHLÁSIT SE
+              </button>
+            </>
+          )}
         </div>
 
-        
         <div className="nav-button-icon">
           <button onClick={handleCartClick} className="cart-button">
             {cart.length > 0 ? (
@@ -103,9 +147,23 @@ export default function Navigation() {
                 <ListItemButton component={Link} to="/">
                   <ListItemText primary="Domů" />
                 </ListItemButton>
-                <ListItemButton component={Link} to="/Nabidka">
-                  <ListItemText primary="NABÍDKA" />
-                </ListItemButton>
+                {!isAuthenticated ? (
+                  <ListItemButton component={Link} to="/Nabidka">
+                    <ListItemText primary="NABÍDKA" />
+                  </ListItemButton>
+                ) : (
+                  <>
+                    <ListItemButton component={Link} to="/Dashboard">
+                      <ListItemText primary="DASHBOARD" />
+                    </ListItemButton>
+                    <ListItemButton component={Link} to="/Settings">
+                      <ListItemText primary="NASTAVENÍ" />
+                    </ListItemButton>
+                    <ListItemButton onClick={handleLogout}>
+                      <ListItemText primary="ODHLÁSIT SE" />
+                    </ListItemButton>
+                  </>
+                )}
               </List>
               <Divider />
               <h4>Soc site (Ikony)</h4>
