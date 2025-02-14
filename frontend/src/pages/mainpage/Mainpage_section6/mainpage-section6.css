@@ -17,8 +17,9 @@
     display: flex;
     justify-content: center;
     flex-direction: column;
+    gap: 40px;
     .flexRow {
-        justify-content: center;
+        align-items: flex-start;
         .questions {
             width: 50%;
         }

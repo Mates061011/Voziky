@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import Items from "../../components/adminItems/Items";
 import { Checkbox, Select } from "antd";
 import './adminpanelitem.css';
-import closeButton from '../../assets/close.svg';
 export interface Item {
   name: string;
   desc: string;
@@ -42,15 +41,6 @@ const navigate = useNavigate();
   // Construct the full image URLs from the static names
   const imageUrls = imageNames.map((name) => `${name}`);
 
-  const addImage = (url: string) => {
-    if (!imgUrls.includes(url)) {
-      setImgUrls([...imgUrls, url]); // Add new image URL to the array
-    }
-  };
-
-  const deleteImage = (url: string) => {
-    setImgUrls(imgUrls.filter((image) => image !== url)); // Remove the URL from the array
-  };
 
   const createItem = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -132,10 +122,11 @@ const navigate = useNavigate();
         <h2>Přidej nové produkty</h2>
       </div>
       <div className="AdminPanelItemSubCont">
+        <Items data={items} admin={true} />
         <form className="formAdminItem" onSubmit={createItem} style={{ width: "400px" }}>
           {/* Name input */}
-          <div>
-            <label htmlFor="name">Name</label>
+          <div className="adminItem">
+            <label htmlFor="name">Název</label>
             <input
               type="text"
               id="name"
@@ -146,8 +137,8 @@ const navigate = useNavigate();
           </div>
 
           {/* Description input */}
-          <div>
-            <label htmlFor="desc">Description</label>
+          <div className="adminItem">
+            <label htmlFor="desc">Popis</label>
             <textarea
               id="desc"
               value={desc}
@@ -157,8 +148,8 @@ const navigate = useNavigate();
           </div>
 
           {/* Price per Day input */}
-          <div>
-            <label htmlFor="pricePerDay">Price per Day</label>
+          <div className="adminItem">
+            <label htmlFor="pricePerDay">Cena za 1 den</label>
             <input
               type="number"
               id="pricePerDay"
@@ -169,8 +160,8 @@ const navigate = useNavigate();
           </div>
 
           {/* Price for Multiple Days input */}
-          <div>
-            <label htmlFor="pricePerDays">Price for Multiple Days</label>
+          <div className="adminItem">
+            <label htmlFor="pricePerDays">Cena za více dní</label>
             <input
               type="number"
               id="pricePerDays"
@@ -181,8 +172,8 @@ const navigate = useNavigate();
           </div>
 
           {/* Type Select */}
-          <div>
-            <label htmlFor="type">Type</label>
+          <div className="adminItem">
+            <label htmlFor="type">Typ</label>
             <Select
               style={{ width: "100%" }}
               value={type}
@@ -194,37 +185,30 @@ const navigate = useNavigate();
           </div>
 
           {/* Image URL selection */}
-          <div>
-            <label htmlFor="img">Image URLs</label>
+          <div className="adminItem">
+            <label htmlFor="img">Obrázky</label>
             <Select
-              style={{ width: "100%" }}
-              placeholder="Select Image"
-              value={undefined} // No initial value
-              onChange={addImage}
+              mode="multiple" // Allow multiple selections
+              allowClear // Add clear button
+              style={{ width: "100%" }} // Full width
+              placeholder="Vyber obrázky" // Placeholder text
+              defaultValue={imgUrls} // Default selected images
+              onChange={(values) => setImgUrls(values)} // Handle selection change
               className="imgInput"
-            >
-              {imageUrls.map((url, index) => (
-                <Select.Option key={index} value={url}>
-                  <img src={`/items/${url}`} alt={`image ${index + 1}`} style={{ width: "50px", marginRight: "10px" }} />
-                  {url}
-                </Select.Option>
-              ))}
-            </Select>
-            <div className="addedImages">
-                {imgUrls.map((url, index) => (
-                  <div key={index}>
-                    <img src={`/items/${url}`} alt={`image ${index + 1}`} style={{ width: "50px", marginRight: "10px" }} />
-                    {url}
-                    <button type="button" onClick={() => deleteImage(url)}>
-                      <img src={closeButton} alt="" />
-                    </button>
+              options={imageUrls.map((url) => ({
+                label: (
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <img src={`/items/${url}`} alt="thumbnail" style={{ width: "50px", marginRight: "10px" }} />
                   </div>
-                ))}
-            </div>
+                ),
+                value: url,
+              }))}
+            />
           </div>
 
+
           {/* Kauce input */}
-          <div>
+          <div className="adminItem">
             <label htmlFor="kauce">Kauce</label>
             <input
               type="text"
@@ -236,22 +220,19 @@ const navigate = useNavigate();
           </div>
 
           {/* Hidden Checkbox */}
-          <div>
-            <label htmlFor="hidden">Hidden</label>
+          <div className="hiddenCheckBox">
             <Checkbox 
               onChange={(e) => setHidden(e.target.checked)}
               style={{ color: '#FF6832' }} 
             />
+            <label htmlFor="hidden">Schováno</label>
           </div>
 
           {/* Submit Button */}
           <button type="submit" disabled={loading}>
-            {loading ? "Creating..." : "Create Item"}
+            {loading ? "Vytváření..." : "Vytvořit produkt"}
           </button>
         </form>
-
-        {/* Display Items (Optional, for demonstration) */}
-        <Items data={items} type="standard" admin={true} />
       </div>
 
       {error && <p>Error: {error}</p>}

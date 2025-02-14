@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useItemContext } from "../../context/ItemContext"; // Import your context
+import { useItemContext } from "../../context/ItemContext";
+import { List, Button, Typography, Space, Tag, Spin, Alert, Card } from "antd";
+const { Paragraph } = Typography;
 
 interface User {
   name: string;
@@ -20,7 +22,7 @@ interface Appointment {
   price: number;
   createdAt: string;
   vs: number;
-  items: string[]; // Array of item IDs
+  items: string[];
 }
 
 const AdminPanel: React.FC = () => {
@@ -32,7 +34,7 @@ const AdminPanel: React.FC = () => {
     return null;
   }
 
-  const { items } = useItemContext(); // Use ItemContext
+  const { items } = useItemContext();
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -55,21 +57,16 @@ const AdminPanel: React.FC = () => {
 
   const confirmAppointment = async (id: string) => {
     try {
-      await axios.get(
-        `${baseUrl}/api/appointment/confirm/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // Update the confirmed status locally for immediate feedback
+      await axios.get(`${baseUrl}/api/appointment/confirm/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setAppointments((prevAppointments) =>
         prevAppointments.map((appointment) =>
           appointment._id === id ? { ...appointment, confirmed: true } : appointment
         )
       );
-      alert("Appointment confirmed!");
     } catch (err: any) {
       alert(err.message || "Failed to confirm the appointment.");
     }
@@ -79,9 +76,6 @@ const AdminPanel: React.FC = () => {
     fetchAppointments();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
-
   const formatDateInUTC = (date: string | Date): string => {
     const utcDate = new Date(date);
     const formatter = new Intl.DateTimeFormat("cs-CZ", {
@@ -90,12 +84,11 @@ const AdminPanel: React.FC = () => {
       year: "numeric",
       hour: "2-digit",
       minute: "2-digit",
-      timeZone: "UTC", // Force UTC
+      timeZone: "UTC",
     });
     return formatter.format(utcDate);
   };
 
-  // Function to get item names from the items array based on the item IDs
   const getItemNames = (itemIds: string[]): string[] => {
     return itemIds.map((itemId) => {
       const item = items.find((item) => item._id === itemId);
@@ -103,66 +96,88 @@ const AdminPanel: React.FC = () => {
     });
   };
 
+  if (loading) return <Spin tip="Loading appointments..." />;
+  if (error) return <Alert message="Error" description={error} type="error" showIcon />;
+
   return (
     <div>
       <h1>Admin Panel</h1>
       <h2>Potvrzuj objednávky</h2>
-      <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
-        {appointments.map((appointment) => {
+      <List
+        grid={{
+          gutter: 24,
+          xs: 1,
+          sm: 1,
+          md: 2,
+          lg: 3,
+          xl: 3,
+          xxl: 4,
+        }}
+        dataSource={appointments}
+        renderItem={(appointment) => {
           const itemNames = getItemNames(appointment.items);
           return (
-            <div
-              key={appointment._id}
-              style={{ border: "1px solid black", margin: "10px", padding: "10px", width: 'fit-content' }}
+            <List.Item
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                minWidth: "380px", // Set minimum width for each List.Item
+              }}
             >
-              <p>
-                <strong>ID:</strong> {appointment._id}
-              </p>
-              <p>
-                <strong>Start Date:</strong> {formatDateInUTC(appointment.startDate)}
-              </p>
-              <p>
-                <strong>End Date:</strong> {formatDateInUTC(appointment.endDate)}
-              </p>
-              <p>
-                <strong>User:</strong> {appointment.user.name} {appointment.user.surname}
-              </p>
-              <p>
-                <strong>Email:</strong> {appointment.user.email}
-              </p>
-              <p>
-                <strong>Phone:</strong> {appointment.user.phone}
-              </p>
-              <p>
-                <strong>Price:</strong> {appointment.price} Kč
-              </p>
-              <p>
-                <strong>Confirmed:</strong> {appointment.confirmed ? "Yes" : "No"}
-              </p>
-              <p>
-                <strong>Created At:</strong> {formatDateInUTC(appointment.createdAt)}
-              </p>
-              <p>
-                <strong>Items:</strong> {itemNames.join(", ")} {/* Show item names */}
-              </p>
-              {!appointment.confirmed && (
-                <button
-                  onClick={() => confirmAppointment(appointment._id)}
-                  style={{
-                    padding: "10px 20px",
-                    backgroundColor: "green",
-                    color: "white",
-                    border: "none",
-                    cursor: "pointer",
-                  }}
-                >
-                  Confirm
-                </button>
-              )}
-            </div>
+              <Card
+                style={{
+                  width: "100%",
+                  maxWidth: "500px", // Allow flexibility but ensure consistent size
+                  margin: "0 auto",
+                }}
+                title={
+                  <Space>
+                    <Tag color={appointment.confirmed ? "green" : "red"}>
+                      {appointment.confirmed ? "Potvrzeno" : "Nepotvrzeno"}
+                    </Tag>
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                      <span>{`Začátek: ${formatDateInUTC(appointment.startDate)}`}</span>
+                      <span>{`Konec: ${formatDateInUTC(appointment.endDate)}`}</span>
+                    </div>
+                  </Space>
+                }
+                actions={[
+                  !appointment.confirmed && (
+                    <Button
+                      type="primary"
+                      onClick={() => confirmAppointment(appointment._id)}
+                    >
+                      Potvrdit
+                    </Button>
+                  ),
+                ]}
+              >
+                <Paragraph>
+                  <strong>Uživatel:</strong> {appointment.user.name}{" "}
+                  {appointment.user.surname}
+                </Paragraph>
+                <Paragraph>
+                  <strong>Email:</strong> {appointment.user.email}
+                </Paragraph>
+                <Paragraph>
+                  <strong>Telefon:</strong> {appointment.user.phone}
+                </Paragraph>
+                <Paragraph>
+                  <strong>Cena:</strong> {appointment.price} Kč
+                </Paragraph>
+                <Paragraph>
+                  <strong>Produkty:</strong> {itemNames.join(", ")}
+                </Paragraph>
+                <Paragraph>
+                  <strong>Vytvořeno:</strong> {formatDateInUTC(appointment.createdAt)}
+                </Paragraph>
+              </Card>
+            </List.Item>
           );
-        })}
-      </div>
+        }}
+      />
+
+
     </div>
   );
 };
