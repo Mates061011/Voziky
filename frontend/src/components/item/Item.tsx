@@ -22,7 +22,7 @@ const Item: React.FC<ItemProps> = ({ _id, type = 'standard' }) => {
   }
 
   const { name, pricePerDays, img, desc } = item; // Access `desc` and `img` array from item
-  const imagePath = img.length > 0 ? `items/${img[0]}` : ''; // Only use the first image in the array
+  const imagePath = img.length > 0 ? `items-avif/${img[0]}` : ''; // Only use the first image in the array
 
   const isInCart = cart.some((cartItem) => cartItem === _id);
 

@@ -31,7 +31,7 @@ const CartItem: React.FC<CartItemProps> = ({ item, onRemove, showKauce, showClos
   const numOfDays = Math.ceil(
     (currentEndDate.getTime() - currentStartDate.getTime()) / (1000 * 60 * 60 * 24) + 1
   );
-  const imagePath = item.img.length > 0 ? `/items/${item.img[0]}` : ''; 
+  const imagePath = item.img.length > 0 ? `/items-avif/${item.img[0]}` : ''; 
   // Calculate the price based on the number of days and the price per day or per multiple days
   const totalPrice =
     numOfDays === 1

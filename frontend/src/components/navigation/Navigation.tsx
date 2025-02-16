@@ -56,18 +56,13 @@ export default function Navigation() {
   }, []);
 
   const breadcrumbItems = [
-    <Breadcrumb.Item key="/">
-      <Link to="/">Domů</Link>
-    </Breadcrumb.Item>,
+    { title: <Link to="/">Domů</Link> },
     ...pathSnippets.map((_, index) => {
       const url = `/${pathSnippets.slice(0, index + 1).join("/")}`;
-      return (
-        <Breadcrumb.Item key={url}>
-          <Link to={url}>{pathSnippets[index]}</Link>
-        </Breadcrumb.Item>
-      );
+      return { title: <Link to={url}>{pathSnippets[index]}</Link> };
     }),
   ];
+  
 
   return (
     <nav className="navigation">
@@ -177,7 +172,7 @@ export default function Navigation() {
       {/* Breadcrumb */}
       {pathSnippets.length > 0 && (
         <div className="breadcrumb-wrap">
-          <Breadcrumb>{breadcrumbItems}</Breadcrumb>
+          <Breadcrumb items={breadcrumbItems} />
         </div>
       )}
     </nav>

@@ -102,7 +102,7 @@ const AdminPanel: React.FC = () => {
   return (
     <div>
       <h1>Admin Panel</h1>
-      <h2>Potvrzuj objednávky</h2>
+      <h2 style={{marginBottom: "40px"}}>Potvrzuj objednávky</h2>
       <List
         grid={{
           gutter: 24,

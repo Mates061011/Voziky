@@ -112,7 +112,6 @@ const Cart: React.FC = () => {
   };
   const handleStepTransition = (direction: "next" | "previous") => {
     let newStep = currentStep;
-    console.log(newStep)
     // Check for missing fields before moving to step 3
     if (direction === "next") {
       if(currentStep === 0) {

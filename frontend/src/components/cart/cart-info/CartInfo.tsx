@@ -8,7 +8,7 @@ const UserInfo: React.FC = () => {
   return (
     <div className="cart-info">
       <div className="table-row">
-        <div className="table-cell1"><strong>Name:</strong></div>
+        <div className="table-cell1"><strong>Jméno:</strong></div>
         <div className="table-cell">{userData.name} {userData.surname}</div>
       </div>
       <div className="table-row">
@@ -16,7 +16,7 @@ const UserInfo: React.FC = () => {
         <div className="table-cell">{userData.email}</div>
       </div>
       <div className="table-row">
-        <div className="table-cell1"><strong>Phone:</strong></div>
+        <div className="table-cell1"><strong>Telefon:</strong></div>
         <div className="table-cell">{userData.phone}</div>
       </div>
     </div>

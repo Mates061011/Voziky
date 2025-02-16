@@ -52,7 +52,8 @@
             animation-range-start: contain - 100%;
             animation-range-end: 300px;
             opacity: 0;
-            transform: translate(0, -30px);
+            transform: translate(0, -30px) scale(1.2);
+            z-index: 0;
         }
         .popis-cont {
             width: 40%;
@@ -75,7 +76,6 @@
         }
     }
 }
-
 @media screen and (min-width: 1600px) {
     .popis-a-kocarek > img {
         transform: translateY(0);
@@ -107,6 +107,9 @@
                 span {
                     font-size: 15px !important;
                 }
+            }
+            img {
+                transform: translate(0, -30px) scale(1);
             }
             .ant-carousel  {
                 min-width: 300px;

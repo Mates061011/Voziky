@@ -38,7 +38,7 @@ function App() {
             >
               <div className="content">
                 <Navigation />
-                <Suspense fallback={<div>Loading...</div>}>
+                <Suspense fallback={<div>Načítání...</div>}>
                   <Routes>
                     <Route path="/" element={<Mainpage />} />
                     <Route path="/Objednat" element={<Cart />} />

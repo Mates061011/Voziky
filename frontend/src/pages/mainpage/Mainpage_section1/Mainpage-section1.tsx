@@ -21,7 +21,7 @@ export default function Section1() {
         <img src={thuleLogo} alt="Thule logo" />
       </div>
       <div className="picture-part">
-        <img src="/items/Thule Chariot Sport 2 double 01.png" alt="Vozik Thule" />
+        <img src="/items-avif/Thule Chariot Sport 2 double 01.avif" alt="Vozik Thule" />
       </div>
       <div className="bar-part">
         <div className="bar-part-bg">

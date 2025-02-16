@@ -54,7 +54,7 @@ export default function Section3() {
           {imgUrls.length > 0 && (
             <div className="carousel">
               <img 
-                src={`/items/${imgUrls[currentIndex]}`} 
+                src={`/items-avif/${imgUrls[currentIndex]}`} 
                 alt={`Thule Chariot Lite ${currentIndex + 1}`} 
                 loading="lazy" 
                 className="carousel-image" 

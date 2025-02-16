@@ -14,7 +14,7 @@ const Item: React.FC<ItemProps> = ({ item, type = 'standard' }) => {
   }
 
   const { _id, name, img, desc, hidden } = item; // Destructure necessary fields from the item
-  const imagePath = img && img.length > 0 ? `/items/${img[0]}` : ''; // Handle missing images gracefully
+  const imagePath = img && img.length > 0 ? `/items-avif/${img[0]}` : ''; // Handle missing images gracefully
 
 
   // Truncate description to the first sentence
