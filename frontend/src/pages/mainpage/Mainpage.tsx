@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import Section1 from "./Mainpage_section1/Mainpage-section1";
 import Section2 from "./Mainpage_section2/Mainpage-section2";
 import Section3 from "./Mainpage_section3/Mainpage-section3";
@@ -11,19 +11,7 @@ import { useLocation } from "react-router-dom";
 import MainPage_section4b from './Mainpage_section4b/MainPage_section4b';
 
 export default function Mainpage() {
-    const [password, setPassword] = useState("");
-    const [accessGranted, setAccessGranted] = useState(false);
-
-    const correctPassword = import.meta.env.VITE_MAINPAGE_PASSWORD; // Loaded from .env
-    const localStorageKey = "accessGranted";
     const location = useLocation();
-
-    useEffect(() => {
-        const storedAccess = localStorage.getItem(localStorageKey);
-        if (storedAccess === "true") {
-            setAccessGranted(true);
-        }
-    }, []);
 
     useEffect(() => {
         if (location.state?.scrollTo) {
@@ -40,44 +28,6 @@ export default function Mainpage() {
             scrollToElement(); // Start scrolling logic
         }
     }, [location.state]);
-
-    const handlePasswordSubmit = (e: any) => {
-        e.preventDefault();
-        if (password === correctPassword) {
-            setAccessGranted(true);
-            localStorage.setItem(localStorageKey, "true");
-        } else {
-            alert("Incorrect password");
-        }
-    };
-
-    if (!accessGranted) {
-        return (
-            <div style={{ textAlign: "center", marginTop: "50px" }}>
-                <h1>Tento web je ve vývoji, pro přístup zadejte heslo:</h1>
-                <form onSubmit={handlePasswordSubmit}>
-                    <input
-                        type="password"
-                        placeholder="Enter password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        style={{ padding: "10px", fontSize: "16px", width: "200px" }}
-                    />
-                    <button
-                        type="submit"
-                        style={{
-                            marginLeft: "10px",
-                            padding: "10px 20px",
-                            fontSize: "16px",
-                            cursor: "pointer",
-                        }}
-                    >
-                        Submit
-                    </button>
-                </form>
-            </div>
-        );
-    }
 
     return (
         <ScrollProvider>
