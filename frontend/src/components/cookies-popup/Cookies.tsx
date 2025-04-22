@@ -93,10 +93,10 @@ export const CookieManager: React.FC = () => {
   return (
     <Popover
       content={content}
-      trigger="click"
       placement="topRight"
-      visible={visible}
-      onVisibleChange={setVisible}
+      trigger={[]}  
+      open={visible}
+      onOpenChange={setVisible}
     >
       <FloatButton
         icon={
@@ -107,6 +107,7 @@ export const CookieManager: React.FC = () => {
           />
         }
         style={{ right: 24, bottom: 24, minWidth: 0 }}
+        onClick={() => setVisible(v => !v)}
       />
     </Popover>
   );
