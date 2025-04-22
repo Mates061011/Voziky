@@ -17,13 +17,16 @@ import { useCart } from "../../context/CartContext"; // Import the useCart hook
 
 export default function Navigation() {
   const location = useLocation();
-  const navigate = useNavigate();
   const pathSnippets = location.pathname.split("/").filter((i) => i);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(
     !!localStorage.getItem("token")
   );
+  const navigate = useNavigate();
 
+  const handleScrollToSection = (sectionId: string) => {
+      navigate("/", { state: { scrollTo: sectionId } });
+  };
   const { cart } = useCart(); // Access the cart state from the context
 
   const toggleDrawer = (open: boolean) => () => {
@@ -77,14 +80,14 @@ export default function Navigation() {
         <div className="nav-links-cont">
           {!isAuthenticated ? (
             <>
-              <Link className="nav-link" to="/">
-                O NÁS
-              </Link>
-              <Link className="nav-link" to="/FAQ">
-                FAQ
-              </Link>
-              <Link className="nav-link" to="/Nabidka">
+              <Link className="nav-link" to="/" state={{ scrollTo: "nabidka" }}>
                 NABÍDKA
+              </Link>
+              <Link className="nav-link" to="/" state={{ scrollTo: "prislusentsvi" }}>
+                PŘÍSUŠENSTVÍ
+              </Link>
+              <Link className="nav-link" to="/" state={{ scrollTo: "faq" }}>
+                FAQ
               </Link>
             </>
           ) : (

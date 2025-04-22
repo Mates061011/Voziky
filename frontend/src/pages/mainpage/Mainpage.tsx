@@ -18,16 +18,20 @@ export default function Mainpage() {
             const scrollToElement = () => {
                 const element = document.getElementById(location.state.scrollTo);
                 if (element) {
-                    element.scrollIntoView({ behavior: "smooth" });
+                    element.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center", // Align the element to the center of the screen
+                    });
                 } else {
-                    // Retry after a short delay if the element is not found
+                    // Retry if the element isn't rendered yet
                     setTimeout(scrollToElement, 100);
                 }
             };
-
+    
             scrollToElement(); // Start scrolling logic
         }
     }, [location.state]);
+    
 
     return (
         <ScrollProvider>
@@ -37,13 +41,18 @@ export default function Mainpage() {
                 </div>
                 <Section1 />
                 <Section2 />
-                <Section3 />
-                <div id="section4">
-                    <Section4 />
+                <div id="nabidka">
+                    <Section3 />
                 </div>
-                <MainPage_section4b />
+                <Section4 />
+                <div id="prislusentsvi">
+                    
+                    <MainPage_section4b />
+                </div>
                 <Section5 />
-                <Section6 />
+                <div id="faq">
+                    <Section6 />    
+                </div>
                 <Section7 />
             </main>
         </ScrollProvider>

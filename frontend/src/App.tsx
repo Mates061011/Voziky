@@ -10,7 +10,8 @@ import { ItemProvider } from './context/ItemContext';
 import Footer from './components/footer/Footer';
 import PrivateRoute from './components/PrivateRoute';
 import ItemDetails from './components/ItemDetails/ItemDetails';
-
+import CookiePopup from "./components/cookies-popup/Cookies";
+import CookiesPolicy from './pages/cookies/CookiesPolicy';
 
 // Lazy load the components for routes
 const Mainpage = lazy(() => import("./pages/mainpage/Mainpage"));
@@ -40,6 +41,7 @@ function App() {
                 <Navigation />
                 <Suspense fallback={<div>Načítání...</div>}>
                   <Routes>
+                    <Route path="/Zasady-cookies" element={<CookiesPolicy />} />
                     <Route path="/" element={<Mainpage />} />
                     <Route path="/Objednat" element={<Cart />} />
                     <Route path='/loginAdmin' element={<Admin />} />
@@ -52,6 +54,7 @@ function App() {
                 </Suspense>
                 <Footer/>
               </div>
+              <CookiePopup />
             </ConfigProvider>
           </HashRouter>
         </CartProvider>
