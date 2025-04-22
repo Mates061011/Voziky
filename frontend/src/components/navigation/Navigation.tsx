@@ -24,9 +24,6 @@ export default function Navigation() {
   );
   const navigate = useNavigate();
 
-  const handleScrollToSection = (sectionId: string) => {
-      navigate("/", { state: { scrollTo: sectionId } });
-  };
   const { cart } = useCart(); // Access the cart state from the context
 
   const toggleDrawer = (open: boolean) => () => {
